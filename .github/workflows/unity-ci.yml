@@ -40,8 +40,7 @@ jobs:
           testMode: editMode
           artifactsPath: results-artifacts
           coverageOptions: "generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;coverWithOpenCover"
-          unityVersion: 2022.3.27f1
-          customImage: unityci/editor:ubuntu-2022.3.27f1-linux-il2cpp-2
+          unityVersion: 6000.0.0f1
 
       # 4. Upload test resultaten (voor debuggen)
       - name: Upload Test Results
