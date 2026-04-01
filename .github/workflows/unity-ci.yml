@@ -19,27 +19,20 @@ jobs:
         with:
           lfs: true
 
-      # 2. Unity Cache Permissions fixen
-      - name: Fix Unity Cache Permissions
-        run: |
-          sudo mkdir -p /root/.cache/unity3d
-          sudo chmod -R 777 /root/.cache/unity3d
-
-      # 3. Unity Test Runner uitvoeren
+      # 2. Unity Test Runner uitvoeren
       - name: Run Unity Tests
         uses: game-ci/unity-test-runner@v4
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          UNITY_FORCE_FREE_LICENSE: true
         with:
           projectPath: .
           testMode: editMode
           artifactsPath: results-artifacts
           coverageOptions: "generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;coverWithOpenCover"
 
-      # 4. Upload test resultaten (voor debuggen)
+      # 3. Upload test resultaten (voor debuggen)
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         if: always()
@@ -47,7 +40,7 @@ jobs:
           name: Test Results
           path: results-artifacts
 
-      # 5. Upload coverage naar Codecov (Vervangt de oude coverage-report-action)
+      # 4. Upload coverage naar Codecov (Vervangt de oude coverage-report-action)
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
