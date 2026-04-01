@@ -54,9 +54,9 @@ jobs:
           path: results-artifacts
 
       # 5. Upload coverage naar Codecov (Vervangt de oude coverage-report-action)
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          files: results-artifacts/coverage.info # Of .xml/.json afhankelijk van je output
-          fail_ci_if_error: false # Zorg dat de pipeline niet faalt als Codecov tijdelijk down is
-          verbose: true
+#      - name: Upload Coverage to Codecov
+#        uses: codecov/codecov-action@v4
+#        with:
+#          files: results-artifacts/coverage.info # Of .xml/.json afhankelijk van je output
+#          fail_ci_if_error: false # Zorg dat de pipeline niet faalt als Codecov tijdelijk down is
+#          verbose: true
