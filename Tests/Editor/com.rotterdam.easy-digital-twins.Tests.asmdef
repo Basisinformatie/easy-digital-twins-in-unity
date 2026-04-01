@@ -2,7 +2,8 @@
     "name": "com.rotterdam.easy-digital-twins.Tests",
     "references": [
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner"
+        "UnityEditor.TestRunner",
+        "com.rotterdam.easy-digital-twins"
     ],
     "includePlatforms": [
         "Editor"
@@ -14,9 +15,7 @@
         "nunit.framework.dll"
     ],
     "autoReferenced": false,
-    "defineConstraints": [
-        "UNITY_INCLUDE_TESTS"
-    ],
+    "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
 }
