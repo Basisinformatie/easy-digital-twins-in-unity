@@ -1,6 +1,6 @@
 {
   "dependencies": {
     "com.unity.modules.ui": "1.0.0",
-    "com.rotterdam.easy-digital-twins": "file:../.."
+    "com.rotterdam.easy-digital-twins": "file:.."
   }
 }
