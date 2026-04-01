@@ -22,12 +22,10 @@ jobs:
       # 2. Prepare Unity Cache Directory
       - name: Prepare Unity Cache Directory
         run: |
-          sudo mkdir -p /root/.cache/unity3d
-          sudo mkdir -p /root/.config/Unity
-          sudo chown -R $(id -u):$(id -g) /root/.cache/unity3d
-          sudo chown -R $(id -u):$(id -g) /root/.config/Unity
-          sudo chmod -R 755 /root/.cache/unity3d
-          sudo chmod -R 755 /root/.config/Unity
+          mkdir -p /root/.cache/unity3d
+          mkdir -p /root/.config/Unity
+          chmod -R 755 /root/.cache/unity3d
+          chmod -R 755 /root/.config/Unity
 
       # 3. Unity Test Runner uitvoeren
       - name: Run Unity Tests
@@ -42,7 +40,8 @@ jobs:
           testMode: editMode
           artifactsPath: results-artifacts
           coverageOptions: "generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;coverWithOpenCover"
-          unityVersion: auto
+          unityVersion: 2022.3.27f1
+          customImage: unityci/editor:ubuntu-2022.3.27f1-linux-il2cpp-2
 
       # 4. Upload test resultaten (voor debuggen)
       - name: Upload Test Results
