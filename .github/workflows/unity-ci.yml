@@ -32,7 +32,7 @@ jobs:
           artifactsPath: results-artifacts
           coverageOptions: "generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;coverWithOpenCover"
 
-      # 3. Test resultaten uploaden als artifact
+      # 3. Upload test resultaten (voor debuggen)
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         if: always()
@@ -40,10 +40,10 @@ jobs:
           name: Test Results
           path: results-artifacts
 
-      # 4. Coverage badge genereren (optioneel, voor README)
-      - name: Generate Coverage Badge
-        uses: game-ci/coverage-report-action@v4
+      # 4. Upload coverage naar Codecov (Vervangt de oude coverage-report-action)
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v4
         with:
-          json_file: results-artifacts/coverage.json
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          badge_name: Coverage
+          files: results-artifacts/coverage.info # Of .xml/.json afhankelijk van je output
+          fail_ci_if_error: false # Zorg dat de pipeline niet faalt als Codecov tijdelijk down is
+          verbose: true
