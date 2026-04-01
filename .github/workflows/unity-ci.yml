@@ -27,7 +27,7 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          projectPath: TestProject
+ #         projectPath: .
           testMode: editMode
           artifactsPath: results-artifacts
           coverageOptions: "generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;coverWithOpenCover"
