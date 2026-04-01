@@ -40,7 +40,7 @@ jobs:
           testMode: editMode
           artifactsPath: results-artifacts
           # Optie 1: Coverage uitschakelen om segmentatie fout (exit code 139) te voorkomen
-          # coverageOptions: ""
+          coverageOptions: ""
           # Optie 2: Vereenvoudigde coverage instellingen voor package tests (Indien Option 1 werkt)
           # coverageOptions: "usePackageTestRunner;pathToResultsFile=CodeCoverage"
           unityVersion: 6000.0.0f1
