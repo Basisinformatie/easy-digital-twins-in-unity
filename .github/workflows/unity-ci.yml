@@ -22,10 +22,10 @@ jobs:
       # 2. Prepare Unity Cache Directory
       - name: Prepare Unity Cache Directory
         run: |
-          mkdir -p $HOME/.cache/unity3d
-          mkdir -p $HOME/.config/Unity
-          chmod -R 755 $HOME/.cache/unity3d
-          chmod -R 755 $HOME/.config/Unity
+          mkdir -p /root/.cache/unity3d
+          mkdir -p /root/.config/Unity
+          chmod -R 755 /root/.cache/unity3d
+          chmod -R 755 /root/.config/Unity
 
       # 3. Unity Test Runner uitvoeren
       - name: Run Unity Tests
