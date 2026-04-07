@@ -5,7 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <IncludeTestQueries>true</IncludeTestQueries>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,11 +13,6 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="NUnit.Analyzers" Version="3.9.0" />
     <PackageReference Include="Coverlet.collector" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="../Runtime/Config/OUPConfig.cs" Link="Runtime/Config/OUPConfig.cs" />
-    <Compile Include="../Runtime/Config/ToolkitSettings.cs" Link="Runtime/Config/ToolkitSettings.cs" />
   </ItemGroup>
 
 </Project>
