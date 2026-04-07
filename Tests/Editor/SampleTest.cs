@@ -9,5 +9,10 @@ namespace Tests.Editor
         {
             Assert.Pass("+++++++++++++Deze test slaagt altijd.++++++++++++++++");
         }
+        
+        public void PassingTest()
+        {
+            Assert.Pass("+++++++++++++Deze test slaagt ook.++++++++++++++++");
+        }
     }
 }
