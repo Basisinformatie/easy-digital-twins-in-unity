@@ -21,4 +21,4 @@ jobs:
           dotnet-version: '8.0.x' # Or specify the version your project uses
 
       - name: Run Tests
-        run: dotnet test --configuration Release
+        run: dotnet test Tests/Tests.csproj --configuration Release
