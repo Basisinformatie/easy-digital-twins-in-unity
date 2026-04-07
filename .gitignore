@@ -1,0 +1,40 @@
+# Unity-generated files
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+
+# Memory Captures
+*.vram
+*.dump
+
+# Asset Meta Data (exclude if meta files are needed, but usually we want to keep them in Unity projects)
+# However, if this is a package, we DEFINITELY want to keep meta files. 
+# But for now, we follow standard Unity gitignore for everything else.
+
+# IDE-specific files
+.idea/
+.vs/
+.vscode/
+*.sln
+*.csproj
+*.unityproj
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svclog
+*.pdb
+*.mdb
+*.opendb
+*.db
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+
