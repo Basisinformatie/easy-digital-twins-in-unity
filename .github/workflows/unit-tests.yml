@@ -21,4 +21,17 @@ jobs:
           dotnet-version: '8.0.x' # Or specify the version your project uses
 
       - name: Run Tests
-        run: dotnet test Tests/Tests.csproj --configuration Release
+        run: dotnet test Tests/Tests.csproj --configuration Release --collect:"XPlat Code Coverage"
+
+      - name: ReportGenerator
+        uses: danielpalme/ReportGenerator-Action@5.2.4
+        with:
+          reports: 'Tests/TestResults/**/coverage.cobertura.xml'
+          targetdir: 'coveragereport'
+          reporttypes: 'MarkdownSummary;Badges'
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: coveragereport
