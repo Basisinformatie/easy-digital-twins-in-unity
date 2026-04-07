@@ -1,0 +1,16 @@
+{
+    "name": "com.rotterdam.digital-twins.Runtime",
+    "rootNamespace": "Rotterdam.DigitalTwins.Runtime",
+    "references": [
+        "CesiumForUnity"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

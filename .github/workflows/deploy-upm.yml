@@ -1,0 +1,42 @@
+name: Deploy UPM branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-upm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build upm branch
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Temp folder for UPM-versioning
+          mkdir -p ../upm-build
+          cp -r . ../upm-build
+          cd ../upm-build
+          
+          # remove unrelated files for UPM-version
+          rm -rf Tests
+          rm -rf Tests.meta
+          rm -rf .github
+          rm -rf .idea
+          rm -rf Documentation
+          
+          # add and commit, with feedback
+          git init -b upm
+          git add -A
+          git commit -m "Update UPM branch - $(date)"
+          
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git push -f origin upm

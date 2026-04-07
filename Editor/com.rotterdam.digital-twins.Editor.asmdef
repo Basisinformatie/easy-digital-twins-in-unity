@@ -1,0 +1,19 @@
+{
+    "name": "com.rotterdam.digital-twins.Editor",
+    "rootNamespace": "Rotterdam.DigitalTwins.Editor",
+    "references": [
+        "com.rotterdam.digital-twins.Runtime",
+        "CesiumForUnity"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
