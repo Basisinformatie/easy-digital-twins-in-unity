@@ -21,24 +21,19 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Temp folder for UPM-versioning
-          mkdir -p ../upm-build
-          cp -r . ../upm-build
-          cd ../upm-build
+          # Create and switch to upm branch from main
+          git checkout -b upm
           
-          # remove unrelated files for UPM-version
+          # Remove unrelated files for UPM-version
           rm -rf Tests
           rm -rf Tests.meta
           rm -rf .github
           rm -rf .idea
           rm -rf Documentation
           
-          # add and commit, with feedback
-          git init -b upm
+          # Add and commit changes
           git add -A
           git commit -m "Update UPM branch - $(date)"
           
-          # Remove existing remote if it exists, then add origin
-          git remote remove origin 2>/dev/null || true
-          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          # Push the upm branch
           git push -f origin upm
