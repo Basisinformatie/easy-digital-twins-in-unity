@@ -38,5 +38,7 @@ jobs:
           git add -A
           git commit -m "Update UPM branch - $(date)"
           
+          # Remove existing remote if it exists, then add origin
+          git remote remove origin 2>/dev/null || true
           git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git push -f origin upm
