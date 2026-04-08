@@ -1,0 +1,48 @@
+Projectcontext: "Makkelijk Digital Twins in Unity"
+Projectoverzicht Dit project is een afstudeeropdracht voor de Gemeente Rotterdam. Het doel is de ontwikkeling van een herbruikbare Unity-toolkit (UPM package) genaamd "Makkelijk Digital Twins in Unity". Deze toolkit verlaagt de drempel voor (niet-technische) gebruikers om complexe 3D-stadsdata van het Open Urban Platform (OUP) te ontsluiten en te gebruiken in XR-omgevingen (VR, AR en Desktop).
+Technische Stack & Afhankelijkheden
+•
+Engine: Unity 6 (6000.x) met de Universal Render Pipeline (URP).
+•
+Taal: C# (modern .NET).
+•
+Core Plugin: Cesium for Unity (voor WGS84 coördinaten en 3D Tiles streaming).
+•
+Data Bron: Open Urban Platform (OUP) API (JSON-catalogus met tileset URL's).
+•
+Standaarden: OGC 3D Tiles, b3dm, WGS84.
+Architectuur & Coding Standards
+•
+Design Principles: Strikte naleving van SOLID, DRY, KISS en Separation of Concerns (SoC).
+•
+Structuur: Modulaire opbouw als een Unity Package (UPM).
+•
+Assembly Definitions: Gebruik van .asmdef bestanden om Editor- en Runtime-logica strikt gescheiden te houden.
+•
+Data Management: Veelgebruik van ScriptableObjects voor configuratie en modulaire data-opslag.
+•
+UI: Ontwikkeld met de Unity UI Toolkit (UXML/USS) voor de Editor-vensters.
+Belangrijke Functionaliteiten
+1.
+Shopping Window (Editor Tool): Een wizard die de gebruiker stap-voor-stap door het proces leidt:
+◦
+Stap 1: Data Shopping – Ophalen van datasets via de OUPCatalogService.
+◦
+Stap 2: Experience & Controller – Kiezen uit VR, AR of Desktop prefabs. Oude controllers worden automatisch opgeschoond (SceneControllerUtil).
+◦
+Stap 3: Locatie & Omgeving – Automatische instelling van CesiumGeoreference, zonpositie en een tijdelijk plateau.
+2.
+Metadata Extractie: CesiumBuildingSelector.cs gebruikt Raycasting en de Cesium Batch Table om BAG-gegevens (bouwjaar, functie, etc.) direct uit de 3D-mesh te halen.
+3.
+Setup Assistant: Controleert bij opstarten of com.cesium.unity aanwezig is en installeert deze indien nodig via de Package Manager API.
+Richtlijnen voor de AI Assistent
+•
+Schrijf code die onderhoudbaar en testbaar is (gebruik interfaces voor dependency inversion).
+•
+Houd rekening met performance in XR (voorkom zware operaties in Update, gebruik caching).
+•
+Volg de Unity C# Style Guide (PascalCase voor methods/classes, camelCase voor private velden met underscore).
+•
+Wanneer je Editor-scripts schrijft, zorg dat ze altijd binnen #if UNITY_EDITOR staan of in een aparte Editor-map met de juiste assembly definition.
+•
+Focus op herbruikbaarheid: schrijf componenten die losgekoppeld zijn van specifieke scenes.
