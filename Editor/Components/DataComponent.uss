@@ -1,0 +1,4 @@
+/* Style definitions for DataComponent */
+.data-label {
+    -unity-font-style: bold;
+}
