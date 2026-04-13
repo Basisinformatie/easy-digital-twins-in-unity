@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Editor;
-
-public class OUPCatalogService
+namespace Rotterdam.DigitalTwins.Editor
 {
-    
+    public class OUPCatalogService
+    {
+        
+    }
 }

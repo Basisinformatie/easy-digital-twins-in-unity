@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Editor;
-
-public class PrefabLoader
+namespace Rotterdam.DigitalTwins.Editor
 {
-    
+    public class PrefabLoader
+    {
+        
+    }
 }

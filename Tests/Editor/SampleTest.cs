@@ -1,17 +1,18 @@
 using NUnit.Framework;
 
-namespace Rotterdam.DigitalTwins.Editor.Tests;
-
-public class SampleTest
+namespace Rotterdam.DigitalTwins.Editor.Tests
 {
-    [Test]
-    public void AlwaysPassingTest()
+    public class SampleTest
     {
-        Assert.Pass("+++++++++++++Deze test slaagt altijd.++++++++++++++++");
-    }
+        [Test]
+        public void AlwaysPassingTest()
+        {
+            Assert.Pass("+++++++++++++Deze test slaagt altijd.++++++++++++++++");
+        }
 
-    public void PassingTest()
-    {
-        Assert.Pass("+++++++++++++Deze test slaagt ook.++++++++++++++++");
+        public void PassingTest()
+        {
+            Assert.Pass("+++++++++++++Deze test slaagt ook.++++++++++++++++");
+        }
     }
 }

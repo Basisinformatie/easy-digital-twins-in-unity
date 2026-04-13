@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Runtime;
-
-public class ToolkitSettings
+namespace Rotterdam.DigitalTwins.Runtime
 {
-    
+    public class ToolkitSettings
+    {
+        
+    }
 }

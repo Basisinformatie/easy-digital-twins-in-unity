@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Runtime;
-
-public class MetadataPopupUI
+namespace Rotterdam.DigitalTwins.Runtime
 {
-    
+    public class MetadataPopupUI
+    {
+        
+    }
 }

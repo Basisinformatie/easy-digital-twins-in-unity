@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Editor;
-
-public class ShoppingWindow
+namespace Rotterdam.DigitalTwins.Editor
 {
-    
+    public class ShoppingWindow
+    {
+        
+    }
 }

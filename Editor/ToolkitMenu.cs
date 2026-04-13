@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Editor;
-
-public class ToolkitMenu
+namespace Rotterdam.DigitalTwins.Editor
 {
-    
+    public class ToolkitMenu
+    {
+        
+    }
 }

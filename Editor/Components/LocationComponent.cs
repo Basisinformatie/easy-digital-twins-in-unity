@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Editor;
-
-public class LocationComponent
+namespace Rotterdam.DigitalTwins.Editor
 {
-    
+    public class LocationComponent
+    {
+        
+    }
 }

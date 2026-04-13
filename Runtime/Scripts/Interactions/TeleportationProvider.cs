@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Runtime;
-
-public class TeleportationProvider
+namespace Rotterdam.DigitalTwins.Runtime
 {
-    
+    public class TeleportationProvider
+    {
+        
+    }
 }

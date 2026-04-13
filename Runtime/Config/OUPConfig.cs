@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Runtime;
-
-public class OUPConfig
+namespace Rotterdam.DigitalTwins.Runtime
 {
-    
+    public class OUPConfig
+    {
+        
+    }
 }

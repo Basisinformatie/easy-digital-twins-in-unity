@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Runtime;
-
-public class BuildingSelector
+namespace Rotterdam.DigitalTwins.Runtime
 {
-    
+    public class BuildingSelector
+    {
+        
+    }
 }

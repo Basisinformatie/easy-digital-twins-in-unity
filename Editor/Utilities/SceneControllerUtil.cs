@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Editor;
-
-public class SceneControllerUtil
+namespace Rotterdam.DigitalTwins.Editor
 {
-    
+    public class SceneControllerUtil
+    {
+        
+    }
 }

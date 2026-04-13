@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Editor;
-
-public class ControllerComponent
+namespace Rotterdam.DigitalTwins.Editor
 {
-    
+    public class ControllerComponent
+    {
+        
+    }
 }

@@ -1,6 +1,7 @@
-namespace Rotterdam.DigitalTwins.Editor;
-
-public class CesiumSetupService
+namespace Rotterdam.DigitalTwins.Editor
 {
-    
+    public class CesiumSetupService
+    {
+        
+    }
 }
