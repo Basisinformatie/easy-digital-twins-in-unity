@@ -1,4 +1,4 @@
-namespace DefaultNamespace;
+namespace Rotterdam.DigitalTwins.Editor;
 
 public class ControllerComponent
 {
