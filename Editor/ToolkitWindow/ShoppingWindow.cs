@@ -23,7 +23,7 @@ namespace Rotterdam.DigitalTwins.Editor
             root.style.paddingTop = 10;
             root.style.paddingBottom = 10;
 
-            Label label = new Label("Gemeente Rotterdam Easy Digital Twins");
+            Label label = new Label("Easy Digital Twins");
             label.style.fontSize = 20;
             label.style.unityFontStyleAndWeight = FontStyle.Bold;
             label.style.marginBottom = 20;
