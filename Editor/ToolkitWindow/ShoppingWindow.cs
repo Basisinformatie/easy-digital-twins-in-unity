@@ -38,13 +38,21 @@ namespace Rotterdam.DigitalTwins.Editor
 
             settingsButton.style.marginTop = 5;
             settingsButton.style.marginBottom = 5;
+            settingsButton.style.paddingTop = 10;
+            settingsButton.style.paddingBottom = 10;
             readmeButton.style.marginTop = 5;
             readmeButton.style.marginBottom = 5;
+            readmeButton.style.paddingTop = 10;
+            readmeButton.style.paddingBottom = 10;
             samplesButton.style.marginTop = 5;
             samplesButton.style.marginBottom = 5;
+            samplesButton.style.paddingTop = 10;
+            samplesButton.style.paddingBottom = 10;
 
-            startButton.style.height = 50;
+            startButton.style.height = 60;
             startButton.style.marginTop = 20;
+            startButton.style.paddingTop = 10;
+            startButton.style.paddingBottom = 10;
             startButton.style.backgroundColor = new Color(0.1f, 0.5f, 0.1f); // Groenachtig voor START
             startButton.style.color = Color.white;
             startButton.style.fontSize = 16;
@@ -56,12 +64,10 @@ namespace Rotterdam.DigitalTwins.Editor
             buttonContainer.Add(startButton);
             root.Add(buttonContainer);
 
-            // Spacer om het logo naar beneden te duwen
             VisualElement spacer = new VisualElement();
             spacer.style.flexGrow = 1;
             root.Add(spacer);
 
-            // Container voor logo en powered by tekst
             VisualElement footer = new VisualElement();
             footer.style.flexDirection = FlexDirection.Column;
             footer.style.alignItems = Align.Center;
@@ -69,22 +75,12 @@ namespace Rotterdam.DigitalTwins.Editor
 
             Image logo = new Image();
             Texture2D logoTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.rotterdam.digital-twins/Editor/ToolkitWindow/gemeente-rotterdam-logo.png");
+            logo.image = logoTexture;
+            logo.style.width = 300;
+            logo.style.height = 75;
+            logo.style.marginTop = 20;
+            footer.Add(logo);
             
-            // Fallback voor development
-            if (logoTexture == null)
-            {
-                logoTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Editor/ToolkitWindow/gemeente-rotterdam-logo.png");
-            }
-
-            if (logoTexture != null)
-            {
-                logo.image = logoTexture;
-                logo.style.width = 300;
-                logo.style.height = 75;
-                logo.style.marginTop = 20;
-                footer.Add(logo);
-            }
-
             Label poweredByLabel = new Label("Powered by Cesium");
             poweredByLabel.style.unityFontStyleAndWeight = FontStyle.Italic;
             poweredByLabel.style.fontSize = 10;
