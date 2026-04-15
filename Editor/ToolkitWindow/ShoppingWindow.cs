@@ -36,8 +36,15 @@ namespace Rotterdam.DigitalTwins.Editor
             Button samplesButton = new Button { text = "Samples" };
             Button startButton = new Button { text = "START" };
 
+            settingsButton.style.marginTop = 5;
+            settingsButton.style.marginBottom = 5;
+            readmeButton.style.marginTop = 5;
+            readmeButton.style.marginBottom = 5;
+            samplesButton.style.marginTop = 5;
+            samplesButton.style.marginBottom = 5;
+
             startButton.style.height = 50;
-            startButton.style.marginTop = 15;
+            startButton.style.marginTop = 20;
             startButton.style.backgroundColor = new Color(0.1f, 0.5f, 0.1f); // Groenachtig voor START
             startButton.style.color = Color.white;
             startButton.style.fontSize = 16;
@@ -54,6 +61,12 @@ namespace Rotterdam.DigitalTwins.Editor
             spacer.style.flexGrow = 1;
             root.Add(spacer);
 
+            // Container voor logo en powered by tekst
+            VisualElement footer = new VisualElement();
+            footer.style.flexDirection = FlexDirection.Column;
+            footer.style.alignItems = Align.Center;
+            root.Add(footer);
+
             Image logo = new Image();
             Texture2D logoTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.rotterdam.digital-twins/Editor/ToolkitWindow/gemeente-rotterdam-logo.png");
             
@@ -69,9 +82,16 @@ namespace Rotterdam.DigitalTwins.Editor
                 logo.style.width = 300;
                 logo.style.height = 75;
                 logo.style.marginTop = 20;
-                logo.style.alignSelf = Align.Center;
-                root.Add(logo);
+                footer.Add(logo);
             }
+
+            Label poweredByLabel = new Label("Powered by Cesium");
+            poweredByLabel.style.unityFontStyleAndWeight = FontStyle.Italic;
+            poweredByLabel.style.fontSize = 10;
+            poweredByLabel.style.alignSelf = Align.FlexEnd;
+            poweredByLabel.style.marginTop = 5;
+            poweredByLabel.style.color = new Color(0.5f, 0.5f, 0.5f);
+            footer.Add(poweredByLabel);
         }
     }
 }
