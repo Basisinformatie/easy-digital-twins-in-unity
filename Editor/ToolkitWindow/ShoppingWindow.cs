@@ -16,15 +16,35 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             VisualElement root = rootVisualElement;
 
-            Label label = new Label("by Gemeente Rotterdam");
-            Label label2 = new Label("Powered by Cesium");
-            
-            Button button = new Button();
-            button.text = "Test";
+            Image logo = new Image();
+            Texture2D logoTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.rotterdam.digital-twins/Editor/ToolkitWindow/gemeente-rotterdam-logo.png");
+            logo.image = logoTexture;
+            logo.style.width = 200;
+            logo.style.height = 50;
+            logo.style.marginBottom = 10;
+            root.Add(logo);
+
+            Label label = new Label("Gemeente Rotterdam Easy Digital Twins");
+            label.style.fontSize = 20;
+            label.style.unityFontStyleAndWeight = FontStyle.Bold;
+            label.style.marginBottom = 20;
             
             root.Add(label);
-            root.Add(label2);
-            root.Add(button);
+
+            Button startButton = new Button { text = "START" };
+            Button settingsButton = new Button { text = "Settings" };
+            Button readmeButton = new Button { text = "ReadMe" };
+            Button samplesButton = new Button { text = "Samples" };
+
+            startButton.style.height = 40;
+            startButton.style.marginTop = 10;
+            startButton.style.backgroundColor = new Color(0.1f, 0.5f, 0.1f); // Groenachtig voor START
+            startButton.style.color = Color.white;
+
+            root.Add(settingsButton);
+            root.Add(readmeButton);
+            root.Add(samplesButton);
+            root.Add(startButton);
         }
     }
 }

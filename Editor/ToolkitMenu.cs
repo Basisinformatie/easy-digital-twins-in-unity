@@ -4,7 +4,7 @@ namespace Rotterdam.DigitalTwins.Editor
 {
     public class ToolkitMenu
     {
-        [MenuItem("Tools/Easy Digital Twins")]
+        [MenuItem("Rotterdam Digital Twins/Launch UI")]
         public static void OpenShoppingWindow()
         {
             ShoppingWindow.ShowWindow();
