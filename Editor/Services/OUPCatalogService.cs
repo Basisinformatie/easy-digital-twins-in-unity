@@ -16,7 +16,7 @@ namespace Rotterdam.DigitalTwins.Editor
             List<string> queryParams = new List<string>();
 
             if (!string.IsNullOrEmpty(hubId))
-                queryParams.Add($"hubId={UnityWebRequest.EscapeURL(hubId)}");
+                queryParams.Add($"ownerHubId={UnityWebRequest.EscapeURL(hubId)}");
 
             if (tags != null && tags.Count > 0)
             {
@@ -59,13 +59,14 @@ namespace Rotterdam.DigitalTwins.Editor
                         }
                         OUPDatasetResponse response = JsonUtility.FromJson<OUPDatasetResponse>(json);
                         var results = response?.results ?? new List<OUPDataset>();
-                        Debug.Log($"[OUP] Fetched {results.Count} datasets.");
+                        Debug.Log($"[OUP] Fetched {results.Count} datasets from {url}");
                         
                         if (!string.IsNullOrEmpty(searchTerm))
                         {
                             results = results.Where(d => 
-                                d.title != null && d.title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || 
-                                (d.description != null && d.description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                                (d.title != null && d.title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) || 
+                                (d.description != null && d.description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                                (d.tags != null && d.tags.Any(t => t.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
                             ).ToList();
                         }
 
@@ -74,6 +75,65 @@ namespace Rotterdam.DigitalTwins.Editor
                             results = results.Where(d => 
                                 d.resources != null && d.resources.Any(f => formats.Any(fmt => string.Equals(fmt, f.format, StringComparison.OrdinalIgnoreCase)))
                             ).ToList();
+                        }
+
+                        onSuccess?.Invoke(results);
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"JSON Parsing error: {ex.Message}");
+                    }
+                }
+                request.Dispose();
+            };
+        }
+
+        public void FetchDigitalTwins(Action<List<OUPDigitalTwin>> onSuccess, Action<string> onError, string searchTerm = "", string hubId = "", List<string> tags = null)
+        {
+            List<string> queryParams = new List<string>();
+
+            if (!string.IsNullOrEmpty(hubId))
+                queryParams.Add($"hubId={UnityWebRequest.EscapeURL(hubId)}");
+
+            string url = $"{BaseUrl}/digital-twins";
+            if (queryParams.Count > 0)
+                url += "?" + string.Join("&", queryParams);
+
+            UnityWebRequest request = UnityWebRequest.Get(url);
+            request.SetRequestHeader("accept", "application/json");
+            var operation = request.SendWebRequest();
+
+            operation.completed += _ =>
+            {
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    onError?.Invoke(request.error);
+                }
+                else
+                {
+                    try
+                    {
+                        string json = request.downloadHandler.text;
+                        if (json.Trim().StartsWith("["))
+                        {
+                            json = "{\"results\":" + json + "}";
+                        }
+                        OUPDigitalTwinResponse response = JsonUtility.FromJson<OUPDigitalTwinResponse>(json);
+                        var results = response?.results ?? new List<OUPDigitalTwin>();
+                        Debug.Log($"[OUP] Fetched {results.Count} digital twins.");
+
+                        if (!string.IsNullOrEmpty(searchTerm))
+                        {
+                            results = results.Where(dt => 
+                                (dt.title != null && dt.title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) || 
+                                (dt.description != null && dt.description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                                (dt.tags != null && dt.tags.Any(t => t.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+                            ).ToList();
+                        }
+
+                        if (tags != null && tags.Count > 0)
+                        {
+                             results = results.Where(dt => dt.tags != null && tags.All(t => dt.tags.Contains(t))).ToList();
                         }
 
                         onSuccess?.Invoke(results);
