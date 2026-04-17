@@ -15,8 +15,17 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             List<string> queryParams = new List<string>();
 
+            // Use the suggested endpoint /datasets-filter
+            string url = $"{BaseUrl}/datasets-filter";
+            queryParams.Add("filterType=TAGS");
+
             if (!string.IsNullOrEmpty(hubId))
+            {
                 queryParams.Add($"ownerHubId={UnityWebRequest.EscapeURL(hubId)}");
+                queryParams.Add($"hubId={UnityWebRequest.EscapeURL(hubId)}");
+                string hubIdsJson = "[\"" + hubId + "\"]";
+                queryParams.Add($"partOfHubIds={UnityWebRequest.EscapeURL(hubIdsJson)}");
+            }
 
             if (tags != null && tags.Count > 0)
             {
@@ -34,7 +43,6 @@ namespace Rotterdam.DigitalTwins.Editor
             queryParams.Add("findability=LIMITED");
             queryParams.Add("datasetHubStatus=%5B%22OWNED_BY_HUB%22%5D");
 
-            string url = $"{BaseUrl}/datasets";
             if (queryParams.Count > 0)
                 url += "?" + string.Join("&", queryParams);
 
