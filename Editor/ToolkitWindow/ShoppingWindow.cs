@@ -8,15 +8,20 @@ namespace Rotterdam.DigitalTwins.Editor
     {
         private VisualElement _contentContainer;
 
+        private ICatalogService _catalogService;
+
         public static void ShowWindow()
         {
             ShoppingWindow wnd = GetWindow<ShoppingWindow>();
             wnd.titleContent = new GUIContent("Main Menu");
             wnd.minSize = new Vector2(350, 450);
+            wnd._catalogService = new OUPCatalogService();
         }
 
         public void CreateGUI()
         {
+            if (_catalogService == null)
+                _catalogService = new OUPCatalogService();
             VisualElement root = rootVisualElement;
             root.style.paddingLeft = 10;
             root.style.paddingRight = 10;
@@ -138,7 +143,7 @@ namespace Rotterdam.DigitalTwins.Editor
             toolbar.style.paddingTop = 5;
             toolbar.style.paddingBottom = 5;
 
-            Button dataTab = new Button(() => SwitchTab(new DataComponent())) { text = "Data" };
+            Button dataTab = new Button(() => SwitchTab(new DataComponent(_catalogService))) { text = "Data" };
             Button controllerTab = new Button(() => SwitchTab(new ControllerComponent())) { text = "Controller" };
             Button locationTab = new Button(() => SwitchTab(new LocationComponent())) { text = "Location" };
 
@@ -163,7 +168,7 @@ namespace Rotterdam.DigitalTwins.Editor
             backButton.style.paddingBottom = 8;
             _contentContainer.Add(backButton);
 
-            SwitchTab(new DataComponent());
+            SwitchTab(new DataComponent(_catalogService));
         }
 
         private void SwitchTab(VisualElement content)
