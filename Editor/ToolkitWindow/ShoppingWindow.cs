@@ -83,6 +83,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
             settingsButton.clicked += ShowSettings;
             readmeButton.clicked += ShowReadMe;
+            startButton.clicked += ShowShoppingWizard;
 
             settingsButton.style.marginTop = 5;
             settingsButton.style.marginBottom = 5;
@@ -124,6 +125,55 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             _contentContainer.Clear();
             _contentContainer.Add(new ReadMeComponent(ShowMainMenu));
+        }
+
+        private void ShowShoppingWizard()
+        {
+            _contentContainer.Clear();
+
+            VisualElement toolbar = new VisualElement();
+            toolbar.style.flexDirection = FlexDirection.Row;
+            toolbar.style.marginBottom = 10;
+            toolbar.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f);
+            toolbar.style.paddingTop = 5;
+            toolbar.style.paddingBottom = 5;
+
+            Button dataTab = new Button(() => SwitchTab(new DataComponent())) { text = "Data" };
+            Button controllerTab = new Button(() => SwitchTab(new ControllerComponent())) { text = "Controller" };
+            Button locationTab = new Button(() => SwitchTab(new LocationComponent())) { text = "Location" };
+
+            dataTab.style.flexGrow = 1;
+            controllerTab.style.flexGrow = 1;
+            locationTab.style.flexGrow = 1;
+
+            toolbar.Add(dataTab);
+            toolbar.Add(controllerTab);
+            toolbar.Add(locationTab);
+
+            _contentContainer.Add(toolbar);
+
+            VisualElement tabContent = new VisualElement();
+            tabContent.style.flexGrow = 1;
+            tabContent.name = "TabContent";
+            _contentContainer.Add(tabContent);
+
+            Button backButton = new Button(ShowMainMenu) { text = "Terug naar Menu" };
+            backButton.style.marginTop = 10;
+            backButton.style.paddingTop = 8;
+            backButton.style.paddingBottom = 8;
+            _contentContainer.Add(backButton);
+
+            SwitchTab(new DataComponent());
+        }
+
+        private void SwitchTab(VisualElement content)
+        {
+            VisualElement tabContent = _contentContainer.Q<VisualElement>("TabContent");
+            if (tabContent != null)
+            {
+                tabContent.Clear();
+                tabContent.Add(content);
+            }
         }
     }
 }
