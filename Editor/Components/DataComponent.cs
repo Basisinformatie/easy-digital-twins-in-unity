@@ -34,7 +34,7 @@ namespace Rotterdam.DigitalTwins.Editor
             filterBar.style.flexDirection = FlexDirection.Row;
             filterBar.style.marginBottom = 10;
 
-            _searchField = new TextField { placeholderText = "Search digital twins..." };
+            _searchField = new TextField("Search");
             _searchField.style.flexGrow = 1;
             _searchField.RegisterValueChangedCallback(_ => RefreshData());
             filterBar.Add(_searchField);
