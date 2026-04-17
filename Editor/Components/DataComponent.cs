@@ -63,7 +63,7 @@ namespace Rotterdam.DigitalTwins.Editor
             {
                 _hubs = hubs;
                 var choices = new List<string> { "All Hubs" };
-                choices.AddRange(hubs.Select(h => h.title));
+                choices.AddRange(hubs.Select(h => h.name));
                 _hubDropdown.choices = choices;
                 _hubDropdown.index = 0;
             }, error => Debug.LogError($"Failed to load hubs: {error}"));
@@ -74,7 +74,7 @@ namespace Rotterdam.DigitalTwins.Editor
             string selectedHubId = "";
             if (_hubDropdown.index > 0 && _hubs.Count >= _hubDropdown.index)
             {
-                selectedHubId = _hubs[_hubDropdown.index - 1].id;
+                selectedHubId = _hubs[_hubDropdown.index - 1]._id;
             }
 
             _catalogService.FetchDatasets(datasets =>
@@ -84,7 +84,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 {
                     _scrollView.Add(CreateDatasetCard(dataset));
                 }
-            }, error => Debug.LogError($"Failed to load datasets: {error}"), _searchField.value, selectedHubId, null, new List<string> { "3dtileset", "wms", "3dtile" });
+            }, error => Debug.LogError($"Failed to load datasets: {error}"), _searchField.value, selectedHubId, null, new List<string> { "3dtileset", "wms", "3dtile", "3dtiles" });
         }
 
         private VisualElement CreateDatasetCard(OUPDataset dataset)
@@ -135,10 +135,10 @@ namespace Rotterdam.DigitalTwins.Editor
                 card.Add(tags);
             }
 
-            if (dataset.formats != null && dataset.formats.Count > 0)
+            if (dataset.resources != null && dataset.resources.Count > 0)
             {
-                var matchingFormats = dataset.formats
-                    .Where(f => new[] { "3dtileset", "wms", "3dtile" }.Any(fmt => string.Equals(fmt, f.format, System.StringComparison.OrdinalIgnoreCase)))
+                var matchingFormats = dataset.resources
+                    .Where(f => new[] { "3dtileset", "wms", "3dtile", "3dtiles" }.Any(fmt => string.Equals(fmt, f.format, System.StringComparison.OrdinalIgnoreCase)))
                     .Select(f => f.format.ToUpper())
                     .Distinct();
                 

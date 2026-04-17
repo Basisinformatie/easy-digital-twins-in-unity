@@ -13,7 +13,6 @@ namespace Rotterdam.DigitalTwins.Editor
 
         public void FetchDatasets(Action<List<OUPDataset>> onSuccess, Action<string> onError, string searchTerm = "", string hubId = "", List<string> tags = null, List<string> formats = null)
         {
-            // Build query parameters based on NewFile1.txt example
             List<string> queryParams = new List<string>();
 
             if (!string.IsNullOrEmpty(hubId))
@@ -40,6 +39,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 url += "?" + string.Join("&", queryParams);
 
             UnityWebRequest request = UnityWebRequest.Get(url);
+            request.SetRequestHeader("accept", "application/json");
             var operation = request.SendWebRequest();
 
             operation.completed += _ =>
@@ -53,18 +53,18 @@ namespace Rotterdam.DigitalTwins.Editor
                     try
                     {
                         string json = request.downloadHandler.text;
-                        if (json.StartsWith("["))
+                        if (json.Trim().StartsWith("["))
                         {
-                            json = "{\"items\":" + json + "}";
+                            json = "{\"results\":" + json + "}";
                         }
                         OUPDatasetResponse response = JsonUtility.FromJson<OUPDatasetResponse>(json);
-                        
-                        var results = response?.items ?? new List<OUPDataset>();
+                        var results = response?.results ?? new List<OUPDataset>();
+                        Debug.Log($"[OUP] Fetched {results.Count} datasets.");
                         
                         if (!string.IsNullOrEmpty(searchTerm))
                         {
                             results = results.Where(d => 
-                                d.title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || 
+                                d.title != null && d.title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || 
                                 (d.description != null && d.description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
                             ).ToList();
                         }
@@ -72,7 +72,7 @@ namespace Rotterdam.DigitalTwins.Editor
                         if (formats != null && formats.Count > 0)
                         {
                             results = results.Where(d => 
-                                d.formats != null && d.formats.Any(f => formats.Any(fmt => string.Equals(fmt, f.format, StringComparison.OrdinalIgnoreCase)))
+                                d.resources != null && d.resources.Any(f => formats.Any(fmt => string.Equals(fmt, f.format, StringComparison.OrdinalIgnoreCase)))
                             ).ToList();
                         }
 
@@ -91,6 +91,7 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             string url = $"{BaseUrl}/hubs";
             UnityWebRequest request = UnityWebRequest.Get(url);
+            request.SetRequestHeader("accept", "application/json");
             var operation = request.SendWebRequest();
 
             operation.completed += _ =>
@@ -104,13 +105,15 @@ namespace Rotterdam.DigitalTwins.Editor
                     try
                     {
                         string json = request.downloadHandler.text;
-                        if (json.StartsWith("["))
+                        if (json.Trim().StartsWith("["))
                         {
-                            json = "{\"items\":" + json + "}";
+                            json = "{\"results\":" + json + "}";
                         }
                         
                         HubResponse response = JsonUtility.FromJson<HubResponse>(json);
-                        onSuccess?.Invoke(response?.items ?? new List<OUPHub>());
+                        var results = response?.results ?? new List<OUPHub>();
+                        Debug.Log($"[OUP] Fetched {results.Count} hubs.");
+                        onSuccess?.Invoke(results);
                     }
                     catch (Exception ex)
                     {
@@ -124,7 +127,7 @@ namespace Rotterdam.DigitalTwins.Editor
         [Serializable]
         private class HubResponse
         {
-            public List<OUPHub> items;
+            public List<OUPHub> results;
         }
     }
 }

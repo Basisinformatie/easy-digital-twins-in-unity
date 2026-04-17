@@ -6,17 +6,17 @@ namespace Rotterdam.DigitalTwins.Runtime
     [Serializable]
     public class OUPDataset
     {
-        public string id;
+        public string _id;
         public string title;
         public string description;
         public string thumbnailUrl;
         public List<string> tags;
         public string ownerHubId;
-        public List<OUPFormat> formats;
+        public List<OUPResource> resources;
     }
 
     [Serializable]
-    public class OUPFormat
+    public class OUPResource
     {
         public string format; 
         public string url;
@@ -25,14 +25,14 @@ namespace Rotterdam.DigitalTwins.Runtime
     [Serializable]
     public class OUPHub
     {
-        public string id;
-        public string title;
+        public string _id;
+        public string name;
         public string description;
     }
 
     [Serializable]
     public class OUPDatasetResponse
     {
-        public List<OUPDataset> items;
+        public List<OUPDataset> results;
     }
 }
