@@ -13,12 +13,32 @@ namespace Rotterdam.DigitalTwins.Editor
 
         public void FetchDatasets(Action<List<OUPDataset>> onSuccess, Action<string> onError, string searchTerm = "", string hubId = "", List<string> tags = null, List<string> formats = null)
         {
-            string url = $"{BaseUrl}/datasets?tags=%5B%22string%22%5D&ownerHubId=string&hubId=string&partOfHubIds=%5B%22string%22%5D&formats=%5B%22string%22%5D&preselectedFormats=%5B%22string%22%5D&ratings=%5B%22string%22%5D&bbox=%5B0%5D&withDefinedGeoExtent=true&findability=LIMITED&datasetHubStatus=%5B%22OWNED_BY_HUB%22%5D&excludeDatasetsFromHubs=%5B%22string%22%5D"; 
+            // Build query parameters based on NewFile1.txt example
+            List<string> queryParams = new List<string>();
 
             if (!string.IsNullOrEmpty(hubId))
-                url += $"&hubId={hubId}";
-            
-            
+                queryParams.Add($"hubId={UnityWebRequest.EscapeURL(hubId)}");
+
+            if (tags != null && tags.Count > 0)
+            {
+                string tagsJson = "[\"" + string.Join("\",\"", tags) + "\"]";
+                queryParams.Add($"tags={UnityWebRequest.EscapeURL(tagsJson)}");
+            }
+
+            if (formats != null && formats.Count > 0)
+            {
+                string formatsJson = "[\"" + string.Join("\",\"", formats) + "\"]";
+                queryParams.Add($"formats={UnityWebRequest.EscapeURL(formatsJson)}");
+            }
+
+            queryParams.Add("withDefinedGeoExtent=true");
+            queryParams.Add("findability=LIMITED");
+            queryParams.Add("datasetHubStatus=%5B%22OWNED_BY_HUB%22%5D");
+
+            string url = $"{BaseUrl}/datasets";
+            if (queryParams.Count > 0)
+                url += "?" + string.Join("&", queryParams);
+
             UnityWebRequest request = UnityWebRequest.Get(url);
             var operation = request.SendWebRequest();
 
@@ -39,7 +59,7 @@ namespace Rotterdam.DigitalTwins.Editor
                         }
                         OUPDatasetResponse response = JsonUtility.FromJson<OUPDatasetResponse>(json);
                         
-                        var results = response.items;
+                        var results = response?.items ?? new List<OUPDataset>();
                         
                         if (!string.IsNullOrEmpty(searchTerm))
                         {
@@ -90,7 +110,7 @@ namespace Rotterdam.DigitalTwins.Editor
                         }
                         
                         HubResponse response = JsonUtility.FromJson<HubResponse>(json);
-                        onSuccess?.Invoke(response.items);
+                        onSuccess?.Invoke(response?.items ?? new List<OUPHub>());
                     }
                     catch (Exception ex)
                     {
