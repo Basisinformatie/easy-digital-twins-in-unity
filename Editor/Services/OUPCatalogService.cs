@@ -13,7 +13,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
         public void FetchDatasets(Action<List<OUPDataset>> onSuccess, Action<string> onError, string searchTerm = "", string hubId = "", List<string> tags = null, List<string> formats = null)
         {
-            string url = $"{BaseUrl}/datasets?findability=PUBLIC"; 
+            string url = $"{BaseUrl}/datasets?tags=%5B%22string%22%5D&ownerHubId=string&hubId=string&partOfHubIds=%5B%22string%22%5D&formats=%5B%22string%22%5D&preselectedFormats=%5B%22string%22%5D&ratings=%5B%22string%22%5D&bbox=%5B0%5D&withDefinedGeoExtent=true&findability=LIMITED&datasetHubStatus=%5B%22OWNED_BY_HUB%22%5D&excludeDatasetsFromHubs=%5B%22string%22%5D"; 
 
             if (!string.IsNullOrEmpty(hubId))
                 url += $"&hubId={hubId}";
