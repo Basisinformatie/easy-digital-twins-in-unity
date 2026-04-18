@@ -15,6 +15,9 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             List<string> queryParams = new List<string>();
 
+            if (!string.IsNullOrEmpty(searchTerm))
+                queryParams.Add($"search={UnityWebRequest.EscapeURL(searchTerm)}");
+
             if (!string.IsNullOrEmpty(hubId))
                 queryParams.Add($"ownerHubId={UnityWebRequest.EscapeURL(hubId)}");
 
@@ -61,6 +64,7 @@ namespace Rotterdam.DigitalTwins.Editor
                         var results = response?.results ?? new List<OUPDataset>();
                         Debug.Log($"[OUP] Fetched {results.Count} datasets from {url}");
                         
+
                         if (!string.IsNullOrEmpty(searchTerm))
                         {
                             results = results.Where(d => 
@@ -68,6 +72,11 @@ namespace Rotterdam.DigitalTwins.Editor
                                 (d.description != null && d.description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
                                 (d.tags != null && d.tags.Any(t => t.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
                             ).ToList();
+                        }
+
+                        if (!string.IsNullOrEmpty(hubId))
+                        {
+                            results = results.Where(d => d.ownerHub != null && d.ownerHub._id == hubId).ToList();
                         }
 
                         if (formats != null && formats.Count > 0)
@@ -91,6 +100,9 @@ namespace Rotterdam.DigitalTwins.Editor
         public void FetchDigitalTwins(Action<List<OUPDigitalTwin>> onSuccess, Action<string> onError, string searchTerm = "", string hubId = "", List<string> tags = null)
         {
             List<string> queryParams = new List<string>();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+                queryParams.Add($"search={UnityWebRequest.EscapeURL(searchTerm)}");
 
             if (!string.IsNullOrEmpty(hubId))
                 queryParams.Add($"hubId={UnityWebRequest.EscapeURL(hubId)}");

@@ -11,7 +11,7 @@ namespace Rotterdam.DigitalTwins.Runtime
         public string description;
         public string thumbnailUrl;
         public List<string> tags;
-        public string ownerHubId;
+        public OUPHub ownerHub;
         public List<OUPResource> resources;
         public OUPGeoExtent geoExtent;
     }
@@ -19,7 +19,7 @@ namespace Rotterdam.DigitalTwins.Runtime
     [Serializable]
     public class OUPGeoExtent
     {
-        public List<double> bbox; // [minLon, minLat, maxLon, maxLat]
+        public List<double> bbox;
     }
 
     [Serializable]
@@ -38,7 +38,6 @@ namespace Rotterdam.DigitalTwins.Runtime
         public string previewImage;
         public OUPHub ownerHub;
         public List<string> tags;
-        // Digital twins might have different structures, but we keep it simple for now
     }
 
     [Serializable]
