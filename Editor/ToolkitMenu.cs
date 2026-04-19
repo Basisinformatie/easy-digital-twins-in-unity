@@ -1,4 +1,5 @@
 using UnityEditor;
+using Rotterdam.DigitalTwins.Editor;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
@@ -7,7 +8,7 @@ namespace Rotterdam.DigitalTwins.Editor
         [MenuItem("Rotterdam Digital Twins/Launch UI")]
         public static void OpenShoppingWindow()
         {
-            CesiumSetupService.EnsureCesiumIsInstalled();
+            CesiumSetupService.CheckAndInstallCesium();
             ShoppingWindow.ShowWindow();
         }
     }
