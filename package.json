@@ -15,16 +15,5 @@
   "author": {
     "name": "Gemeente Rotterdam"
   },
-  "dependencies": {
-    "com.cesium.unity": "1.13.0"
-  },
-  "scopedRegistries": [
-    {
-      "name": "Cesium",
-      "url": "https://unity.pkg.cesium.com",
-      "scopes": [
-        "com.cesium.unity"
-      ]
-    }
-  ]
+  "dependencies": {}
 }
