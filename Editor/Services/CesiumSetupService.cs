@@ -15,7 +15,7 @@ namespace Rotterdam.DigitalTwins.Editor
         private const string RegistryUrl = "https://unity.pkg.cesium.com";
         private static readonly string[] Scopes = { "com.cesium.unity" };
 
-        public static void CheckAndInstallCesium()
+        public static void CheckAndInstallCesium(Action onComplete)
         {
             ListRequest request = Client.List(true);
             
@@ -29,8 +29,16 @@ namespace Rotterdam.DigitalTwins.Editor
                         var isInstalled = request.Result.Any(p => p.name == PackageName);
                         if (!isInstalled)
                         {
-                            InstallCesium();
+                            InstallCesium(onComplete);
                         }
+                        else
+                        {
+                            onComplete?.Invoke();
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("Check for Cesium installation failed.");
                     }
                 }
             }
@@ -38,11 +46,29 @@ namespace Rotterdam.DigitalTwins.Editor
             EditorApplication.update += Progress;
         }
 
-        private static void InstallCesium()
+        private static void InstallCesium(Action onComplete)
         {
-            Debug.Log("Cesium for Unity is niet geïnstalleerd. Installatie wordt gestart...");
+            Debug.Log("Cesium for Unity is not installed. Starting installation...");
             AddScopedRegistry();
-            Client.Add(PackageName);
+            AddRequest addRequest = Client.Add(PackageName);
+
+            void Progress()
+            {
+                if (addRequest.IsCompleted)
+                {
+                    EditorApplication.update -= Progress;
+                    if (addRequest.Status == StatusCode.Success)
+                    {
+                        Debug.Log("Cesium for Unity successfully installed.");
+                        onComplete?.Invoke();
+                    }
+                    else
+                    {
+                        Debug.LogError($"Cesium installation failed: {addRequest.Error.message}");
+                    }
+                }
+            }
+            EditorApplication.update += Progress;
         }
 
         private static void AddScopedRegistry()

@@ -23,7 +23,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
             if (prefab == null)
             {
-                Debug.LogError($"Controller prefab {prefabName} niet gevonden op paden: {PackagePath} of {LocalPath}");
+                Debug.LogError($"Controller prefab {prefabName} not found at paths: {PackagePath} or {LocalPath}");
                 return;
             }
 
@@ -31,7 +31,7 @@ namespace Rotterdam.DigitalTwins.Editor
             Undo.RegisterCreatedObjectUndo(instance, "Instantiate Controller");
             Selection.activeGameObject = instance;
             
-            Debug.Log($"Controller vervangen door {prefabName}.");
+            Debug.Log($"Controller replaced with {prefabName}.");
         }
 
         public static void RemoveExistingControllers()
