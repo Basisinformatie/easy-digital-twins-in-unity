@@ -8,7 +8,8 @@ namespace Rotterdam.DigitalTwins.Editor
         [MenuItem("Rotterdam Digital Twins/Launch UI")]
         public static void OpenShoppingWindow()
         {
-            CesiumSetupService.CheckAndInstallCesium(ShoppingWindow.ShowWindow);
+            // CesiumSetupService.CheckAndInstallCesium(ShoppingWindow.ShowWindow);
+            ShoppingWindow.ShowWindow
         }
     }
 }
