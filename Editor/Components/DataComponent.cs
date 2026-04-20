@@ -101,6 +101,8 @@ namespace Rotterdam.DigitalTwins.Editor
 
             _scrollView.Clear();
 
+            var allowedFormats = new List<string> { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles" };
+
             if (_typeDropdown.index == 0) // Datasets
             {
                 _catalogService.FetchDatasets(datasets =>
@@ -109,7 +111,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     {
                         _scrollView.Add(CreateDatasetCard(dataset));
                     }
-                }, error => Debug.LogError($"Failed to load datasets: {error}"), _searchField.value, selectedHubId, null, new List<string> { "3dtileset", "3dtile", "3dtiles", "3dterrain" });
+                }, error => Debug.LogError($"Failed to load datasets: {error}"), _searchField.value, selectedHubId, null, allowedFormats);
             }
             else // Digital Twins
             {
@@ -129,8 +131,9 @@ namespace Rotterdam.DigitalTwins.Editor
 
             if (dataset.resources != null && dataset.resources.Count > 0)
             {
+                var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles" };
                 var allMatchingResources = dataset.resources
-                    .Where(r => new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
+                    .Where(r => allowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
                     .ToList();
                 
                 var matchingFormatsStrings = allMatchingResources
@@ -145,9 +148,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     formatsLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
                     card.Add(formatsLabel);
                     
-                    var tilesetResources = allMatchingResources
-                        .Where(r => new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
-                        .ToList();
+                    var tilesetResources = allMatchingResources;
 
                     foreach (var res in tilesetResources)
                     {
@@ -197,6 +198,34 @@ namespace Rotterdam.DigitalTwins.Editor
                 hubLabel.style.fontSize = 9;
                 hubLabel.style.color = new Color(0.7f, 0.7f, 0.7f);
                 card.Add(hubLabel);
+            }
+
+            var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles" };
+            var matchingResources = twin.resources?
+                .Where(r => allowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+            if (matchingResources != null && matchingResources.Count > 0)
+            {
+                Button addButton = new Button(() => {
+                    if (twin.groundPosition != null)
+                    {
+                        CesiumSceneHelper.SetGeoreference(twin.groundPosition.latitude, twin.groundPosition.longitude, twin.groundPosition.height);
+                    }
+                    CesiumSceneHelper.CreateMultiple3DTilesets(twin.title, matchingResources);
+                });
+                
+                addButton.text = matchingResources.Count > 1 ? "Add Digital Twin (All)" : "Add Digital Twin";
+                addButton.style.marginTop = 5;
+                addButton.style.height = 20;
+                addButton.style.fontSize = 10;
+                addButton.style.backgroundColor = new Color(0.2f, 0.5f, 0.2f);
+                addButton.style.color = Color.white;
+                addButton.style.borderBottomLeftRadius = 3;
+                addButton.style.borderBottomRightRadius = 3;
+                addButton.style.borderTopLeftRadius = 3;
+                addButton.style.borderTopRightRadius = 3;
+                card.Add(addButton);
             }
 
             return card;
