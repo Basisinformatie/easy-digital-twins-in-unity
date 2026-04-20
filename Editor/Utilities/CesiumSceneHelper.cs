@@ -8,6 +8,11 @@ namespace Rotterdam.DigitalTwins.Editor
     {
         public static void CreateBlank3DTileset()
         {
+            Create3DTilesetFromUrl("Cesium3DTileset", "");
+        }
+
+        public static void Create3DTilesetFromUrl(string name, string url)
+        {
             CesiumGeoreference georeference = Object.FindAnyObjectByType<CesiumGeoreference>();
             if (georeference == null)
             {
@@ -16,14 +21,20 @@ namespace Rotterdam.DigitalTwins.Editor
                 Undo.RegisterCreatedObjectUndo(georefGo, "Create CesiumGeoreference");
             }
 
-            GameObject tilesetGo = new GameObject("Cesium3DTileset");
+            GameObject tilesetGo = new GameObject(name);
             tilesetGo.transform.SetParent(georeference.transform);
-            tilesetGo.AddComponent<Cesium3DTileset>();
+            Cesium3DTileset tileset = tilesetGo.AddComponent<Cesium3DTileset>();
+
+            if (!string.IsNullOrEmpty(url))
+            {
+                tileset.source = CesiumDataSource.FromUrl;
+                tileset.url = url;
+            }
             
-            Undo.RegisterCreatedObjectUndo(tilesetGo, "Create Blank 3D Tileset");
+            Undo.RegisterCreatedObjectUndo(tilesetGo, $"Create {name}");
             Selection.activeGameObject = tilesetGo;
             
-            Debug.Log("Created Blank 3D Tiles Tileset under CesiumGeoreference.");
+            Debug.Log($"Created {name} under CesiumGeoreference.");
         }
     }
 }

@@ -126,7 +126,9 @@ namespace Rotterdam.DigitalTwins.Editor
         private VisualElement CreateDatasetCard(OUPDataset dataset)
         {
             VisualElement card = CreateBaseCard(dataset.title, dataset.thumbnailUrl, dataset.tags);
-            
+            card.RegisterCallback<ClickEvent>(_ => OnDatasetCardClicked(dataset));
+            card.style.cursor = new StyleCursor(Cursor.Link);
+
             if (dataset.resources != null && dataset.resources.Count > 0)
             {
                 var matchingFormats = dataset.resources
@@ -145,6 +147,27 @@ namespace Rotterdam.DigitalTwins.Editor
             }
 
             return card;
+        }
+
+        private void OnDatasetCardClicked(OUPDataset dataset)
+        {
+            if (dataset.resources == null || dataset.resources.Count == 0)
+            {
+                Debug.LogWarning($"Dataset {dataset.title} has no resources.");
+                return;
+            }
+
+            var tilesetResource = dataset.resources.FirstOrDefault(r => 
+                new[] { "3dtileset", "3dtile", "3dtiles" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)));
+
+            if (tilesetResource != null)
+            {
+                CesiumSceneHelper.Create3DTilesetFromUrl(dataset.title, tilesetResource.url);
+            }
+            else
+            {
+                Debug.LogWarning($"Dataset {dataset.title} has no compatible 3D tileset resources.");
+            }
         }
 
         private VisualElement CreateDigitalTwinCard(OUPDigitalTwin twin)
