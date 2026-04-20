@@ -1,6 +1,9 @@
 using CesiumForUnity;
 using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+using Rotterdam.DigitalTwins.Runtime;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
@@ -37,8 +40,30 @@ namespace Rotterdam.DigitalTwins.Editor
             Debug.Log($"Created {name} under CesiumGeoreference.");
         }
 
+        public static void CreateMultiple3DTilesets(string groupName, List<OUPResource> resources)
+        {
+            if (resources == null || resources.Count == 0) return;
+
+            foreach (var res in resources)
+            {
+                if (new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain" }.Any(fmt => string.Equals(fmt, res.format, System.StringComparison.OrdinalIgnoreCase)))
+                {
+                    string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
+                    string tilesetName = $"{groupName} ({displayName})";
+                    Create3DTilesetFromUrl(tilesetName, res.url);
+                }
+            }
+        }
+
         public static void SetGeoreferenceToRotterdam()
         {
+            SetGeoreference(new OUPGroundPosition { latitude = 51.90759, longitude = 4.490608, height = 6.1 });
+        }
+
+        public static void SetGeoreference(OUPGroundPosition groundPosition)
+        {
+            if (groundPosition == null) return;
+            
             CesiumGeoreference georeference = Object.FindAnyObjectByType<CesiumGeoreference>();
             if (georeference == null)
             {
@@ -47,12 +72,12 @@ namespace Rotterdam.DigitalTwins.Editor
                 Undo.RegisterCreatedObjectUndo(georefGo, "Create CesiumGeoreference");
             }
 
-            Undo.RecordObject(georeference, "Set Georeference to Rotterdam");
-            georeference.latitude = 51.90759;
-            georeference.longitude = 4.490608;
-            georeference.height = 6.1;
+            Undo.RecordObject(georeference, "Set Georeference");
+            georeference.latitude = groundPosition.latitude;
+            georeference.longitude = groundPosition.longitude;
+            georeference.height = groundPosition.height;
 
-            Debug.Log("CesiumGeoreference set to Rotterdam (51.90759, 4.490608, 6.1).");
+            Debug.Log($"CesiumGeoreference set to ({groundPosition.latitude}, {groundPosition.longitude}, {groundPosition.height}).");
         }
     }
 }
