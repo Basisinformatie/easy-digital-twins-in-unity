@@ -3,8 +3,7 @@ using Rotterdam.DigitalTwins.Editor;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
-    try
-    {
+    try{
         public class ToolkitMenu
         {
             [MenuItem("Rotterdam Digital Twins/Launch UI")]
@@ -15,8 +14,7 @@ namespace Rotterdam.DigitalTwins.Editor
             }
         }
     }
-    catch (Exception ex)
-    {
+    catch (Exception ex){
         Debug.LogError($"Is Cesium installed?: {ex.Message}");
     }
 }
