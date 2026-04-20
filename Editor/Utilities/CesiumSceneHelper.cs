@@ -1,5 +1,3 @@
-try{
-using CesiumForUnity;
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
@@ -80,9 +78,4 @@ namespace Rotterdam.DigitalTwins.Editor
             }
         }
     }
-}
-}
-catch (System.Exception e)
-{
-    Debug.LogError($"Unable to create tileset, is cesium installed?: {e.Message}");
 }
