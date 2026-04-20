@@ -9,7 +9,7 @@ namespace Rotterdam.DigitalTwins.Editor
         public static void OpenShoppingWindow()
         {
             CesiumSetupService.EnsureCesiumIsInstalled();
-            ShoppingWindow.ShowWindow;
+            ShoppingWindow.ShowWindow();
         }
     }
 }
