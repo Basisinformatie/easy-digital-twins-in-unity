@@ -109,7 +109,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     {
                         _scrollView.Add(CreateDatasetCard(dataset));
                     }
-                }, error => Debug.LogError($"Failed to load datasets: {error}"), _searchField.value, selectedHubId, null, new List<string> { "3dtileset", "wms", "3dtile", "3dtiles" });
+                }, error => Debug.LogError($"Failed to load datasets: {error}"), _searchField.value, selectedHubId, null, new List<string> { "3dtileset", "3dtile", "3dtiles", "3dterrain" });
             }
             else // Digital Twins
             {
@@ -130,7 +130,7 @@ namespace Rotterdam.DigitalTwins.Editor
             if (dataset.resources != null && dataset.resources.Count > 0)
             {
                 var allMatchingResources = dataset.resources
-                    .Where(r => new[] { "3dtileset", "wms", "3dtile", "3dtiles" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
+                    .Where(r => new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
                     .ToList();
                 
                 var matchingFormatsStrings = allMatchingResources
@@ -146,16 +146,18 @@ namespace Rotterdam.DigitalTwins.Editor
                     card.Add(formatsLabel);
                     
                     var tilesetResources = allMatchingResources
-                        .Where(r => new[] { "3dtileset", "3dtile", "3dtiles" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
+                        .Where(r => new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
                         .ToList();
 
                     foreach (var res in tilesetResources)
                     {
                         string buttonText;
                         string tilesetName;
+                        bool isTerrain = string.Equals(res.format, "3dterrain", System.StringComparison.OrdinalIgnoreCase);
+
                         if (tilesetResources.Count == 1)
                         {
-                            buttonText = "Add 3D Tileset";
+                            buttonText = isTerrain ? "Add 3D Terrain" : "Add 3D Tileset";
                             tilesetName = dataset.title;
                         }
                         else
