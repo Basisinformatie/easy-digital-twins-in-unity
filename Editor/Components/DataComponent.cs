@@ -109,7 +109,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     {
                         _scrollView.Add(CreateDatasetCard(dataset));
                     }
-                }, error => Debug.LogError($"Failed to load datasets: {error}"), _searchField.value, selectedHubId, null, new List<string> { "3dtileset", "3dtile", "3dtiles", "3dterrain" });
+                }, error => Debug.LogError($"Failed to load datasets: {error}"), _searchField.value, selectedHubId, null, new List<string> { "3dtileset", "3dtile", "3dtiles", "3d tiles", "3d-tiles", "3dterrain" });
             }
             else // Digital Twins
             {
@@ -151,8 +151,9 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             if (resources == null || resources.Count == 0) return;
 
+            var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3d tiles", "3d-tiles", "3dterrain" };
             var matchingResources = resources
-                .Where(r => new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
+                .Where(r => r.format != null && allowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
             if (matchingResources.Count == 0) return;
@@ -167,14 +168,15 @@ namespace Rotterdam.DigitalTwins.Editor
             formatsLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
             card.Add(formatsLabel);
 
-            if (matchingResources.Count > 1)
+            bool isDigitalTwin = groundPosition != null;
+            if (matchingResources.Count > 1 || isDigitalTwin)
             {
                 Button addAllButton = new Button(() => 
                 {
                     CesiumSceneHelper.SetGeoreference(groundPosition);
                     CesiumSceneHelper.CreateMultiple3DTilesets(title, matchingResources);
                 });
-                addAllButton.text = "Add All 3D Tilesets";
+                addAllButton.text = isDigitalTwin ? "Add Digital Twin" : "Add All 3D Tilesets";
                 addAllButton.style.marginTop = 5;
                 addAllButton.style.height = 24;
                 addAllButton.style.backgroundColor = new Color(0.1f, 0.3f, 0.6f);

@@ -44,9 +44,10 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             if (resources == null || resources.Count == 0) return;
 
+            var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3d tiles", "3d-tiles", "3dterrain" };
             foreach (var res in resources)
             {
-                if (new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain" }.Any(fmt => string.Equals(fmt, res.format, System.StringComparison.OrdinalIgnoreCase)))
+                if (res.format != null && allowedFormats.Any(fmt => string.Equals(fmt, res.format, System.StringComparison.OrdinalIgnoreCase)))
                 {
                     string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
                     string tilesetName = $"{groupName} ({displayName})";
