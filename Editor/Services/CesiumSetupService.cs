@@ -59,13 +59,20 @@ namespace Rotterdam.DigitalTwins.Editor
       ]
     }}";
 
-            if (manifestText.Contains("\"scopedRegistries\": ["))
+            var scopedRegistriesMatch = System.Text.RegularExpressions.Regex.Match(manifestText, "\"scopedRegistries\"\\s*:\\s*\\[");
+
+            if (scopedRegistriesMatch.Success)
             {
-                manifestText = manifestText.Replace("\"scopedRegistries\": [", "\"scopedRegistries\": [" + registryJson + ",");
+                int index = scopedRegistriesMatch.Index + scopedRegistriesMatch.Length;
+                manifestText = manifestText.Insert(index, registryJson + ",");
             }
             else
             {
-                manifestText = manifestText.Replace("{", "{\n  \"scopedRegistries\": [" + registryJson + "\n  ],");
+                int index = manifestText.IndexOf("{");
+                if (index >= 0)
+                {
+                    manifestText = manifestText.Insert(index + 1, "\n  \"scopedRegistries\": [" + registryJson + "\n  ],");
+                }
             }
 
             File.WriteAllText(manifestPath, manifestText);
