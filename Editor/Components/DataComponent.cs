@@ -201,16 +201,32 @@ namespace Rotterdam.DigitalTwins.Editor
             }
 
             var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles" };
-            var matchingResources = twin.resources?
+            
+            var allResources = new List<OUPResource>();
+            if (twin.configuration != null)
+            {
+                foreach (var config in twin.configuration)
+                {
+                    if (config.resources != null)
+                    {
+                        allResources.AddRange(config.resources);
+                    }
+                }
+            }
+
+            var matchingResources = allResources
                 .Where(r => allowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
-            if (matchingResources != null && matchingResources.Count > 0)
+            if (matchingResources.Count > 0)
             {
                 Button addButton = new Button(() => {
-                    if (twin.groundPosition != null)
+                    if (twin.viewpoint?.groundPosition != null && twin.viewpoint.groundPosition.Count >= 2)
                     {
-                        CesiumSceneHelper.SetGeoreference(twin.groundPosition.latitude, twin.groundPosition.longitude, twin.groundPosition.height);
+                        double lon = twin.viewpoint.groundPosition[0];
+                        double lat = twin.viewpoint.groundPosition[1];
+                        double height = twin.viewpoint.groundPosition.Count > 2 ? twin.viewpoint.groundPosition[2] : 0;
+                        CesiumSceneHelper.SetGeoreference(lat, lon, height);
                     }
                     CesiumSceneHelper.CreateMultiple3DTilesets(twin.title, matchingResources);
                 });
