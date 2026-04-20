@@ -36,5 +36,23 @@ namespace Rotterdam.DigitalTwins.Editor
             
             Debug.Log($"Created {name} under CesiumGeoreference.");
         }
+
+        public static void SetGeoreferenceToRotterdam()
+        {
+            CesiumGeoreference georeference = Object.FindAnyObjectByType<CesiumGeoreference>();
+            if (georeference == null)
+            {
+                GameObject georefGo = new GameObject("CesiumGeoreference");
+                georeference = georefGo.AddComponent<CesiumGeoreference>();
+                Undo.RegisterCreatedObjectUndo(georefGo, "Create CesiumGeoreference");
+            }
+
+            Undo.RecordObject(georeference, "Set Georeference to Rotterdam");
+            georeference.latitude = 51.90759;
+            georeference.longitude = 4.490608;
+            georeference.height = 6.1;
+
+            Debug.Log("CesiumGeoreference set to Rotterdam (51.90759, 4.490608, 6.1).");
+        }
     }
 }

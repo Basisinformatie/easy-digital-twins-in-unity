@@ -126,7 +126,6 @@ namespace Rotterdam.DigitalTwins.Editor
         private VisualElement CreateDatasetCard(OUPDataset dataset)
         {
             VisualElement card = CreateBaseCard(dataset.title, dataset.thumbnailUrl, dataset.tags);
-            card.RegisterCallback<ClickEvent>(_ => OnDatasetCardClicked(dataset));
 
             if (dataset.resources != null && dataset.resources.Count > 0)
             {
