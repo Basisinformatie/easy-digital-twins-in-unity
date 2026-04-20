@@ -1,3 +1,4 @@
+try{
 using CesiumForUnity;
 using UnityEditor;
 using UnityEngine;
@@ -66,7 +67,6 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             if (resources == null || resources.Count == 0) return;
 
-            // We use the same format check as in DataComponent
             var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles" };
             var matchingResources = resources
                 .Where(r => allowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
@@ -80,4 +80,9 @@ namespace Rotterdam.DigitalTwins.Editor
             }
         }
     }
+}
+}
+catch (System.Exception e)
+{
+    Debug.LogError($"Unable to create tileset, is cesium installed?: {e.Message}");
 }
