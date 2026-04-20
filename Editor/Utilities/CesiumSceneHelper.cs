@@ -84,8 +84,3 @@ namespace Rotterdam.DigitalTwins.Editor
     }
 }
 }
-catch (Exception ex)
-{
-    Debug.LogError($"Error in CesiumSceneHelper, is cesium installed?: {ex.Message}");
-}
-}
