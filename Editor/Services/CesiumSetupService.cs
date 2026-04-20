@@ -1,10 +1,9 @@
-using System;
-using System.IO;
-using System.Linq;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
+using System.IO;
+using System.Linq;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
@@ -13,62 +12,30 @@ namespace Rotterdam.DigitalTwins.Editor
         private const string PackageName = "com.cesium.unity";
         private const string RegistryName = "Cesium";
         private const string RegistryUrl = "https://unity.pkg.cesium.com";
-        private static readonly string[] Scopes = { "com.cesium.unity" };
+        private const string RegistryScope = "com.cesium.unity";
 
-        public static void CheckAndInstallCesium(Action onComplete)
+        public static void EnsureCesiumIsInstalled()
         {
-            ListRequest request = Client.List(true);
-            
-            void Progress()
+            if (IsPackageInstalled(PackageName))
             {
-                if (request.IsCompleted)
-                {
-                    EditorApplication.update -= Progress;
-                    if (request.Status == StatusCode.Success)
-                    {
-                        var isInstalled = request.Result.Any(p => p.name == PackageName);
-                        if (!isInstalled)
-                        {
-                            InstallCesium(onComplete);
-                        }
-                        else
-                        {
-                            onComplete?.Invoke();
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError("Check for Cesium installation failed.");
-                    }
-                }
+                Debug.Log($"[CesiumSetupService] {PackageName} is already installed.");
+                return;
             }
 
-            EditorApplication.update += Progress;
+            Debug.Log($"[CesiumSetupService] {PackageName} installing...");
+            AddScopedRegistry();
+            InstallPackage(PackageName);
         }
 
-        private static void InstallCesium(Action onComplete)
+        private static bool IsPackageInstalled(string packageName)
         {
-            Debug.Log("Cesium for Unity is not installed. Starting installation...");
-            AddScopedRegistry();
-            AddRequest addRequest = Client.Add(PackageName);
-
-            void Progress()
+            string manifestPath = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
+            if (File.Exists(manifestPath))
             {
-                if (addRequest.IsCompleted)
-                {
-                    EditorApplication.update -= Progress;
-                    if (addRequest.Status == StatusCode.Success)
-                    {
-                        Debug.Log("Cesium for Unity successfully installed.");
-                        onComplete?.Invoke();
-                    }
-                    else
-                    {
-                        Debug.LogError($"Cesium installation failed: {addRequest.Error.message}");
-                    }
-                }
+                string manifestText = File.ReadAllText(manifestPath);
+                return manifestText.Contains(packageName);
             }
-            EditorApplication.update += Progress;
+            return false;
         }
 
         private static void AddScopedRegistry()
@@ -76,26 +43,40 @@ namespace Rotterdam.DigitalTwins.Editor
             string manifestPath = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
             if (!File.Exists(manifestPath)) return;
 
-            string content = File.ReadAllText(manifestPath);
+            string manifestText = File.ReadAllText(manifestPath);
             
-            if (content.Contains(RegistryUrl)) return;
-
-            if (content.Contains("\"scopedRegistries\""))
+            if (manifestText.Contains(RegistryUrl))
             {
-                int index = content.IndexOf("\"scopedRegistries\"", StringComparison.Ordinal);
-                int openBracketIndex = content.IndexOf('[', index);
-                string newRegistry = $"\n    {{\n      \"name\": \"{RegistryName}\",\n      \"url\": \"{RegistryUrl}\",\n      \"scopes\": [\n        \"{Scopes[0]}\"\n      ]\n    }},";
-                content = content.Insert(openBracketIndex + 1, newRegistry);
+                return;
+            }
+            
+            string registryJson = $@"
+    {{
+      ""name"": ""{RegistryName}"",
+      ""url"": ""{RegistryUrl}"",
+      ""scopes"": [
+        ""{RegistryScope}""
+      ]
+    }}";
+
+            if (manifestText.Contains("\"scopedRegistries\": ["))
+            {
+                manifestText = manifestText.Replace("\"scopedRegistries\": [", "\"scopedRegistries\": [" + registryJson + ",");
             }
             else
             {
-                int lastBraceIndex = content.LastIndexOf('}');
-                string newSection = $",\n  \"scopedRegistries\": [\n    {{\n      \"name\": \"{RegistryName}\",\n      \"url\": \"{RegistryUrl}\",\n      \"scopes\": [\n        \"{Scopes[0]}\"\n      ]\n    }}\n  ]";
-                content = content.Insert(lastBraceIndex, newSection);
+                manifestText = manifestText.Replace("{", "{\n  \"scopedRegistries\": [" + registryJson + "\n  ],");
             }
 
-            File.WriteAllText(manifestPath, content);
+            File.WriteAllText(manifestPath, manifestText);
             AssetDatabase.Refresh();
+        }
+
+        private static void InstallPackage(string packageName)
+        {
+            Client.Add(packageName);
+            Debug.Log($"[CesiumSetupService] {PackageName} installation finishing...");
+
         }
     }
 }
