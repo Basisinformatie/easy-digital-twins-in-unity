@@ -1,4 +1,6 @@
+#if CESIUM_PRESENT
 using CesiumForUnity;
+#endif
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
@@ -15,6 +17,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
         public static void Create3DTilesetFromUrl(string name, string url)
         {
+#if CESIUM_PRESENT
             CesiumGeoreference georeference = Object.FindAnyObjectByType<CesiumGeoreference>();
             if (georeference == null)
             {
@@ -37,6 +40,9 @@ namespace Rotterdam.DigitalTwins.Editor
             Selection.activeGameObject = tilesetGo;
             
             Debug.Log($"Created {name} under CesiumGeoreference.");
+#else
+            Debug.LogError("Cesium for Unity is not installed. Please install it to use this feature.");
+#endif
         }
 
         public static void SetGeoreferenceToRotterdam()
@@ -46,6 +52,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
         public static void SetGeoreference(double lat, double lon, double height)
         {
+#if CESIUM_PRESENT
             CesiumGeoreference georeference = Object.FindAnyObjectByType<CesiumGeoreference>();
             if (georeference == null)
             {
@@ -60,6 +67,9 @@ namespace Rotterdam.DigitalTwins.Editor
             georeference.height = height;
 
             Debug.Log($"CesiumGeoreference set to ({lat}, {lon}, {height}).");
+#else
+            Debug.LogError("Cesium for Unity is not installed. Please install it to use this feature.");
+#endif
         }
 
         public static void CreateMultiple3DTilesets(string baseName, List<Rotterdam.DigitalTwins.Runtime.OUPResource> resources)
