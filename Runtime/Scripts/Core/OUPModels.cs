@@ -39,7 +39,6 @@ namespace Rotterdam.DigitalTwins.Runtime
         public string previewImage;
         public OUPHub ownerHub;
         public List<string> tags;
-        public List<OUPResource> resources;
     }
 
     [Serializable]
