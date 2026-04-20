@@ -56,6 +56,19 @@ namespace Rotterdam.DigitalTwins.Editor
 
             Add(filterBar);
 
+            Button blankTilesetButton = new Button(() => CesiumSceneHelper.CreateBlank3DTileset());
+            blankTilesetButton.text = "Blank 3D Tiles Tileset";
+            blankTilesetButton.tooltip = "Creates a CesiumGeoreference and a Blank 3D Tiles Tileset in the scene.";
+            blankTilesetButton.style.height = 30;
+            blankTilesetButton.style.marginBottom = 10;
+            blankTilesetButton.style.backgroundColor = new Color(0.25f, 0.25f, 0.25f);
+            blankTilesetButton.style.borderBottomLeftRadius = 5;
+            blankTilesetButton.style.borderBottomRightRadius = 5;
+            blankTilesetButton.style.borderTopLeftRadius = 5;
+            blankTilesetButton.style.borderTopRightRadius = 5;
+            blankTilesetButton.style.unityFontStyleAndWeight = FontStyle.Bold;
+            Add(blankTilesetButton);
+
             _scrollView = new ScrollView();
             _scrollView.style.flexGrow = 1;
             _scrollView.contentContainer.style.flexDirection = FlexDirection.Row;
