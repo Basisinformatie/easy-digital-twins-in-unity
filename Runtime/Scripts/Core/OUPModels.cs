@@ -31,14 +31,6 @@ namespace Rotterdam.DigitalTwins.Runtime
     }
 
     [Serializable]
-    public class OUPGroundPosition
-    {
-        public double latitude;
-        public double longitude;
-        public double height;
-    }
-
-    [Serializable]
     public class OUPDigitalTwin
     {
         public string _id;
@@ -47,8 +39,6 @@ namespace Rotterdam.DigitalTwins.Runtime
         public string previewImage;
         public OUPHub ownerHub;
         public List<string> tags;
-        public List<OUPResource> resources;
-        public OUPGroundPosition groundPosition;
     }
 
     [Serializable]
