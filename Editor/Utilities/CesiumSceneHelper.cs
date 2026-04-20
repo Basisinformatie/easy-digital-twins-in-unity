@@ -1,3 +1,5 @@
+try
+{
 using CesiumForUnity;
 using UnityEditor;
 using UnityEngine;
@@ -80,4 +82,5 @@ namespace Rotterdam.DigitalTwins.Editor
             }
         }
     }
+}
 }
