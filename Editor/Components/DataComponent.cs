@@ -14,6 +14,7 @@ namespace Rotterdam.DigitalTwins.Editor
         private DropdownField _hubDropdown;
         private DropdownField _typeDropdown;
         private List<OUPHub> _hubs = new();
+        private static readonly string[] SupportedFormats = { "3dtileset", "3dtile", "3dtiles", "3dterrain" };
 
         public DataComponent(ICatalogService catalogService)
         {
@@ -126,64 +127,7 @@ namespace Rotterdam.DigitalTwins.Editor
         private VisualElement CreateDatasetCard(OUPDataset dataset)
         {
             VisualElement card = CreateBaseCard(dataset.title, dataset.thumbnailUrl, dataset.tags);
-
-            if (dataset.resources != null && dataset.resources.Count > 0)
-            {
-                var allMatchingResources = dataset.resources
-                    .Where(r => new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
-                    .ToList();
-                
-                var matchingFormatsStrings = allMatchingResources
-                    .Select(f => f.format.ToUpper())
-                    .Distinct();
-                
-                if (matchingFormatsStrings.Any())
-                {
-                    Label formatsLabel = new Label(string.Join(", ", matchingFormatsStrings));
-                    formatsLabel.style.fontSize = 9;
-                    formatsLabel.style.color = new Color(0.3f, 0.7f, 1f);
-                    formatsLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-                    card.Add(formatsLabel);
-                    
-                    var tilesetResources = allMatchingResources
-                        .Where(r => new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
-                        .ToList();
-
-                    foreach (var res in tilesetResources)
-                    {
-                        string buttonText;
-                        string tilesetName;
-                        bool isTerrain = string.Equals(res.format, "3dterrain", System.StringComparison.OrdinalIgnoreCase);
-
-                        if (tilesetResources.Count == 1)
-                        {
-                            buttonText = isTerrain ? "Add 3D Terrain" : "Add 3D Tileset";
-                            tilesetName = dataset.title;
-                        }
-                        else
-                        {
-                            string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
-                            buttonText = $"Add {displayName}";
-                            tilesetName = $"{dataset.title} ({displayName})";
-                        }
-
-                        Button addButton = new Button(() => CesiumSceneHelper.Create3DTilesetFromUrl(tilesetName, res.url));
-                        addButton.text = buttonText;
-                        addButton.tooltip = res.url;
-                        addButton.style.marginTop = 5;
-                        addButton.style.height = 20;
-                        addButton.style.fontSize = 10;
-                        addButton.style.backgroundColor = new Color(0.2f, 0.5f, 0.2f);
-                        addButton.style.color = Color.white;
-                        addButton.style.borderBottomLeftRadius = 3;
-                        addButton.style.borderBottomRightRadius = 3;
-                        addButton.style.borderTopLeftRadius = 3;
-                        addButton.style.borderTopRightRadius = 3;
-                        card.Add(addButton);
-                    }
-                }
-            }
-
+            AddResourceButtons(card, dataset.title, dataset.resources);
             return card;
         }
 
@@ -198,6 +142,8 @@ namespace Rotterdam.DigitalTwins.Editor
                 hubLabel.style.color = new Color(0.7f, 0.7f, 0.7f);
                 card.Add(hubLabel);
             }
+
+            AddResourceButtons(card, twin.title, twin.resources);
 
             return card;
         }
@@ -267,7 +213,84 @@ namespace Rotterdam.DigitalTwins.Editor
                 request.Dispose();
             };
         }
-        
 
+        private void AddResourceButtons(VisualElement card, string mainTitle, List<OUPResource> resources)
+        {
+            if (resources == null || resources.Count == 0) return;
+
+            var tilesetResources = resources
+                .Where(r => SupportedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+            if (tilesetResources.Count == 0) return;
+
+            var matchingFormatsStrings = tilesetResources
+                .Select(f => f.format.ToUpper())
+                .Distinct();
+
+            Label formatsLabel = new Label(string.Join(", ", matchingFormatsStrings));
+            formatsLabel.style.fontSize = 9;
+            formatsLabel.style.color = new Color(0.3f, 0.7f, 1f);
+            formatsLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+            card.Add(formatsLabel);
+
+            if (tilesetResources.Count > 1)
+            {
+                Button addAllButton = new Button(() =>
+                {
+                    var items = tilesetResources.Select(res =>
+                    {
+                        string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
+                        return ($"{mainTitle} ({displayName})", res.url);
+                    }).ToList();
+                    CesiumSceneHelper.CreateMultiple3DTilesets(items);
+                });
+                addAllButton.text = "Add All 3D Tilesets";
+                addAllButton.style.marginTop = 5;
+                addAllButton.style.height = 24;
+                addAllButton.style.fontSize = 11;
+                addAllButton.style.backgroundColor = new Color(0.1f, 0.4f, 0.6f); // Blueish for "All"
+                addAllButton.style.color = Color.white;
+                addAllButton.style.unityFontStyleAndWeight = FontStyle.Bold;
+                addAllButton.style.borderBottomLeftRadius = 3;
+                addAllButton.style.borderBottomRightRadius = 3;
+                addAllButton.style.borderTopLeftRadius = 3;
+                addAllButton.style.borderTopRightRadius = 3;
+                card.Add(addAllButton);
+            }
+
+            foreach (var res in tilesetResources)
+            {
+                string buttonText;
+                string tilesetName;
+                bool isTerrain = string.Equals(res.format, "3dterrain", System.StringComparison.OrdinalIgnoreCase);
+
+                if (tilesetResources.Count == 1)
+                {
+                    buttonText = isTerrain ? "Add 3D Terrain" : "Add 3D Tileset";
+                    tilesetName = mainTitle;
+                }
+                else
+                {
+                    string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
+                    buttonText = $"Add {displayName}";
+                    tilesetName = $"{mainTitle} ({displayName})";
+                }
+
+                Button addButton = new Button(() => CesiumSceneHelper.Create3DTilesetFromUrl(tilesetName, res.url));
+                addButton.text = buttonText;
+                addButton.tooltip = res.url;
+                addButton.style.marginTop = 5;
+                addButton.style.height = 20;
+                addButton.style.fontSize = 10;
+                addButton.style.backgroundColor = new Color(0.2f, 0.5f, 0.2f);
+                addButton.style.color = Color.white;
+                addButton.style.borderBottomLeftRadius = 3;
+                addButton.style.borderBottomRightRadius = 3;
+                addButton.style.borderTopLeftRadius = 3;
+                addButton.style.borderTopRightRadius = 3;
+                card.Add(addButton);
+            }
+        }
     }
 }

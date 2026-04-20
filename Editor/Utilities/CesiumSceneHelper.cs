@@ -1,4 +1,5 @@
 using CesiumForUnity;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -35,6 +36,42 @@ namespace Rotterdam.DigitalTwins.Editor
             Selection.activeGameObject = tilesetGo;
             
             Debug.Log($"Created {name} under CesiumGeoreference.");
+        }
+
+        public static void CreateMultiple3DTilesets(List<(string name, string url)> datasets)
+        {
+            if (datasets == null || datasets.Count == 0) return;
+
+            CesiumGeoreference georeference = Object.FindAnyObjectByType<CesiumGeoreference>();
+            if (georeference == null)
+            {
+                GameObject georefGo = new GameObject("CesiumGeoreference");
+                georeference = georefGo.AddComponent<CesiumGeoreference>();
+                Undo.RegisterCreatedObjectUndo(georefGo, "Create CesiumGeoreference");
+            }
+
+            GameObject lastCreated = null;
+            foreach (var (name, url) in datasets)
+            {
+                GameObject tilesetGo = new GameObject(name);
+                tilesetGo.transform.SetParent(georeference.transform);
+                Cesium3DTileset tileset = tilesetGo.AddComponent<Cesium3DTileset>();
+
+                if (!string.IsNullOrEmpty(url))
+                {
+                    tileset.tilesetSource = CesiumDataSource.FromUrl;
+                    tileset.url = url;
+                }
+                
+                Undo.RegisterCreatedObjectUndo(tilesetGo, $"Create {name}");
+                Debug.Log($"Created {name} under CesiumGeoreference.");
+                lastCreated = tilesetGo;
+            }
+            
+            if (lastCreated != null)
+            {
+                Selection.activeGameObject = lastCreated;
+            }
         }
 
         public static void SetGeoreferenceToRotterdam()
