@@ -27,7 +27,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
             if (!string.IsNullOrEmpty(url))
             {
-                tileset.source = CesiumDataSource.FromUrl;
+                tileset.tilesetSource = CesiumDataSource.FromUrl;
                 tileset.url = url;
             }
             

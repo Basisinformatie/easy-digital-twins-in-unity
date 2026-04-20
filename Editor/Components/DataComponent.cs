@@ -127,7 +127,6 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             VisualElement card = CreateBaseCard(dataset.title, dataset.thumbnailUrl, dataset.tags);
             card.RegisterCallback<ClickEvent>(_ => OnDatasetCardClicked(dataset));
-            card.style.cursor = new StyleCursor(Cursor.Link);
 
             if (dataset.resources != null && dataset.resources.Count > 0)
             {
@@ -143,6 +142,22 @@ namespace Rotterdam.DigitalTwins.Editor
                     formatsLabel.style.color = new Color(0.3f, 0.7f, 1f);
                     formatsLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
                     card.Add(formatsLabel);
+                    
+                    if (matchingFormats.Any(fmt => new[] { "3DTILESET", "3DTILE", "3DTILES" }.Contains(fmt)))
+                    {
+                        Button addButton = new Button(() => OnDatasetCardClicked(dataset));
+                        addButton.text = "Add 3D Tileset";
+                        addButton.style.marginTop = 5;
+                        addButton.style.height = 20;
+                        addButton.style.fontSize = 10;
+                        addButton.style.backgroundColor = new Color(0.2f, 0.5f, 0.2f);
+                        addButton.style.color = Color.white;
+                        addButton.style.borderBottomLeftRadius = 3;
+                        addButton.style.borderBottomRightRadius = 3;
+                        addButton.style.borderTopLeftRadius = 3;
+                        addButton.style.borderTopRightRadius = 3;
+                        card.Add(addButton);
+                    }
                 }
             }
 
