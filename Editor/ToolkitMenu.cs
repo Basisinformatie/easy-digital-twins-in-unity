@@ -3,13 +3,20 @@ using Rotterdam.DigitalTwins.Editor;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
-    public class ToolkitMenu
+    try
     {
-        [MenuItem("Rotterdam Digital Twins/Launch UI")]
-        public static void OpenShoppingWindow()
+        public class ToolkitMenu
         {
-            CesiumSetupService.EnsureCesiumIsInstalled();
-            ShoppingWindow.ShowWindow();
+            [MenuItem("Rotterdam Digital Twins/Launch UI")]
+            public static void OpenShoppingWindow()
+            {
+                CesiumSetupService.EnsureCesiumIsInstalled();
+                ShoppingWindow.ShowWindow();
+            }
         }
+    }
+    catch (Exception ex)
+    {
+        Debug.LogError($"Is Cesium installed?: {ex.Message}");
     }
 }
