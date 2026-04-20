@@ -129,23 +129,45 @@ namespace Rotterdam.DigitalTwins.Editor
 
             if (dataset.resources != null && dataset.resources.Count > 0)
             {
-                var matchingFormats = dataset.resources
-                    .Where(f => new[] { "3dtileset", "wms", "3dtile", "3dtiles" }.Any(fmt => string.Equals(fmt, f.format, System.StringComparison.OrdinalIgnoreCase)))
+                var allMatchingResources = dataset.resources
+                    .Where(r => new[] { "3dtileset", "wms", "3dtile", "3dtiles" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
+                
+                var matchingFormatsStrings = allMatchingResources
                     .Select(f => f.format.ToUpper())
                     .Distinct();
                 
-                if (matchingFormats.Any())
+                if (matchingFormatsStrings.Any())
                 {
-                    Label formatsLabel = new Label(string.Join(", ", matchingFormats));
+                    Label formatsLabel = new Label(string.Join(", ", matchingFormatsStrings));
                     formatsLabel.style.fontSize = 9;
                     formatsLabel.style.color = new Color(0.3f, 0.7f, 1f);
                     formatsLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
                     card.Add(formatsLabel);
                     
-                    if (matchingFormats.Any(fmt => new[] { "3DTILESET", "3DTILE", "3DTILES" }.Contains(fmt)))
+                    var tilesetResources = allMatchingResources
+                        .Where(r => new[] { "3dtileset", "3dtile", "3dtiles" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
+                        .ToList();
+
+                    foreach (var res in tilesetResources)
                     {
-                        Button addButton = new Button(() => OnDatasetCardClicked(dataset));
-                        addButton.text = "Add 3D Tileset";
+                        string buttonText;
+                        string tilesetName;
+                        if (tilesetResources.Count == 1)
+                        {
+                            buttonText = "Add 3D Tileset";
+                            tilesetName = dataset.title;
+                        }
+                        else
+                        {
+                            string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
+                            buttonText = $"Add {displayName}";
+                            tilesetName = $"{dataset.title} ({displayName})";
+                        }
+
+                        Button addButton = new Button(() => CesiumSceneHelper.Create3DTilesetFromUrl(tilesetName, res.url));
+                        addButton.text = buttonText;
+                        addButton.tooltip = res.url;
                         addButton.style.marginTop = 5;
                         addButton.style.height = 20;
                         addButton.style.fontSize = 10;
@@ -161,27 +183,6 @@ namespace Rotterdam.DigitalTwins.Editor
             }
 
             return card;
-        }
-
-        private void OnDatasetCardClicked(OUPDataset dataset)
-        {
-            if (dataset.resources == null || dataset.resources.Count == 0)
-            {
-                Debug.LogWarning($"Dataset {dataset.title} has no resources.");
-                return;
-            }
-
-            var tilesetResource = dataset.resources.FirstOrDefault(r => 
-                new[] { "3dtileset", "3dtile", "3dtiles" }.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)));
-
-            if (tilesetResource != null)
-            {
-                CesiumSceneHelper.Create3DTilesetFromUrl(dataset.title, tilesetResource.url);
-            }
-            else
-            {
-                Debug.LogWarning($"Dataset {dataset.title} has no compatible 3D tileset resources.");
-            }
         }
 
         private VisualElement CreateDigitalTwinCard(OUPDigitalTwin twin)

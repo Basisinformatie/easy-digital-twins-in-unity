@@ -25,6 +25,7 @@ namespace Rotterdam.DigitalTwins.Runtime
     [Serializable]
     public class OUPResource
     {
+        public string name;
         public string format; 
         public string url;
     }
