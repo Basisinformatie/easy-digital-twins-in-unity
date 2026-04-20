@@ -2,7 +2,6 @@
     "name": "com.rotterdam.digital-twins.Runtime",
     "rootNamespace": "Rotterdam.DigitalTwins.Runtime",
     "references": [
-        "CesiumForUnity",
         "Unity.InputSystem"
     ],
     "includePlatforms": [],
@@ -17,6 +16,11 @@
             "name": "com.unity.inputsystem",
             "expression": "1.0.0",
             "define": "ROTTERDAM_ENABLE_INPUT_SYSTEM"
+        },
+        {
+            "name": "com.cesium.unity",
+            "expression": "",
+            "define": "CESIUM_PRESENT"
         }
     ],
     "noEngineReferences": false
