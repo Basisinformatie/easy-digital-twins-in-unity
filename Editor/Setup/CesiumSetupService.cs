@@ -1,9 +1,7 @@
 using UnityEditor;
 using UnityEditor.PackageManager;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using System.IO;
-using System.Linq;
 
 namespace Rotterdam.DigitalTwins.Editor.Setup
 {
@@ -29,7 +27,11 @@ namespace Rotterdam.DigitalTwins.Editor.Setup
 
         private static bool IsPackageInstalled(string packageName)
         {
-            return UnityEditor.PackageManager.PackageInfo.GetAllRegistered().Any(p => p.name == packageName);
+            string manifestPath = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
+            if (!File.Exists(manifestPath)) return false;
+
+            string manifestText = File.ReadAllText(manifestPath);
+            return System.Text.RegularExpressions.Regex.IsMatch(manifestText, $"\"{packageName}\"\\s*:");
         }
 
         private static void AddScopedRegistry()
