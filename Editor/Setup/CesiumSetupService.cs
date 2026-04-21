@@ -5,7 +5,7 @@ using UnityEngine;
 using System.IO;
 using System.Linq;
 
-namespace Rotterdam.DigitalTwins.Editor
+namespace Rotterdam.DigitalTwins.Editor.Setup
 {
     public class CesiumSetupService
     {

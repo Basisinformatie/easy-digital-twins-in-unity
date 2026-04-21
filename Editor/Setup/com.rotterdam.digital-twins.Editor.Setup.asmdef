@@ -1,11 +1,7 @@
 {
-    "name": "com.rotterdam.digital-twins.Editor",
-    "rootNamespace": "Rotterdam.DigitalTwins.Editor",
-    "references": [
-        "com.rotterdam.digital-twins.Runtime",
-        "com.rotterdam.digital-twins.Editor.Setup",
-        "CesiumForUnity"
-    ],
+    "name": "com.rotterdam.digital-twins.Editor.Setup",
+    "rootNamespace": "Rotterdam.DigitalTwins.Editor.Setup",
+    "references": [],
     "includePlatforms": [
         "Editor"
     ],
