@@ -29,13 +29,7 @@ namespace Rotterdam.DigitalTwins.Editor.Setup
 
         private static bool IsPackageInstalled(string packageName)
         {
-            string manifestPath = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
-            if (File.Exists(manifestPath))
-            {
-                string manifestText = File.ReadAllText(manifestPath);
-                return manifestText.Contains(packageName);
-            }
-            return false;
+            return PackageInfo.GetAllRegistered().Any(p => p.name == packageName);
         }
 
         private static void AddScopedRegistry()
