@@ -29,7 +29,7 @@ namespace Rotterdam.DigitalTwins.Editor.Setup
 
         private static bool IsPackageInstalled(string packageName)
         {
-            return PackageInfo.GetAllRegistered().Any(p => p.name == packageName);
+            return UnityEditor.PackageManager.PackageInfo.GetAllRegistered().Any(p => p.name == packageName);
         }
 
         private static void AddScopedRegistry()
