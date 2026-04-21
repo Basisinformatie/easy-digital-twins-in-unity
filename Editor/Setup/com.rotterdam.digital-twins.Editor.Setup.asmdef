@@ -3,8 +3,7 @@
     "rootNamespace": "Rotterdam.DigitalTwins.Editor.Setup",
     "references": [],
     "includePlatforms": [
-        "Editor",
-        "CesiumForUnity"
+        "Editor"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
