@@ -34,6 +34,11 @@ namespace Rotterdam.DigitalTwins.Editor.Setup
             return System.Text.RegularExpressions.Regex.IsMatch(manifestText, $"\"{packageName}\"\\s*:");
         }
 
+        public static bool IsPackageFolderPresent()
+        {
+            return AssetDatabase.IsValidFolder($"Packages/{PackageName}");
+        }
+
         private static void AddScopedRegistry()
         {
             string manifestPath = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
