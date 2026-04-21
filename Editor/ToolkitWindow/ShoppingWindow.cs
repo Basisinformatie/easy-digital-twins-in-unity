@@ -117,7 +117,7 @@ namespace Rotterdam.DigitalTwins.Editor
             waitingLabel.style.whiteSpace = WhiteSpace.Normal;
             waitingLabel.style.color = new Color(0.8f, 0.8f, 0.8f);
 
-            Label instructionsLabel = new Label("Als dit te lang duurt sluit het scherm en start deze opnieuw.");
+            Label instructionsLabel = new Label("If this takes longer than 30 seconds: check for 1. errors, 2. a working internet connection or 3. the readme for troubleshooting.");
             instructionsLabel.style.fontSize = 12;
             instructionsLabel.style.marginTop = 10;
             instructionsLabel.style.whiteSpace = WhiteSpace.Normal;
