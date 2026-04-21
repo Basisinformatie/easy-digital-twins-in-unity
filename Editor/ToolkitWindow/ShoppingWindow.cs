@@ -18,13 +18,11 @@ namespace Rotterdam.DigitalTwins.Editor
             wnd.minSize = new Vector2(350, 450);
             wnd._catalogService = new OUPCatalogService();
         }
-        
-        
+
         public void CreateGUI()
         {
             if (_catalogService == null)
                 _catalogService = new OUPCatalogService();
-
             VisualElement root = rootVisualElement;
             root.style.paddingLeft = 10;
             root.style.paddingRight = 10;
@@ -73,37 +71,9 @@ namespace Rotterdam.DigitalTwins.Editor
             poweredByLabel.style.color = new Color(0.5f, 0.5f, 0.5f);
             footer.Add(poweredByLabel);
 
-            HandleInstallationDisplay();
-        }
-
-        private void HandleInstallationDisplay()
-        {
             if (IsWaitingForCesium())
             {
-                ShowWaitingMessage("Waiting for cesium installation to finish...");
-                SessionState.SetBool("CesiumWaiting", true);
-            }
-            else if (SessionState.GetBool("CesiumWaiting", false))
-            {
-                double finishTime = (double)SessionState.GetFloat("CesiumFinishTime", 0);
-                if (finishTime <= 0)
-                {
-                    finishTime = EditorApplication.timeSinceStartup;
-                    SessionState.SetFloat("CesiumFinishTime", (float)finishTime);
-                }
-
-                double elapsed = EditorApplication.timeSinceStartup - finishTime;
-                if (elapsed < 1.0)
-                {
-                    ShowWaitingMessage("Installation finished! Opening menu...");
-                    EditorApplication.delayCall += Repaint;
-                }
-                else
-                {
-                    SessionState.EraseBool("CesiumWaiting");
-                    SessionState.EraseFloat("CesiumFinishTime");
-                    ShowMainMenu();
-                }
+                ShowWaitingMessage();
             }
             else
             {
@@ -116,16 +86,15 @@ namespace Rotterdam.DigitalTwins.Editor
 #if USING_CESIUM
             return false;
 #else
-            return CesiumSetupService.IsPackageInstalled(CesiumSetupService.PackageName) &&
-                   !CesiumSetupService.IsPackageFolderPresent();
+            return CesiumSetupService.IsPackageInstalled(CesiumSetupService.PackageName);
 #endif
         }
 
-        private void ShowWaitingMessage(string message)
+        private void ShowWaitingMessage()
         {
             _contentContainer.Clear();
             
-            Label waitingLabel = new Label(message);
+            Label waitingLabel = new Label("Waiting for cesium installation to finish...");
             waitingLabel.style.fontSize = 16;
             waitingLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
             waitingLabel.style.marginTop = 50;
@@ -245,6 +214,5 @@ namespace Rotterdam.DigitalTwins.Editor
                 tabContent.Add(content);
             }
         }
-        
     }
 }
