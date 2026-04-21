@@ -17,6 +17,11 @@
             "name": "com.unity.inputsystem",
             "expression": "1.0.0",
             "define": "ROTTERDAM_ENABLE_INPUT_SYSTEM"
+        },
+        {
+            "name": "com.cesium.unity",
+            "expression": "",
+            "define": "USING_CESIUM"
         }
     ],
     "noEngineReferences": false

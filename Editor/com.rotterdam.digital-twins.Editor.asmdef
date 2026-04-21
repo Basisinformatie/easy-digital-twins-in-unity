@@ -15,6 +15,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.cesium.unity",
+            "expression": "",
+            "define": "USING_CESIUM"
+        }
+    ],
     "noEngineReferences": false
 }
