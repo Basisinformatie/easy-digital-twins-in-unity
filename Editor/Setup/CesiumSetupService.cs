@@ -7,7 +7,7 @@ namespace Rotterdam.DigitalTwins.Editor.Setup
 {
     public class CesiumSetupService
     {
-        private const string PackageName = "com.cesium.unity";
+        public const string PackageName = "com.cesium.unity";
         private const string RegistryName = "Cesium";
         private const string RegistryUrl = "https://unity.pkg.cesium.com";
         private const string RegistryScope = "com.cesium.unity";
@@ -20,12 +20,12 @@ namespace Rotterdam.DigitalTwins.Editor.Setup
                 return;
             }
 
-            Debug.Log($"[CesiumSetupService] {PackageName} installing...");
+            Debug.Log($"[CesiumSetupService] Waiting for {PackageName} installation...");
             AddScopedRegistry();
             InstallPackage(PackageName);
         }
 
-        private static bool IsPackageInstalled(string packageName)
+        public static bool IsPackageInstalled(string packageName)
         {
             string manifestPath = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
             if (!File.Exists(manifestPath)) return false;

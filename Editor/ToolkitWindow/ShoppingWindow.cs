@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Rotterdam.DigitalTwins.Editor.Setup;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
@@ -70,7 +71,40 @@ namespace Rotterdam.DigitalTwins.Editor
             poweredByLabel.style.color = new Color(0.5f, 0.5f, 0.5f);
             footer.Add(poweredByLabel);
 
-            ShowMainMenu();
+            if (IsWaitingForCesium())
+            {
+                ShowWaitingMessage();
+            }
+            else
+            {
+                ShowMainMenu();
+            }
+        }
+
+        private bool IsWaitingForCesium()
+        {
+#if USING_CESIUM
+            return false;
+#else
+            return CesiumSetupService.IsPackageInstalled(CesiumSetupService.PackageName);
+#endif
+        }
+
+        private void ShowWaitingMessage()
+        {
+            _contentContainer.Clear();
+            
+            Label waitingLabel = new Label("Waiting for cesium installation to finish...");
+            waitingLabel.style.fontSize = 16;
+            waitingLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+            waitingLabel.style.marginTop = 50;
+            waitingLabel.style.alignSelf = Align.Center;
+            waitingLabel.style.whiteSpace = WhiteSpace.Normal;
+            waitingLabel.style.paddingLeft = 20;
+            waitingLabel.style.paddingRight = 20;
+            waitingLabel.style.color = new Color(0.7f, 0.7f, 0.7f);
+            
+            _contentContainer.Add(waitingLabel);
         }
 
         private void ShowMainMenu()
