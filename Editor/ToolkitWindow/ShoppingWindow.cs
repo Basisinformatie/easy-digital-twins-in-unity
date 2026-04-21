@@ -9,6 +9,7 @@ namespace Rotterdam.DigitalTwins.Editor
         private VisualElement _contentContainer;
 
         private ICatalogService _catalogService;
+        private bool _isWaitingForInstallation = false;
 
         public static void ShowWindow()
         {
@@ -70,7 +71,60 @@ namespace Rotterdam.DigitalTwins.Editor
             poweredByLabel.style.color = new Color(0.5f, 0.5f, 0.5f);
             footer.Add(poweredByLabel);
 
-            ShowMainMenu();
+            CheckInstallation();
+        }
+
+        private void CheckInstallation()
+        {
+            if (IsCesiumInstalled())
+            {
+                _isWaitingForInstallation = false;
+                ShowMainMenu();
+            }
+            else
+            {
+                _isWaitingForInstallation = true;
+                ShowWaitingScreen();
+            }
+        }
+
+        private bool IsCesiumInstalled()
+        {
+            return AssetDatabase.IsValidFolder("Packages/com.cesium.unity") || 
+                   AssetDatabase.IsValidFolder("Assets/CesiumForUnity");
+        }
+
+        private void OnInspectorUpdate()
+        {
+            if (_isWaitingForInstallation)
+            {
+                if (IsCesiumInstalled())
+                {
+                    _isWaitingForInstallation = false;
+                    ShowMainMenu();
+                }
+            }
+        }
+
+        private void ShowWaitingScreen()
+        {
+            _contentContainer.Clear();
+
+            Label waitingLabel = new Label("Waiting for installation...");
+            waitingLabel.style.fontSize = 16;
+            waitingLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+            waitingLabel.style.marginTop = 20;
+            waitingLabel.style.whiteSpace = WhiteSpace.Normal;
+            waitingLabel.style.color = new Color(0.8f, 0.8f, 0.8f);
+
+            Label instructionsLabel = new Label("Als dit te lang duurt sluit het scherm en start deze opnieuw.");
+            instructionsLabel.style.fontSize = 12;
+            instructionsLabel.style.marginTop = 10;
+            instructionsLabel.style.whiteSpace = WhiteSpace.Normal;
+            instructionsLabel.style.color = new Color(0.6f, 0.6f, 0.6f);
+
+            _contentContainer.Add(waitingLabel);
+            _contentContainer.Add(instructionsLabel);
         }
 
         private void ShowMainMenu()
