@@ -110,7 +110,7 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             _contentContainer.Clear();
 
-            Label waitingLabel = new Label("Waiting for installation...");
+            Label waitingLabel = new Label("Waiting for Cesium installation...");
             waitingLabel.style.fontSize = 16;
             waitingLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
             waitingLabel.style.marginTop = 20;
