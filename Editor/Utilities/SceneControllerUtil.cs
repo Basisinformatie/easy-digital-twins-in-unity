@@ -13,7 +13,8 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             RemoveExistingControllers();
 
-            string subFolder = prefabName.Contains("FirstPerson") ? "FirstPerson/" : "ThirdPerson/";
+            string subFolder = prefabName.Contains("FirstPerson") ? "FirstPerson/" : 
+                               prefabName.Contains("ThirdPerson") ? "ThirdPerson/" : "Car/";
             string fullPath = $"{PackagePath}{subFolder}{prefabName}.prefab";
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(fullPath);
             if (prefab == null)
@@ -48,6 +49,12 @@ namespace Rotterdam.DigitalTwins.Editor
             {
                 Undo.DestroyObjectImmediate(controller.gameObject);
             }
+
+            var carControllers = Object.FindObjectsByType<CustomCarController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var controller in carControllers)
+            {
+                Undo.DestroyObjectImmediate(controller.gameObject);
+            }
         }
 
         public static string GetCurrentControllerType()
@@ -56,6 +63,8 @@ namespace Rotterdam.DigitalTwins.Editor
                 return "First Person";
             if (Object.FindAnyObjectByType<ThirdPersonController>(FindObjectsInactive.Include) != null)
                 return "Third Person";
+            if (Object.FindAnyObjectByType<CustomCarController>(FindObjectsInactive.Include) != null)
+                return "Car";
             return "None";
         }
     }

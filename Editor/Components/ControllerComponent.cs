@@ -21,7 +21,7 @@ namespace Rotterdam.DigitalTwins.Editor
             info.style.marginBottom = 15;
             Add(info);
 
-            List<string> options = new List<string> { "None", "First Person", "Third Person" };
+            List<string> options = new List<string> { "None", "First Person", "Third Person", "Car" };
             string currentType = SceneControllerUtil.GetCurrentControllerType();
             
             DropdownField dropdown = new DropdownField("Controller Type", options, currentType);
@@ -34,6 +34,9 @@ namespace Rotterdam.DigitalTwins.Editor
                         break;
                     case "Third Person":
                         SceneControllerUtil.ReplaceController("ThirdPerson-Rig");
+                        break;
+                    case "Car":
+                        SceneControllerUtil.ReplaceController("CustomCarControllerRig");
                         break;
                     case "None":
                     default:
