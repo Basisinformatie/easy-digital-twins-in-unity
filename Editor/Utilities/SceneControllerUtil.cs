@@ -13,17 +13,18 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             RemoveExistingControllers();
 
-            string fullPath = $"{PackagePath}{prefabName}.prefab";
+            string subFolder = prefabName.Contains("FirstPerson") ? "FirstPerson/" : "ThirdPerson/";
+            string fullPath = $"{PackagePath}{subFolder}{prefabName}.prefab";
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(fullPath);
             if (prefab == null)
             {
-                fullPath = $"{LocalPath}{prefabName}.prefab";
+                fullPath = $"{LocalPath}{subFolder}{prefabName}.prefab";
                 prefab = AssetDatabase.LoadAssetAtPath<GameObject>(fullPath);
             }
 
             if (prefab == null)
             {
-                Debug.LogError($"Controller prefab {prefabName} not found at paths: {PackagePath} or {LocalPath}");
+                Debug.LogError($"Controller prefab {prefabName} not found at paths: {PackagePath}{subFolder} or {LocalPath}{subFolder}");
                 return;
             }
 
