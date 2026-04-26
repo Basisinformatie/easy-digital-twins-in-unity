@@ -1,5 +1,9 @@
 using UnityEngine;
 
+#if ROTTERDAM_ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
 public class CustomCarController : MonoBehaviour
 {
     [Header("Motor Settings")]
@@ -241,21 +245,52 @@ public class CustomCarController : MonoBehaviour
 
     private float GetRawSteerInput()
     {
+#if ROTTERDAM_ENABLE_INPUT_SYSTEM
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed) return -1f;
+            if (Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed) return 1f;
+        }
+        return 0f;
+#elif ENABLE_LEGACY_INPUT_MANAGER
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) return -1f;
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) return 1f;
         return 0f;
+#else
+        return 0f;
+#endif
     }
 
     private float GetRawThrottleInput()
     {
+#if ROTTERDAM_ENABLE_INPUT_SYSTEM
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed) return 1f;
+        }
+        return 0f;
+#elif ENABLE_LEGACY_INPUT_MANAGER
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) return 1f;
         return 0f;
+#else
+        return 0f;
+#endif
     }
 
     private float GetRawBrakeInput()
     {
+#if ROTTERDAM_ENABLE_INPUT_SYSTEM
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed) return 1f;
+        }
+        return 0f;
+#elif ENABLE_LEGACY_INPUT_MANAGER
         if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) return 1f;
         return 0f;
+#else
+        return 0f;
+#endif
     }
 
     private void AddDriveTorqueLogic()
