@@ -1,5 +1,9 @@
 using UnityEngine;
 
+#if ROTTERDAM_ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
 [RequireComponent(typeof(Rigidbody))]
 public class CustomHelicopterController : MonoBehaviour
 {
@@ -64,9 +68,23 @@ public class CustomHelicopterController : MonoBehaviour
 
     private void HandleEngine()
     {
-        if (Input.GetKey(liftUpKey))
+        bool liftUp = false;
+        bool liftDown = false;
+
+#if ROTTERDAM_ENABLE_INPUT_SYSTEM
+        if (Keyboard.current != null)
+        {
+            liftUp = Keyboard.current.spaceKey.isPressed;
+            liftDown = Keyboard.current.leftShiftKey.isPressed;
+        }
+#elif ENABLE_LEGACY_INPUT_MANAGER
+        liftUp = Input.GetKey(liftUpKey);
+        liftDown = Input.GetKey(liftDownKey);
+#endif
+
+        if (liftUp)
             engineForce += engineIncreaseSpeed * Time.fixedDeltaTime;
-        else if (Input.GetKey(liftDownKey))
+        else if (liftDown)
             engineForce -= engineDecreaseSpeed * Time.fixedDeltaTime;
 
         engineForce = Mathf.Clamp(engineForce, 0f, maxEngineForce);
@@ -89,18 +107,44 @@ public class CustomHelicopterController : MonoBehaviour
 
         if (!isOnGround)
         {
-            if (Input.GetKey(forwardKey)) tempY = Time.fixedDeltaTime;
-            else if (Input.GetKey(backwardKey)) tempY = -Time.fixedDeltaTime;
+            bool forward = false;
+            bool backward = false;
+            bool left = false;
+            bool right = false;
+            bool turnLeft = false;
+            bool turnRight = false;
 
-            if (Input.GetKey(leftKey)) tempX = -Time.fixedDeltaTime;
-            else if (Input.GetKey(rightKey)) tempX = Time.fixedDeltaTime;
+#if ROTTERDAM_ENABLE_INPUT_SYSTEM
+            if (Keyboard.current != null)
+            {
+                forward = Keyboard.current.wKey.isPressed;
+                backward = Keyboard.current.sKey.isPressed;
+                left = Keyboard.current.aKey.isPressed;
+                right = Keyboard.current.dKey.isPressed;
+                turnLeft = Keyboard.current.qKey.isPressed;
+                turnRight = Keyboard.current.eKey.isPressed;
+            }
+#elif ENABLE_LEGACY_INPUT_MANAGER
+            forward = Input.GetKey(forwardKey);
+            backward = Input.GetKey(backwardKey);
+            left = Input.GetKey(leftKey);
+            right = Input.GetKey(rightKey);
+            turnLeft = Input.GetKey(turnLeftKey);
+            turnRight = Input.GetKey(turnRightKey);
+#endif
 
-            if (Input.GetKey(turnRightKey))
+            if (forward) tempY = Time.fixedDeltaTime;
+            else if (backward) tempY = -Time.fixedDeltaTime;
+
+            if (left) tempX = -Time.fixedDeltaTime;
+            else if (right) tempX = Time.fixedDeltaTime;
+
+            if (turnRight)
             {
                 float force = (turnForcePercent - Mathf.Abs(hMove.y)) * rb.mass;
                 rb.AddRelativeTorque(0f, force, 0);
             }
-            else if (Input.GetKey(turnLeftKey))
+            else if (turnLeft)
             {
                 float force = -(turnForcePercent - Mathf.Abs(hMove.y)) * rb.mass;
                 rb.AddRelativeTorque(0f, force, 0);
