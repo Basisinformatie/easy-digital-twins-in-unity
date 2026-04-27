@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: 15d206b7f58eb7f4d81f6aad2cf03eb8
-timeCreated: 1433780116
-licenseType: Store
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2
@@ -53,10 +51,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 40107
-  packageName: Base Helicopter Controller
-  packageVersion: 1.1
-  assetPath: Assets/Helicopter/Resources/Models/HelicopterModel/Textures/Texture.png
-  uploadId: 72580

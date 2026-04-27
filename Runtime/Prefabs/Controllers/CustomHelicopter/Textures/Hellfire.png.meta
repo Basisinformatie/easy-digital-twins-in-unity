@@ -1,7 +1,4 @@
 fileFormatVersion: 2
-guid: 7fd76a817f1445643860a89beaf7450a
-timeCreated: 1433780121
-licenseType: Store
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2
@@ -53,10 +50,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 40107
-  packageName: Base Helicopter Controller
-  packageVersion: 1.1
-  assetPath: Assets/Helicopter/Resources/Models/HelicopterModel/Textures/Hellfire.png
-  uploadId: 72580

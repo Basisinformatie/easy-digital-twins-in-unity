@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: f44de2f933c77be469903b9fdaefff9b
-timeCreated: 1433780121
-licenseType: Store
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2
@@ -53,10 +51,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 40107
-  packageName: Base Helicopter Controller
-  packageVersion: 1.1
-  assetPath: Assets/Helicopter/Resources/Models/HelicopterModel/Textures/Hydra.png
-  uploadId: 72580

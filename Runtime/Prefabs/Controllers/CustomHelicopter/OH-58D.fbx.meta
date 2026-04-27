@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: f55006f6a32a71b45a114b4680c1e575
-timeCreated: 1433780123
-licenseType: Store
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
@@ -496,10 +494,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 40107
-  packageName: Base Helicopter Controller
-  packageVersion: 1.1
-  assetPath: Assets/Helicopter/Resources/Models/HelicopterModel/OH-58D.fbx
-  uploadId: 72580
