@@ -10,6 +10,8 @@ namespace Rotterdam.DigitalTwins.Editor
 
         private ICatalogService _catalogService;
         private bool _isWaitingForInstallation = false;
+        private double _installationDetectionTime = 0;
+        private const double DelayAfterInstallation = 1.0;
 
         public static void ShowWindow()
         {
@@ -100,8 +102,21 @@ namespace Rotterdam.DigitalTwins.Editor
             {
                 if (IsCesiumInstalled())
                 {
-                    _isWaitingForInstallation = false;
-                    ShowMainMenu();
+                    if (_installationDetectionTime <= 0)
+                    {
+                        _installationDetectionTime = EditorApplication.timeSinceStartup;
+                    }
+
+                    if (EditorApplication.timeSinceStartup - _installationDetectionTime >= DelayAfterInstallation)
+                    {
+                        _isWaitingForInstallation = false;
+                        _installationDetectionTime = 0;
+                        ShowMainMenu();
+                    }
+                }
+                else
+                {
+                    _installationDetectionTime = 0;
                 }
             }
         }
