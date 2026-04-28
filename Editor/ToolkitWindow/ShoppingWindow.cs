@@ -212,7 +212,7 @@ namespace Rotterdam.DigitalTwins.Editor
             toolbar.style.paddingTop = 5;
             toolbar.style.paddingBottom = 5;
 
-            Button dataTab = new Button(() => SwitchTab(new DataComponent(_catalogService))) { text = "Data" };
+            Button dataTab = new Button(() => SwitchTab(new DataComponent(_catalogService))) { text = "Data Catalogue" };
             Button controllerTab = new Button(() => SwitchTab(new ControllerComponent())) { text = "Controller" };
             Button locationTab = new Button(() => SwitchTab(new LocationComponent())) { text = "Location" };
 
