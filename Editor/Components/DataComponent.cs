@@ -13,7 +13,10 @@ namespace Rotterdam.DigitalTwins.Editor
         private TextField _searchField;
         private DropdownField _hubDropdown;
         private DropdownField _typeDropdown;
+        private Toggle _resourceFilterToggle;
         private List<OUPHub> _hubs = new();
+
+        private static readonly string[] AllowedFormats = { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles" };
 
         public DataComponent(ICatalogService catalogService)
         {
@@ -33,8 +36,18 @@ namespace Rotterdam.DigitalTwins.Editor
             List<string> types = new List<string> { "Datasets", "Digital Twins" };
             _typeDropdown = new DropdownField("Type", types, 0);
             _typeDropdown.style.flexGrow = 1;
-            _typeDropdown.RegisterValueChangedCallback(_ => RefreshData());
+            _typeDropdown.RegisterValueChangedCallback(_ => {
+                _resourceFilterToggle.style.display = _typeDropdown.index == 1 ? DisplayStyle.Flex : DisplayStyle.None;
+                RefreshData();
+            });
             topBar.Add(_typeDropdown);
+
+            _resourceFilterToggle = new Toggle("Only with 3D Resources");
+            _resourceFilterToggle.tooltip = "Hide digital twins that do not have any supported 3D resources (3D Tiles, Terrain, etc.)";
+            _resourceFilterToggle.style.display = DisplayStyle.None;
+            _resourceFilterToggle.style.marginLeft = 10;
+            _resourceFilterToggle.RegisterValueChangedCallback(_ => RefreshData());
+            topBar.Add(_resourceFilterToggle);
 
             Add(topBar);
 
@@ -101,8 +114,6 @@ namespace Rotterdam.DigitalTwins.Editor
 
             _scrollView.Clear();
 
-            var allowedFormats = new List<string> { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles" };
-
             if (_typeDropdown.index == 0) // Datasets
             {
                 _catalogService.FetchDatasets(datasets =>
@@ -111,7 +122,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     {
                         _scrollView.Add(CreateDatasetCard(dataset));
                     }
-                }, error => Debug.LogError($"Failed to load datasets: {error}"), _searchField.value, selectedHubId, null, allowedFormats);
+                }, error => Debug.LogError($"Failed to load datasets: {error}"), _searchField.value, selectedHubId, null, AllowedFormats.ToList());
             }
             else // Digital Twins
             {
@@ -119,6 +130,13 @@ namespace Rotterdam.DigitalTwins.Editor
                 {
                     foreach (var twin in twins)
                     {
+                        if (_resourceFilterToggle.value)
+                        {
+                            bool hasResources = twin.configuration?.Any(c => 
+                                c.resources?.Any(r => AllowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase))) == true) == true;
+                            
+                            if (!hasResources) continue;
+                        }
                         _scrollView.Add(CreateDigitalTwinCard(twin));
                     }
                 }, error => Debug.LogError($"Failed to load digital twins: {error}"), _searchField.value, selectedHubId);
@@ -131,9 +149,8 @@ namespace Rotterdam.DigitalTwins.Editor
 
             if (dataset.resources != null && dataset.resources.Count > 0)
             {
-                var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles" };
                 var allMatchingResources = dataset.resources
-                    .Where(r => allowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
+                    .Where(r => AllowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
                     .ToList();
                 
                 var matchingFormatsStrings = allMatchingResources
@@ -199,8 +216,6 @@ namespace Rotterdam.DigitalTwins.Editor
                 hubLabel.style.color = new Color(0.7f, 0.7f, 0.7f);
                 card.Add(hubLabel);
             }
-
-            var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles" };
             
             var allResources = new List<OUPResource>();
             if (twin.configuration != null)
@@ -215,7 +230,7 @@ namespace Rotterdam.DigitalTwins.Editor
             }
 
             var matchingResources = allResources
-                .Where(r => allowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
+                .Where(r => AllowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
             if (matchingResources.Count > 0)
