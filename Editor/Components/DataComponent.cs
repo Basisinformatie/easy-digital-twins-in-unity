@@ -181,13 +181,14 @@ namespace Rotterdam.DigitalTwins.Editor
                         else
                         {
                             string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
-                            buttonText = $"Add {displayName}";
+                            string displayButtonName = displayName.Length > 17 ? displayName.Substring(0, 17) + "..." : displayName;
+                            buttonText = $"Add {displayButtonName}";
                             tilesetName = $"{dataset.title} ({displayName})";
                         }
 
-                        Button addButton = new Button(() => CesiumSceneHelper.Create3DTilesetFromUrl(tilesetName, res.url));
+                        Button addButton = new Button(() => CesiumSceneHelper.Create3DTilesetFromUrl(tilesetName, res.ur));
                         addButton.text = buttonText;
-                        addButton.tooltip = res.url;
+                        addButton.tooltip = res.name;
                         addButton.style.marginTop = 5;
                         addButton.style.height = 20;
                         addButton.style.fontSize = 10;
