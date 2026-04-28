@@ -21,7 +21,7 @@ namespace Rotterdam.DigitalTwins.Editor
             info.style.marginBottom = 15;
             Add(info);
 
-            List<string> options = new List<string> { "None", "First Person", "Third Person", "Car" };
+            List<string> options = new List<string> { "None", "First Person", "Third Person", "Car", "Helicopter" };
             string currentType = SceneControllerUtil.GetCurrentControllerType();
             
             DropdownField dropdown = new DropdownField("Controller Type", options, currentType);
@@ -37,6 +37,9 @@ namespace Rotterdam.DigitalTwins.Editor
                         break;
                     case "Car":
                         SceneControllerUtil.ReplaceController("CustomCarControllerRig");
+                        break;
+                    case "Helicopter":
+                        SceneControllerUtil.ReplaceController("Helicopter-Rig");
                         break;
                     case "None":
                     default:
