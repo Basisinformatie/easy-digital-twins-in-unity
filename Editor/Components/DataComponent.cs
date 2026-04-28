@@ -127,7 +127,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
         private VisualElement CreateDatasetCard(OUPDataset dataset)
         {
-            VisualElement card = CreateBaseCard(dataset.title, dataset.thumbnailUrl, dataset.tags);
+            VisualElement card = CreateBaseCard(dataset.title, null, dataset.tags, dataset.ownerHub?.name);
 
             if (dataset.resources != null && dataset.resources.Count > 0)
             {
@@ -247,7 +247,7 @@ namespace Rotterdam.DigitalTwins.Editor
             return card;
         }
 
-        private VisualElement CreateBaseCard(string titleText, string thumbUrl, List<string> tagsList)
+        private VisualElement CreateBaseCard(string titleText, string thumbUrl, List<string> tagsList, string previewText = null)
         {
             VisualElement card = new VisualElement();
             card.style.width = 150;
@@ -267,6 +267,8 @@ namespace Rotterdam.DigitalTwins.Editor
             preview.style.height = 100;
             preview.style.backgroundColor = Color.black;
             preview.style.marginBottom = 5;
+            preview.style.justifyContent = Justify.Center;
+            preview.style.alignItems = Align.Center;
             
             if (!string.IsNullOrEmpty(thumbUrl))
             {
@@ -274,9 +276,14 @@ namespace Rotterdam.DigitalTwins.Editor
             }
             else
             {
-                Label placeholder = new Label("No Preview");
-                placeholder.style.alignSelf = Align.Center;
-                placeholder.style.marginTop = 40;
+                Label placeholder = new Label(!string.IsNullOrEmpty(previewText) ? previewText : "No Preview");
+                placeholder.style.fontSize = 11;
+                placeholder.style.color = new Color(0.8f, 0.8f, 0.8f);
+                placeholder.style.unityFontStyleAndWeight = FontStyle.Bold;
+                placeholder.style.whiteSpace = WhiteSpace.Normal;
+                placeholder.style.unityTextAlign = TextAnchor.MiddleCenter;
+                placeholder.style.paddingLeft = 5;
+                placeholder.style.paddingRight = 5;
                 preview.Add(placeholder);
             }
             card.Add(preview);
