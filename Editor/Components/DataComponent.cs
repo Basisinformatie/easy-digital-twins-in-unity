@@ -186,7 +186,7 @@ namespace Rotterdam.DigitalTwins.Editor
                             tilesetName = $"{dataset.title} ({displayName})";
                         }
 
-                        Button addButton = new Button(() => CesiumSceneHelper.Create3DTilesetFromUrl(tilesetName, res.ur));
+                        Button addButton = new Button(() => CesiumSceneHelper.Create3DTilesetFromUrl(tilesetName, res.url));
                         addButton.text = buttonText;
                         addButton.tooltip = res.name;
                         addButton.style.marginTop = 5;
