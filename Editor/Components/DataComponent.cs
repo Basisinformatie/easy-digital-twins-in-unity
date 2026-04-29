@@ -95,11 +95,15 @@ namespace Rotterdam.DigitalTwins.Editor
             blankTilesetButton.style.unityFontStyleAndWeight = FontStyle.Bold;
             Add(blankTilesetButton);
 
+            VisualElement resultsContainer = new VisualElement();
+            resultsContainer.style.flexGrow = 1;
+            Add(resultsContainer);
+
             _scrollView = new ScrollView();
             _scrollView.style.flexGrow = 1;
             _scrollView.contentContainer.style.flexDirection = FlexDirection.Row;
             _scrollView.contentContainer.style.flexWrap = Wrap.Wrap;
-            Add(_scrollView);
+            resultsContainer.Add(_scrollView);
 
             _loadingIndicator = new VisualElement();
             _loadingIndicator.style.alignItems = Align.Center;
@@ -113,7 +117,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
             Label spinner = new Label("↻");
             spinner.style.fontSize = 40;
-            spinner.style.color = new Color(0.3f, 0.7f, 1f);
+            spinner.style.color = new Color(0.1f, 0.5f, 0.1f);
             _loadingIndicator.Add(spinner);
             
             _loadingIndicator.schedule.Execute(() => {
@@ -121,7 +125,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 spinner.transform.rotation = Quaternion.Euler(0, 0, currentRotate + 20);
             }).Every(50);
             
-            Add(_loadingIndicator);
+            resultsContainer.Add(_loadingIndicator);
 
             LoadHubs();
             RefreshData();

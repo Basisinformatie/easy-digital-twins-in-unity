@@ -131,14 +131,28 @@ namespace Rotterdam.DigitalTwins.Editor
             waitingLabel.style.marginTop = 20;
             waitingLabel.style.whiteSpace = WhiteSpace.Normal;
             waitingLabel.style.color = new Color(0.8f, 0.8f, 0.8f);
+            waitingLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
 
-            Label instructionsLabel = new Label("If this takes longer than 30 seconds: check for 1. errors, 2. a working internet connection or 3. the readme for troubleshooting.");
+            Label instructionsLabel = new Label("If this takes longer than 2 minutes: check for 1. errors, 2. a working internet connection or 3. the readme for troubleshooting.");
             instructionsLabel.style.fontSize = 12;
             instructionsLabel.style.marginTop = 10;
             instructionsLabel.style.whiteSpace = WhiteSpace.Normal;
             instructionsLabel.style.color = new Color(0.6f, 0.6f, 0.6f);
+            instructionsLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+
+            Label spinner = new Label("↻");
+            spinner.style.fontSize = 40;
+            spinner.style.color = new Color(0.1f, 0.5f, 0.1f);
+            spinner.style.alignSelf = Align.Center;
+            spinner.style.marginTop = 20;
+
+            spinner.schedule.Execute(() => {
+                float currentRotate = spinner.transform.rotation.eulerAngles.z;
+                spinner.transform.rotation = Quaternion.Euler(0, 0, currentRotate + 20);
+            }).Every(50);
 
             _contentContainer.Add(waitingLabel);
+            _contentContainer.Add(spinner);
             _contentContainer.Add(instructionsLabel);
         }
 
@@ -231,7 +245,7 @@ namespace Rotterdam.DigitalTwins.Editor
             tabContent.name = "TabContent";
             _contentContainer.Add(tabContent);
 
-            Button backButton = new Button(ShowMainMenu) { text = "Terug naar Menu" };
+            Button backButton = new Button(ShowMainMenu) { text = "Back to Menu" };
             backButton.style.marginTop = 10;
             backButton.style.paddingTop = 8;
             backButton.style.paddingBottom = 8;
