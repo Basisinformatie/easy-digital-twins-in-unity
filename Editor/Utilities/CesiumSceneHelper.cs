@@ -76,6 +76,18 @@ namespace Rotterdam.DigitalTwins.Editor
 #endif
         }
 
+        public static (double lat, double lon, double height) GetGeoreference()
+        {
+#if USING_CESIUM
+            CesiumGeoreference georeference = Object.FindAnyObjectByType<CesiumGeoreference>();
+            if (georeference != null)
+            {
+                return (georeference.latitude, georeference.longitude, georeference.height);
+            }
+#endif
+            return (0, 0, 0);
+        }
+
         public static void CreateMultiple3DTilesets(string baseName, List<Rotterdam.DigitalTwins.Runtime.OUPResource> resources)
         {
             if (resources == null || resources.Count == 0) return;
