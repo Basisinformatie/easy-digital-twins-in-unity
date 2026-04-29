@@ -18,6 +18,7 @@ public class CustomHelicopterController : MonoBehaviour
     public float engineIncreaseSpeed = 5f;
     public float engineDecreaseSpeed = 20f; 
     public float maxEngineForce = 33f;
+    public float minAirEngineForce = 4f;
     public float engineForce = 0f;
 
     [Header("Physics Settings")]
@@ -87,7 +88,8 @@ public class CustomHelicopterController : MonoBehaviour
         else if (liftDown)
             engineForce -= engineDecreaseSpeed * Time.fixedDeltaTime;
 
-        engineForce = Mathf.Clamp(engineForce, 0f, maxEngineForce);
+        float minForce = isOnGround ? 0f : minAirEngineForce;
+        engineForce = Mathf.Clamp(engineForce, minForce, maxEngineForce);
     }
 
     private void HandleInput()
