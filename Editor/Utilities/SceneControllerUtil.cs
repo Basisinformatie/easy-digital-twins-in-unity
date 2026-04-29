@@ -62,8 +62,19 @@ namespace Rotterdam.DigitalTwins.Editor
             {
                 Undo.DestroyObjectImmediate(controller.gameObject);
             }
+            
+            RemoveExistingCameras();
         }
 
+        public static void RemoveExistingCameras()
+        {
+            var cameras = Object.FindObjectsByType<Camera>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var camera in cameras)
+            {
+                Undo.DestroyObjectImmediate(camera.gameObject);
+            }
+        }
+        
         public static string GetCurrentControllerType()
         {
             if (Object.FindAnyObjectByType<FirstPersonController>(FindObjectsInactive.Include) != null)
