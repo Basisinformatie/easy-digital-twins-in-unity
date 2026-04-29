@@ -151,7 +151,8 @@ namespace Rotterdam.DigitalTwins.Editor
 
         private VisualElement CreateDatasetCard(OUPDataset dataset)
         {
-            VisualElement card = CreateBaseCard(dataset.title, null, dataset.tags, dataset.ownerHub?.name);
+            string infoUrl = $"https://hub.clearly.app/datasets/{dataset._id}/information";
+            VisualElement card = CreateBaseCard(dataset.title, null, dataset.tags, dataset.ownerHub?.name, infoUrl);
 
             if (dataset.resources != null && dataset.resources.Count > 0)
             {
@@ -214,7 +215,8 @@ namespace Rotterdam.DigitalTwins.Editor
 
         private VisualElement CreateDigitalTwinCard(OUPDigitalTwin twin)
         {
-            VisualElement card = CreateBaseCard(twin.title, twin.previewImage, twin.tags);
+            string infoUrl = $"https://hub.clearly.app/digital-twins/{twin._id}/information";
+            VisualElement card = CreateBaseCard(twin.title, twin.previewImage, twin.tags, null, infoUrl);
             
             if (twin.ownerHub != null)
             {
@@ -269,7 +271,7 @@ namespace Rotterdam.DigitalTwins.Editor
             return card;
         }
 
-        private VisualElement CreateBaseCard(string titleText, string thumbUrl, List<string> tagsList, string previewText = null)
+        private VisualElement CreateBaseCard(string titleText, string thumbUrl, List<string> tagsList, string previewText = null, string infoUrl = null)
         {
             VisualElement card = new VisualElement();
             card.style.width = 150;
@@ -291,6 +293,7 @@ namespace Rotterdam.DigitalTwins.Editor
             preview.style.marginBottom = 5;
             preview.style.justifyContent = Justify.Center;
             preview.style.alignItems = Align.Center;
+            preview.style.overflow = Overflow.Hidden;
             
             if (!string.IsNullOrEmpty(thumbUrl))
             {
@@ -308,6 +311,39 @@ namespace Rotterdam.DigitalTwins.Editor
                 placeholder.style.paddingRight = 5;
                 preview.Add(placeholder);
             }
+
+            if (!string.IsNullOrEmpty(infoUrl))
+            {
+                VisualElement triangle = new VisualElement();
+                triangle.style.position = Position.Absolute;
+                triangle.style.top = 0;
+                triangle.style.left = 0;
+                triangle.style.width = 0;
+                triangle.style.height = 0;
+                triangle.style.borderTopWidth = 20;
+                triangle.style.borderRightWidth = 20;
+                triangle.style.borderTopColor = new Color(0.12f, 0.45f, 0.85f);
+                triangle.style.borderRightColor = Color.clear;
+                
+                triangle.RegisterCallback<ClickEvent>(e => {
+                    Application.OpenURL(infoUrl);
+                    e.StopPropagation();
+                });
+                triangle.tooltip = "Open information page";
+                
+                Label infoLabel = new Label("i");
+                infoLabel.style.position = Position.Absolute;
+                infoLabel.style.top = -20;
+                infoLabel.style.left = 1;
+                infoLabel.style.color = Color.white;
+                infoLabel.style.fontSize = 10;
+                infoLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+                infoLabel.style.pointerEvents = PointerEvents.None;
+                triangle.Add(infoLabel);
+
+                preview.Add(triangle);
+            }
+            
             card.Add(preview);
 
             Label title = new Label(titleText);
