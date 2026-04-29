@@ -231,6 +231,7 @@ namespace Rotterdam.DigitalTwins.Editor
                         string buttonText;
                         string tilesetName;
                         bool isTerrain = string.Equals(res.format, "3dterrain", System.StringComparison.OrdinalIgnoreCase);
+                        bool isPointCloud = string.Equals(res.format, "3dpointclouds", System.StringComparison.OrdinalIgnoreCase);
 
                         if (tilesetResources.Count == 1)
                         {
@@ -245,7 +246,7 @@ namespace Rotterdam.DigitalTwins.Editor
                             tilesetName = $"{dataset.title} ({displayName})";
                         }
 
-                        Button addButton = new Button(() => CesiumSceneHelper.Create3DTilesetFromUrl(tilesetName, res.url));
+                        Button addButton = new Button(() => CesiumSceneHelper.Create3DTilesetFromUrl(tilesetName, res.url, isPointCloud));
                         addButton.text = buttonText;
                         addButton.tooltip = res.name;
                         addButton.style.marginTop = 5;

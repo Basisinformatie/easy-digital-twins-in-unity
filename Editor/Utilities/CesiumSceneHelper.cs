@@ -19,7 +19,7 @@ namespace Rotterdam.DigitalTwins.Editor
 #endif
         }
 
-        public static void Create3DTilesetFromUrl(string name, string url)
+        public static void Create3DTilesetFromUrl(string name, string url, bool isPointCloud = false)
         {
 #if USING_CESIUM
             CesiumGeoreference georeference = Object.FindAnyObjectByType<CesiumGeoreference>();
@@ -38,6 +38,11 @@ namespace Rotterdam.DigitalTwins.Editor
             {
                 tileset.tilesetSource = CesiumDataSource.FromUrl;
                 tileset.url = url;
+            }
+
+            if (isPointCloud)
+            {
+                tileset.pointCloudShading.attenuation = true;
             }
             
             Undo.RegisterCreatedObjectUndo(tilesetGo, $"Create {name}");
@@ -101,7 +106,8 @@ namespace Rotterdam.DigitalTwins.Editor
             {
                 string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
                 string tilesetName = $"{baseName} ({displayName})";
-                Create3DTilesetFromUrl(tilesetName, res.url);
+                bool isPointCloud = string.Equals(res.format, "3dpointclouds", System.StringComparison.OrdinalIgnoreCase);
+                Create3DTilesetFromUrl(tilesetName, res.url, isPointCloud);
             }
         }
     }
