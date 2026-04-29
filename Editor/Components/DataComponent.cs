@@ -16,6 +16,10 @@ namespace Rotterdam.DigitalTwins.Editor
         private Toggle _resourceFilterToggle;
         private List<OUPHub> _hubs = new();
 
+        private VisualElement _loadingIndicator;
+        private int _currentRequestId = 0;
+        private IScheduledItem _searchScheduledItem;
+
         private static readonly string[] AllowedFormats = { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles" };
 
         public DataComponent(ICatalogService catalogService)
@@ -64,7 +68,10 @@ namespace Rotterdam.DigitalTwins.Editor
             _searchField = new TextField("Search");
             _searchField.tooltip = "Search by title, description, location or tags";
             _searchField.style.flexGrow = 1;
-            _searchField.RegisterValueChangedCallback(_ => RefreshData());
+            _searchField.RegisterValueChangedCallback(_ => {
+                _searchScheduledItem?.Pause();
+                _searchScheduledItem = _searchField.schedule.Execute(() => RefreshData()).StartingIn(300);
+            });
             filterBar.Add(_searchField);
 
             _hubDropdown = new DropdownField();
@@ -94,6 +101,28 @@ namespace Rotterdam.DigitalTwins.Editor
             _scrollView.contentContainer.style.flexWrap = Wrap.Wrap;
             Add(_scrollView);
 
+            _loadingIndicator = new VisualElement();
+            _loadingIndicator.style.alignItems = Align.Center;
+            _loadingIndicator.style.justifyContent = Justify.Center;
+            _loadingIndicator.style.position = Position.Absolute;
+            _loadingIndicator.style.width = Length.Percent(100);
+            _loadingIndicator.style.height = Length.Percent(100);
+            _loadingIndicator.style.backgroundColor = new Color(0, 0, 0, 0.1f);
+            _loadingIndicator.style.display = DisplayStyle.None;
+            _loadingIndicator.pickingMode = PickingMode.Ignore;
+
+            Label spinner = new Label("↻");
+            spinner.style.fontSize = 40;
+            spinner.style.color = new Color(0.3f, 0.7f, 1f);
+            _loadingIndicator.Add(spinner);
+            
+            _loadingIndicator.schedule.Execute(() => {
+                float currentRotate = spinner.transform.rotation.eulerAngles.z;
+                spinner.transform.rotation = Quaternion.Euler(0, 0, currentRotate + 20);
+            }).Every(50);
+            
+            Add(_loadingIndicator);
+
             LoadHubs();
             RefreshData();
         }
@@ -112,6 +141,8 @@ namespace Rotterdam.DigitalTwins.Editor
 
         private void RefreshData()
         {
+            int requestId = ++_currentRequestId;
+
             string selectedHubId = "";
             if (_hubDropdown.index > 0 && _hubs.Count >= _hubDropdown.index)
             {
@@ -119,21 +150,32 @@ namespace Rotterdam.DigitalTwins.Editor
             }
 
             _scrollView.Clear();
+            _loadingIndicator.style.display = DisplayStyle.Flex;
 
             if (_typeDropdown.index == 0) // Datasets
             {
                 _catalogService.FetchDatasets(datasets =>
                 {
+                    if (requestId != _currentRequestId) return;
+                    _loadingIndicator.style.display = DisplayStyle.None;
+
                     foreach (var dataset in datasets)
                     {
                         _scrollView.Add(CreateDatasetCard(dataset));
                     }
-                }, error => Debug.LogError($"Failed to load datasets: {error}"), _searchField.value, selectedHubId, null, AllowedFormats.ToList());
+                }, error => {
+                    if (requestId != _currentRequestId) return;
+                    _loadingIndicator.style.display = DisplayStyle.None;
+                    Debug.LogError($"Failed to load datasets: {error}");
+                }, _searchField.value, selectedHubId, null, AllowedFormats.ToList());
             }
             else // Digital Twins
             {
                 _catalogService.FetchDigitalTwins(twins =>
                 {
+                    if (requestId != _currentRequestId) return;
+                    _loadingIndicator.style.display = DisplayValueToNone();
+
                     foreach (var twin in twins)
                     {
                         if (_resourceFilterToggle.value)
@@ -145,8 +187,14 @@ namespace Rotterdam.DigitalTwins.Editor
                         }
                         _scrollView.Add(CreateDigitalTwinCard(twin));
                     }
-                }, error => Debug.LogError($"Failed to load digital twins: {error}"), _searchField.value, selectedHubId);
+                }, error => {
+                    if (requestId != _currentRequestId) return;
+                    _loadingIndicator.style.display = DisplayValueToNone();
+                    Debug.LogError($"Failed to load digital twins: {error}");
+                }, _searchField.value, selectedHubId);
             }
+
+            DisplayStyle DisplayValueToNone() => DisplayStyle.None;
         }
 
         private VisualElement CreateDatasetCard(OUPDataset dataset)
