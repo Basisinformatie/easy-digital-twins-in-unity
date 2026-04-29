@@ -332,7 +332,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 infoIcon.style.color = Color.white;
                 infoIcon.style.fontSize = 10;
                 infoIcon.style.unityFontStyleAndWeight = FontStyle.Bold;
-                infoIcon.style.textAlign = TextAnchor.MiddleCenter;
+                infoIcon.style.unityTextAlign = TextAnchor.MiddleCenter;
                 infoIcon.style.width = 14;
                 infoIcon.style.height = 14;
                 infoIcon.style.marginLeft = 5;
