@@ -18,7 +18,7 @@ namespace Rotterdam.DigitalTwins.Editor
             label.style.unityFontStyleAndWeight = FontStyle.Bold;
             Add(label);
 
-            Label info = new Label("The georeference is used to position the experience in the city. Coordinates are set by default according to the selected Digital Twin or can be customized here.");
+            Label info = new Label("The georeference is used to position the experience in the city. Coordinates are set by default according to the selected Digital Twin or can be customised here.");
             info.style.whiteSpace = WhiteSpace.Normal;
             info.style.marginTop = 10;
             info.style.marginBottom = 10;
@@ -54,6 +54,12 @@ namespace Rotterdam.DigitalTwins.Editor
             setRotterdamButton.style.borderTopRightRadius = 5;
             setRotterdamButton.style.unityFontStyleAndWeight = FontStyle.Bold;
             Add(setRotterdamButton);
+            
+            Label info2 = new Label("Gps map to find the coordinates: https://www.mapcoordinates.net/ ");
+            info2.style.whiteSpace = WhiteSpace.Normal;
+            info2.style.marginTop = 10;
+            info2.style.marginBottom = 10;
+            Add(info2);
         }
 
         private void UpdateGeoreference()
