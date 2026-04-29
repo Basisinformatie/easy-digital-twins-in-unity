@@ -23,11 +23,17 @@ namespace Rotterdam.DigitalTwins.Editor
             _catalogService = catalogService;
             style.flexGrow = 1;
 
-            Label label = new Label("Data Shopping");
+            Label label = new Label("Browse Data Catalogue");
             label.style.fontSize = 16;
             label.style.unityFontStyleAndWeight = FontStyle.Bold;
             label.style.marginBottom = 10;
             Add(label);
+            
+            Label info = new Label("Making a selection adds live city data to your experience. Using the Open Urban Platform (OUP) to expose datasources, you can select data to livestream with Cesium.");
+            info.style.whiteSpace = WhiteSpace.Normal;
+            info.style.marginTop = 10;
+            info.style.marginBottom = 10;
+            Add(info);
 
             VisualElement topBar = new VisualElement();
             topBar.style.flexDirection = FlexDirection.Row;
@@ -42,7 +48,7 @@ namespace Rotterdam.DigitalTwins.Editor
             });
             topBar.Add(_typeDropdown);
 
-            _resourceFilterToggle = new Toggle("Only with 3D Resources");
+            _resourceFilterToggle = new Toggle("Only 3D Resources");
             _resourceFilterToggle.tooltip = "Hide digital twins that do not have any supported 3D resources (3D Tiles, Terrain, etc.)";
             _resourceFilterToggle.style.display = DisplayStyle.None;
             _resourceFilterToggle.style.marginLeft = 10;

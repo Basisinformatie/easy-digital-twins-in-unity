@@ -13,12 +13,12 @@ namespace Rotterdam.DigitalTwins.Editor
         public LocationComponent()
         {
             style.flexGrow = 1;
-            Label label = new Label("Locatie & Omgeving");
+            Label label = new Label("Set Location with Georeference");
             label.style.fontSize = 16;
             label.style.unityFontStyleAndWeight = FontStyle.Bold;
             Add(label);
 
-            Label info = new Label("Automatische instelling van CesiumGeoreference, zonpositie en een tijdelijk plateau.");
+            Label info = new Label("The georeference is used to position the experience in the city. Coordinates are set by default according to the selected Digital Twin or can be customized here.");
             info.style.whiteSpace = WhiteSpace.Normal;
             info.style.marginTop = 10;
             info.style.marginBottom = 10;
@@ -43,8 +43,8 @@ namespace Rotterdam.DigitalTwins.Editor
                 CesiumSceneHelper.SetGeoreferenceToRotterdam();
                 UpdateFieldsFromScene();
             });
-            setRotterdamButton.text = "Zet Georeference naar Rotterdam";
-            setRotterdamButton.tooltip = "Zet de CesiumGeoreference naar de coördinaten van Rotterdam (51.90759, 4.490608, 6.1).";
+            setRotterdamButton.text = "Set Georeference to Rotterdam";
+            setRotterdamButton.tooltip = "Rotterdam - Wilhelminakade (51.90759, 4.490608, 6.1).";
             setRotterdamButton.style.height = 30;
             setRotterdamButton.style.marginTop = 10;
             setRotterdamButton.style.backgroundColor = new Color(0.25f, 0.25f, 0.25f);
