@@ -329,7 +329,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     Application.OpenURL(infoUrl);
                     e.StopPropagation();
                 });
-                triangle.tooltip = "Open informatie pagina";
+                triangle.tooltip = "Open Catalogue Page";
 
                 Label infoLabel = new Label("i");
                 infoLabel.style.position = Position.Absolute;
