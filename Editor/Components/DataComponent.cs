@@ -29,7 +29,7 @@ namespace Rotterdam.DigitalTwins.Editor
             label.style.marginBottom = 10;
             Add(label);
             
-            Label info = new Label("Making a selection adds live city data to your experience. Using the Open Urban Platform (OUP) to expose datasources, you can select data to livestream with Cesium.");
+            Label info = new Label("Making a selection adds live city data to your experience. Using the Open Urban Platform (OUP) as a catalogue we can browse and add data, the added data sources are processed and live streamed with Cesium.");
             info.style.whiteSpace = WhiteSpace.Normal;
             info.style.marginTop = 10;
             info.style.marginBottom = 10;
