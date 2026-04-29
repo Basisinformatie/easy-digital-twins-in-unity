@@ -32,6 +32,13 @@ namespace Rotterdam.DigitalTwins.Editor
 
             GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
             Undo.RegisterCreatedObjectUndo(instance, "Instantiate Controller");
+
+            GameObject platform = GetOrCreateStartingPlatform();
+            if (platform != null)
+            {
+                instance.transform.position = platform.transform.position + Vector3.up * 0.5f;
+            }
+
             Selection.activeGameObject = instance;
             
             Debug.Log($"Controller replaced with {prefabName}.");
@@ -73,6 +80,40 @@ namespace Rotterdam.DigitalTwins.Editor
             {
                 Undo.DestroyObjectImmediate(camera.gameObject);
             }
+        }
+
+        private static GameObject GetOrCreateStartingPlatform()
+        {
+            GameObject platform = GameObject.Find("StartingPlatform");
+            if (platform == null)
+            {
+                const string platformPackagePath = "Packages/com.rotterdam.digital-twins/Runtime/Prefabs/StartingPlatform.prefab";
+                const string platformLocalPath = "Assets/Runtime/Prefabs/StartingPlatform.prefab";
+
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(platformPackagePath);
+                if (prefab == null)
+                {
+                    prefab = AssetDatabase.LoadAssetAtPath<GameObject>(platformLocalPath);
+                }
+
+                if (prefab != null)
+                {
+                    platform = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+                    platform.name = "StartingPlatform";
+                    Undo.RegisterCreatedObjectUndo(platform, "Instantiate Starting Platform");
+
+                    var groundSnap = platform.GetComponent<GroundSnap>();
+                    if (groundSnap != null)
+                    {
+                        groundSnap.Snap();
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("StartingPlatform prefab not found.");
+                }
+            }
+            return platform;
         }
         
         public static string GetCurrentControllerType()
