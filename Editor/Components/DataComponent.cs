@@ -18,7 +18,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
         private VisualElement _loadingIndicator;
         private int _currentRequestId = 0;
-        private IScheduledItem _searchScheduledItem;
+        private IVisualElementScheduledItem _searchScheduledItem;
 
         private static readonly string[] AllowedFormats = { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles" };
 
