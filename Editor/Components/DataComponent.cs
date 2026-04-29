@@ -338,7 +338,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 infoLabel.style.color = Color.white;
                 infoLabel.style.fontSize = 10;
                 infoLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-                infoLabel.style.pointerEvents = PointerEvents.None;
+                infoLabel.pickingMode = PickingMode.Ignore;
                 triangle.Add(infoLabel);
 
                 preview.Add(triangle);
