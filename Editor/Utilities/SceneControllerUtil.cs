@@ -36,7 +36,7 @@ namespace Rotterdam.DigitalTwins.Editor
             GameObject platform = GetOrCreateStartingPlatform();
             if (platform != null)
             {
-                instance.transform.position = platform.transform.position + Vector3.up * 0.5f;
+                instance.transform.position = platform.transform.position + Vector3.up * 0.05f + Vector3.forward * 0.01f;
             }
 
             Selection.activeGameObject = instance;
