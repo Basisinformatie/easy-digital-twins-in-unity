@@ -34,6 +34,7 @@ namespace Rotterdam.DigitalTwins.Editor
             Undo.RegisterCreatedObjectUndo(instance, "Instantiate Controller");
 
             GameObject platform = GetOrCreateStartingPlatform();
+            Thread.Sleep(50);
             if (platform != null)
             {
                 instance.transform.position = platform.transform.position + Vector3.up * 0.05f + Vector3.forward * 0.01f;
