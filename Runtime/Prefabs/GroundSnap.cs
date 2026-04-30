@@ -71,7 +71,7 @@ namespace Rotterdam.DigitalTwins.Runtime
             while (current != null)
             {
                 string n = current.name;
-                if (n.EndsWith("Rig", System.StringComparison.OrdinalIgnoreCase) 
+                if (n.EndsWith("Rig", System.StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
