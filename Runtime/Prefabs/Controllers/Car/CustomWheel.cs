@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Carcontroller_stuff
+namespace Rotterdam.DigitalTwins.Runtime
 {
     public class Wheel : MonoBehaviour
     {

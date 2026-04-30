@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class CustomRotor : MonoBehaviour
+namespace Rotterdam.DigitalTwins.Runtime
 {
+    public class CustomRotor : MonoBehaviour
+    {
     public enum Axis { X, Y, Z }
     public Axis rotationAxis = Axis.Y;
     public float rotationSpeed = 1000f;
@@ -23,4 +25,5 @@ public class CustomRotor : MonoBehaviour
                 break;
         }
     }
+}
 }

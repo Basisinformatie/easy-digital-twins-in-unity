@@ -1,8 +1,10 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Camera))]
-public class CustomCarCamera : MonoBehaviour
+namespace Rotterdam.DigitalTwins.Runtime
 {
+    [RequireComponent(typeof(Camera))]
+    public class CustomCarCamera : MonoBehaviour
+    {
     [SerializeField] private CustomCarController _targetCar;
 
     [Header("Positioning")]
@@ -111,4 +113,5 @@ public class CustomCarCamera : MonoBehaviour
         var lookAtPos = carPos + Vector3.up * _lookAtHeight;
         transform.LookAt(lookAtPos);
     }
+}
 }

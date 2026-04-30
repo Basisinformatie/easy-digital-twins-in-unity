@@ -37,6 +37,15 @@ public class GroundSnap : MonoBehaviour
             if (hit.transform == transform || hit.transform.IsChildOf(transform))
                 continue;
 
+            // Ignore controllers
+            if (hit.transform.GetComponentInParent<FirstPersonController>() != null ||
+                hit.transform.GetComponentInParent<ThirdPersonController>() != null ||
+                hit.transform.GetComponentInParent<CustomCarController>() != null ||
+                hit.transform.GetComponentInParent<CustomHelicopterController>() != null)
+            {
+                continue;
+            }
+
             if (hit.point.y > highestY)
             {
                 highestY = hit.point.y;

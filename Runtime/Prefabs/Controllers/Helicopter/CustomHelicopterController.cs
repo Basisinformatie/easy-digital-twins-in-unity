@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-[RequireComponent(typeof(Rigidbody))]
-public class CustomHelicopterController : MonoBehaviour
+namespace Rotterdam.DigitalTwins.Runtime
 {
+    [RequireComponent(typeof(Rigidbody))]
+    public class CustomHelicopterController : MonoBehaviour
+    {
     [Header("Rotors")]
     public CustomRotor mainRotor;
     public CustomRotor tailRotor;
@@ -200,4 +202,5 @@ public class CustomHelicopterController : MonoBehaviour
     {
         isOnGround = false;
     }
+}
 }

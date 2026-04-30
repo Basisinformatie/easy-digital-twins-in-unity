@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class CustomHelicopterCamera : MonoBehaviour
+namespace Rotterdam.DigitalTwins.Runtime
 {
+    public class CustomHelicopterCamera : MonoBehaviour
+    {
     public Transform target;
     public Vector3 offset = new Vector3(0, 5, -10);
     public float smoothSpeed = 0.125f;
@@ -18,4 +20,5 @@ public class CustomHelicopterCamera : MonoBehaviour
         Quaternion desiredRotation = Quaternion.LookRotation(target.position - transform.position, target.up);
         transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, rotationSmoothSpeed);
     }
+}
 }

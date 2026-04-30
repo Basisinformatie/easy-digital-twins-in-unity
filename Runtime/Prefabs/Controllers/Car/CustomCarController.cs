@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-public class CustomCarController : MonoBehaviour
+namespace Rotterdam.DigitalTwins.Runtime
 {
+    public class CustomCarController : MonoBehaviour
+    {
     [Header("Motor Settings")]
     [SerializeField, Min(0f)] private float _maxForwardSpeedKPH = 180f;
     [SerializeField, Min(0f)] private float _maxBackwardSpeedKPH = 60f;
@@ -30,7 +32,7 @@ public class CustomCarController : MonoBehaviour
     [SerializeField, Min(0f)] private float _switchToReverseSpeedKPH = 1f;
 
     [Header("Car Settings")]
-    [SerializeField] private Carcontroller_stuff.Wheel[] _steerableWheels;
+    [SerializeField] private Wheel[] _steerableWheels;
     [SerializeField, Min(0f)] private float _maxSteerAngle = 30f;
     [SerializeField, Min(0f)] private float _maxTurnSpeed = 60f;
     [SerializeField, Min(0f)] private float _peakFrictionSlipAngle = 5f;
@@ -50,7 +52,7 @@ public class CustomCarController : MonoBehaviour
     [SerializeField] private float _addForceOffset = -0.1f;
 
     private Rigidbody _rigidbody;
-    private Carcontroller_stuff.Wheel[] _wheels;
+    private Wheel[] _wheels;
     private float _wheelbase;
     private float _steerInput;
     private float _throttleInput;
@@ -101,7 +103,7 @@ public class CustomCarController : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _wheels = GetComponentsInChildren<Carcontroller_stuff.Wheel>();
+        _wheels = GetComponentsInChildren<Wheel>();
         
         if (_wheels == null || _wheels.Length == 0)
         {
@@ -557,4 +559,5 @@ public class CustomCarController : MonoBehaviour
             Gizmos.DrawRay(transform.TransformPoint(_rigidbody.centerOfMass), _totalForce * 0.0001f);
         }
     }
+}
 }
