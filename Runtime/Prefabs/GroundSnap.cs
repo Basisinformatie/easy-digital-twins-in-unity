@@ -1,78 +1,89 @@
 using UnityEngine;
 
-[ExecuteAlways]
-public class GroundSnap : MonoBehaviour
+namespace Rotterdam.DigitalTwins.Runtime
 {
-    [Header("Settings")]
-    public bool autoSnap = true;
-    public float offset = 0.01f;
-    public LayerMask groundLayer = -1;
-    
-    [Header("Editor Only")]
-    public bool snapInEditor = true;
-
-    void Update()
+    [ExecuteAlways]
+    public class GroundSnap : MonoBehaviour
     {
-        if (!Application.isPlaying)
-        {
-            if (snapInEditor && autoSnap)
-            {
-                Snap();
-            }
-        }
-    }
-    
-    public void Snap()
-    {
-        Vector3 origin = transform.position;
-        origin.y += 500f; 
-
-        RaycastHit[] hits = Physics.RaycastAll(origin, Vector3.down, 1000f, groundLayer);
+        [Header("Settings")]
+        public bool autoSnap = true;
+        public float offset = 0.01f;
+        public LayerMask groundLayer = -1;
         
-        float highestY = float.MinValue;
-        bool found = false;
+        [Header("Editor Only")]
+        public bool snapInEditor = true;
 
-        foreach (var hit in hits)
+        void Update()
         {
-            if (hit.transform == transform || hit.transform.IsChildOf(transform))
-                continue;
-
-            // Ignore controllers
-            if (hit.transform.GetComponentInParent<FirstPersonController>() != null ||
-                hit.transform.GetComponentInParent<ThirdPersonController>() != null ||
-                hit.transform.GetComponentInParent<CustomCarController>() != null ||
-                hit.transform.GetComponentInParent<CustomHelicopterController>() != null)
+            if (!Application.isPlaying)
             {
-                continue;
-            }
-
-            if (hit.point.y > highestY)
-            {
-                highestY = hit.point.y;
-                found = true;
-            }
-        }
-
-        if (found)
-        {
-            Vector3 newPos = transform.position;
-            newPos.y = highestY + offset;
-            
-            if (Mathf.Abs(transform.position.y - newPos.y) > 0.0001f)
-            {
-                transform.position = newPos;
-#if UNITY_EDITOR
-                if (!Application.isPlaying)
+                if (snapInEditor && autoSnap)
                 {
-                    UnityEditor.EditorUtility.SetDirty(gameObject);
+                    Snap();
                 }
-#endif
             }
         }
-    }
+        
+        public void Snap()
+        {
+            Vector3 origin = transform.position;
+            origin.y += 500f; 
 
-    private void OnValidate()
-    {
-        if (autoSnap) Snap();
+            RaycastHit[] hits = Physics.RaycastAll(origin, Vector3.down, 1000f, groundLayer);
+            
+            float highestY = float.MinValue;
+            bool found = false;
+
+            foreach (var hit in hits)
+            {
+                if (IsIgnored(hit.transform))
+                    continue;
+
+                if (hit.point.y > highestY)
+                {
+                    highestY = hit.point.y;
+                    found = true;
+                }
+            }
+
+            if (found)
+            {
+                Vector3 newPos = transform.position;
+                newPos.y = highestY + offset;
+                
+                if (Mathf.Abs(transform.position.y - newPos.y) > 0.0001f)
+                {
+                    transform.position = newPos;
+#if UNITY_EDITOR
+                    if (!Application.isPlaying)
+                    {
+                        UnityEditor.EditorUtility.SetDirty(gameObject);
+                    }
+#endif
+                }
+            }
+        }
+
+        private bool IsIgnored(Transform t)
+        {
+            if (t == transform || t.IsChildOf(transform)) return true;
+            Transform current = t;
+            while (current != null)
+            {
+                string n = current.name;
+                if (n.EndsWith("Rig", System.StringComparison.OrdinalIgnoreCase) 
+                {
+                    return true;
+                }
+                current = current.parent;
+            }
+
+            return false;
+        }
+
+        private void OnValidate()
+        {
+            if (autoSnap) Snap();
+        }
     }
 }
