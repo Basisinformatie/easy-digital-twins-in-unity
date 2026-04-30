@@ -7,6 +7,7 @@ namespace Rotterdam.DigitalTwins.Runtime
     {
         [Header("Settings")]
         public bool autoSnap = true;
+        public bool rotateToGround = false;
         public float offset = 0.01f;
         public LayerMask groundLayer = -1;
         
@@ -32,6 +33,7 @@ namespace Rotterdam.DigitalTwins.Runtime
             RaycastHit[] hits = Physics.RaycastAll(origin, Vector3.down, 1000f, groundLayer);
             
             float highestY = float.MinValue;
+            Vector3 surfaceNormal = Vector3.up;
             bool found = false;
 
             foreach (var hit in hits)
@@ -42,18 +44,34 @@ namespace Rotterdam.DigitalTwins.Runtime
                 if (hit.point.y > highestY)
                 {
                     highestY = hit.point.y;
+                    surfaceNormal = hit.normal;
                     found = true;
                 }
             }
 
             if (found)
             {
+                bool changed = false;
                 Vector3 newPos = transform.position;
                 newPos.y = highestY + offset;
                 
                 if (Mathf.Abs(transform.position.y - newPos.y) > 0.0001f)
                 {
                     transform.position = newPos;
+                    changed = true;
+                }
+
+                if (rotateToGround)
+                {
+                    if (Vector3.Angle(transform.up, surfaceNormal) > 0.01f)
+                    {
+                        transform.up = surfaceNormal;
+                        changed = true;
+                    }
+                }
+
+                if (changed)
+                {
 #if UNITY_EDITOR
                     if (!Application.isPlaying)
                     {
