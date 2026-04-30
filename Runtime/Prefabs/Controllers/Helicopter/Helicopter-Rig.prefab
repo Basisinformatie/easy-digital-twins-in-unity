@@ -1106,7 +1106,7 @@ Transform:
   m_GameObject: {fileID: 1399424254122338413}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.233, y: 0.45940006, z: -3.0732996}
+  m_LocalPosition: {x: -0.233, y: 0.97540003, z: -3.0732996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1807,7 +1807,7 @@ Transform:
   m_GameObject: {fileID: 2047154566186695700}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: 0.954, z: -0.016000032}
+  m_LocalPosition: {x: 0, y: 1.47, z: -0.016000032}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2674,6 +2674,7 @@ GameObject:
   - component: {fileID: 1343129203892192072}
   - component: {fileID: 8583796814570561407}
   - component: {fileID: 6355663062791518572}
+  - component: {fileID: 7407719485654866799}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2690,7 +2691,7 @@ Transform:
   m_GameObject: {fileID: 2846142248770682742}
   serializedVersion: 2
   m_LocalRotation: {x: 0.13369487, y: 0.5356031, z: -0.08639638, w: 0.8293315}
-  m_LocalPosition: {x: -2.17, y: -0.07, z: 0.29}
+  m_LocalPosition: {x: -2.17, y: 0.44599998, z: 0.29}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2772,6 +2773,50 @@ MonoBehaviour:
   offset: {x: 0, y: 5, z: -10}
   smoothSpeed: 0.125
   rotationSmoothSpeed: 0.1
+--- !u!114 &7407719485654866799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2846142248770682742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &2902975960654152834
 GameObject:
   m_ObjectHideFlags: 0
@@ -4687,7 +4732,7 @@ Transform:
   m_GameObject: {fileID: 4753690803840491150}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.516, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7462,7 +7507,7 @@ Transform:
   m_GameObject: {fileID: 7911672177245489443}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.178, y: -0.65288, z: -0.81526}
+  m_LocalPosition: {x: 2.39236, y: 2.8925803, z: 2.69194}
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -7521,7 +7566,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2.98
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!114 &5523720479136793790
 MonoBehaviour:
   m_ObjectHideFlags: 0
