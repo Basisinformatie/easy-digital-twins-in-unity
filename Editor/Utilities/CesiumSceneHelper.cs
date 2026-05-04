@@ -109,7 +109,8 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             if (resources == null || resources.Count == 0) return;
 
-            var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles", "3dpointclouds", "WMS", "wms" };
+            var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain", "terrain", "quantized-mesh", "3d tiles", "3d-tiles", "3dpointclouds", "WMS", "wms" };
+            var terrainFormats = new[] { "3dterrain", "terrain", "quantized-mesh" };
             var matchingResources = resources
                 .Where(r => allowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
                 .ToList();
@@ -121,7 +122,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
                 string tilesetName = $"{baseName} ({displayName})";
                 bool isPointCloud = string.Equals(res.format, "3dpointclouds", System.StringComparison.OrdinalIgnoreCase);
-                bool isTerrain = string.Equals(res.format, "3dterrain", System.StringComparison.OrdinalIgnoreCase);
+                bool isTerrain = terrainFormats.Any(fmt => string.Equals(res.format, fmt, System.StringComparison.OrdinalIgnoreCase));
                 
                 GameObject go = Create3DTilesetFromUrl(tilesetName, res.url, isPointCloud, isTerrain);
                 if (isTerrain && go != null)
