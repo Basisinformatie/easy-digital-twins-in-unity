@@ -253,7 +253,7 @@ namespace Rotterdam.DigitalTwins.Editor
                         Button addButton = new Button(() => {
                             if (isWms)
                             {
-                                CesiumSceneHelper.AddWmsOverlay(tilesetName, res.url);
+                                CesiumSceneHelper.AddWmsOverlay(tilesetName, res.url, res.name);
                             }
                             else
                             {
