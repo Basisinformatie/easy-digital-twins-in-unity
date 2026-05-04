@@ -40,3 +40,5 @@ Thumbs.db
 
 /Tests/bin/
 /nogit.txt
+/I3dmInstanceRenderer.cs.tmp
+/cesium_fix.diff

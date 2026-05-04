@@ -20,7 +20,7 @@ namespace Rotterdam.DigitalTwins.Editor
         private int _currentRequestId = 0;
         private IVisualElementScheduledItem _searchScheduledItem;
 
-        private static readonly string[] AllowedFormats = { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles", "3dpointclouds" };
+        private static readonly string[] AllowedFormats = { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles", "3dpointclouds", "wms" };
 
         public DataComponent(ICatalogService catalogService)
         {
@@ -232,21 +232,34 @@ namespace Rotterdam.DigitalTwins.Editor
                         string tilesetName;
                         bool isTerrain = string.Equals(res.format, "3dterrain", System.StringComparison.OrdinalIgnoreCase);
                         bool isPointCloud = string.Equals(res.format, "3dpointclouds", System.StringComparison.OrdinalIgnoreCase);
+                        bool isWms = string.Equals(res.format, "wms", System.StringComparison.OrdinalIgnoreCase);
 
                         if (tilesetResources.Count == 1)
                         {
-                            buttonText = isTerrain ? "Add 3D Terrain" : "Add 3D Tileset";
+                            if (isWms) buttonText = "Add WMS Overlay";
+                            else if (isTerrain) buttonText = "Add 3D Terrain";
+                            else buttonText = "Add 3D Tileset";
+                            
                             tilesetName = dataset.title;
                         }
                         else
                         {
                             string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
                             string displayButtonName = displayName.Length > 17 ? displayName.Substring(0, 17) + "..." : displayName;
-                            buttonText = $"Add {displayButtonName}";
+                            buttonText = isWms ? $"Add WMS {displayButtonName}" : $"Add {displayButtonName}";
                             tilesetName = $"{dataset.title} ({displayName})";
                         }
 
-                        Button addButton = new Button(() => CesiumSceneHelper.Create3DTilesetFromUrl(tilesetName, res.url, isPointCloud));
+                        Button addButton = new Button(() => {
+                            if (isWms)
+                            {
+                                CesiumSceneHelper.AddWmsOverlay(tilesetName, res.url);
+                            }
+                            else
+                            {
+                                CesiumSceneHelper.Create3DTilesetFromUrl(tilesetName, res.url, isPointCloud, isTerrain);
+                            }
+                        });
                         addButton.text = buttonText;
                         addButton.tooltip = res.name;
                         addButton.style.marginTop = 5;
