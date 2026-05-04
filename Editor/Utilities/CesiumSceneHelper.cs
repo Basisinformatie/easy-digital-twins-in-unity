@@ -136,7 +136,6 @@ namespace Rotterdam.DigitalTwins.Editor
 #if USING_CESIUM
                 if (createdTerrains.Count == 1)
                 {
-                    // If we just created exactly one terrain for this digital twin, add all WMS to it automatically
                     foreach (var res in wmsResources)
                     {
                         AddWmsToGameObject(createdTerrains[0], res.url);
@@ -145,7 +144,6 @@ namespace Rotterdam.DigitalTwins.Editor
                 }
 #endif
                 
-                // Fallback: search scene for terrain (or ask user if multiple)
                 foreach (var res in wmsResources)
                 {
                     string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
@@ -155,7 +153,7 @@ namespace Rotterdam.DigitalTwins.Editor
             }
         }
 
-        public static void AddWmsOverlay(string name, string url)
+        public static void AddWmsOverlay(string name, string url, string layers = "0", int maximumLevel = 22)
         {
 #if USING_CESIUM
             var terrainTags = Object.FindObjectsByType<Rotterdam.DigitalTwins.Runtime.CesiumTerrainTag>(FindObjectsSortMode.None);
@@ -168,7 +166,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
             if (terrainTags.Length == 1)
             {
-                AddWmsToGameObject(terrainTags[0].gameObject, url);
+                AddWmsToGameObject(terrainTags[0].gameObject, url, layers, maximumLevel);
             }
             else
             {
@@ -178,7 +176,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 foreach (var tag in terrainTags.OrderBy(t => t.gameObject.name))
                 {
                     GameObject target = tag.gameObject;
-                    menu.AddItem(new GUIContent(target.name), false, () => AddWmsToGameObject(target, url));
+                    menu.AddItem(new GUIContent(target.name), false, () => AddWmsToGameObject(target, url, layers, maximumLevel));
                 }
                 menu.ShowAsContext();
             }
@@ -188,10 +186,10 @@ namespace Rotterdam.DigitalTwins.Editor
         }
 
 #if USING_CESIUM
-        private static void AddWmsToGameObject(GameObject target, string url)
+        private static void AddWmsToGameObject(GameObject target, string url, string layers = "0", int maximumLevel = 22)
         {
             string baseUrl = url;
-            string layers = "";
+            string parsedLayers = "";
 
             try
             {
@@ -206,7 +204,7 @@ namespace Rotterdam.DigitalTwins.Editor
                         {
                             if (param.StartsWith("layers=", System.StringComparison.OrdinalIgnoreCase))
                             {
-                                layers = System.Uri.UnescapeDataString(param.Substring(7));
+                                parsedLayers = System.Uri.UnescapeDataString(param.Substring(7));
                             }
                         }
                     }
@@ -217,14 +215,16 @@ namespace Rotterdam.DigitalTwins.Editor
                 Debug.LogWarning($"Failed to parse WMS URL: {url}. Error: {e.Message}");
             }
 
+            string finalLayers = (layers != "0") ? layers : (string.IsNullOrEmpty(parsedLayers) ? "0" : parsedLayers);
+
             CesiumWebMapServiceRasterOverlay wms = target.AddComponent<CesiumWebMapServiceRasterOverlay>();
             wms.baseUrl = baseUrl;
-            wms.layers = 0;
-            wms.maximumLevel = 22;
+            wms.layers = finalLayers;
+            wms.maximumLevel = maximumLevel;
 
             Undo.RegisterCreatedObjectUndo(wms, "Add WMS Overlay");
             Selection.activeGameObject = target;
-            Debug.Log($"Added WMS Overlay (layers: {layers}) to {target.name}");
+            Debug.Log($"Added WMS Overlay (layers: {finalLayers}, maxLevel: {maximumLevel}) to {target.name}");
         }
 #endif
     }
