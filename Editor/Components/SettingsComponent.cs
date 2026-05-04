@@ -51,28 +51,43 @@ namespace Rotterdam.DigitalTwins.Editor
             disclaimer.style.color = new Color(0.8f, 0.8f, 0.8f);
             experimentalSection.Add(disclaimer);
 
-            bool isForked = CesiumSetupService.IsForkInstalled();
-            string buttonText = isForked ? "Restore Official Cesium" : "Apply Instancing Patch (Fork)";
-            Button patchButton = new Button(() => OnPatchClicked(isForked)) { text = buttonText };
-            patchButton.style.paddingTop = 6;
-            patchButton.style.paddingBottom = 6;
-            experimentalSection.Add(patchButton);
-        }
+            bool isLocal = CesiumPatchService.IsLocalPackageInstalled();
+            bool isBuilding = CesiumPatchService.IsBuilding;
 
-        private void OnPatchClicked(bool isForked)
-        {
-            string title = isForked ? "Restore Official Cesium" : "Apply Experimental Patch";
-            string message = isForked 
-                ? "This will restore the official Cesium Registry version. Unity will re-import the package, which may take several minutes. Continue?"
-                : "This will replace the official Cesium package with a community-patched version from GitHub. \n\nWARNING: This is an experimental feature. \n\nContinue?";
+            Label statusLabel = new Label(isLocal ? "Current: Patched (Local Build)" : "Current: Official Registry");
+            statusLabel.style.fontSize = 11;
+            statusLabel.style.marginBottom = 5;
+            experimentalSection.Add(statusLabel);
 
-            if (EditorUtility.DisplayDialog(title, message, "Yes", "Cancel"))
+            if (isBuilding)
             {
-                if (isForked)
-                    CesiumSetupService.InstallOfficialCesium();
-                else
-                    CesiumSetupService.InstallForkedCesium();
+                Label buildingLabel = new Label("Building... Please wait (10-20 min)");
+                buildingLabel.style.color = Color.yellow;
+                experimentalSection.Add(buildingLabel);
+            }
+            else
+            {
+                Button buildButton = new Button(CesiumPatchService.BuildAndApplyPatch) 
+                { 
+                    text = isLocal ? "Rebuild & Update Patch" : "Automated Build & Apply Patch" 
+                };
+                buildButton.style.paddingTop = 6;
+                buildButton.style.paddingBottom = 6;
+                experimentalSection.Add(buildButton);
+
+                if (isLocal)
+                {
+                    Button restoreButton = new Button(CesiumSetupService.InstallOfficialCesium) 
+                    { 
+                        text = "Restore Official Cesium" 
+                    };
+                    restoreButton.style.marginTop = 5;
+                    restoreButton.style.paddingTop = 4;
+                    restoreButton.style.paddingBottom = 4;
+                    experimentalSection.Add(restoreButton);
+                }
             }
         }
+
     }
 }
