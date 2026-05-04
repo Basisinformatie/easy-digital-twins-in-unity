@@ -109,14 +109,14 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             if (resources == null || resources.Count == 0) return;
 
-            var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles", "3dpointclouds", "wms" };
+            var allowedFormats = new[] { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles", "3dpointclouds", "WMS" };
             var matchingResources = resources
                 .Where(r => allowedFormats.Any(fmt => string.Equals(fmt, r.format, System.StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
             List<GameObject> createdTerrains = new();
 
-            foreach (var res in matchingResources.Where(r => !string.Equals(r.format, "wms", System.StringComparison.OrdinalIgnoreCase)))
+            foreach (var res in matchingResources.Where(r => !string.Equals(r.format, "WMS", System.StringComparison.OrdinalIgnoreCase)))
             {
                 string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
                 string tilesetName = $"{baseName} ({displayName})";
@@ -130,7 +130,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 }
             }
 
-            var wmsResources = matchingResources.Where(r => string.Equals(r.format, "wms", System.StringComparison.OrdinalIgnoreCase)).ToList();
+            var wmsResources = matchingResources.Where(r => string.Equals(r.format, "WMS", System.StringComparison.OrdinalIgnoreCase)).ToList();
             if (wmsResources.Count > 0)
             {
 #if USING_CESIUM

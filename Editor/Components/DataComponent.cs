@@ -20,7 +20,7 @@ namespace Rotterdam.DigitalTwins.Editor
         private int _currentRequestId = 0;
         private IVisualElementScheduledItem _searchScheduledItem;
 
-        private static readonly string[] AllowedFormats = { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles", "3dpointclouds", "wms" };
+        private static readonly string[] AllowedFormats = { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles", "3dpointclouds", "WMS" };
 
         public DataComponent(ICatalogService catalogService)
         {
@@ -232,7 +232,7 @@ namespace Rotterdam.DigitalTwins.Editor
                         string tilesetName;
                         bool isTerrain = string.Equals(res.format, "3dterrain", System.StringComparison.OrdinalIgnoreCase);
                         bool isPointCloud = string.Equals(res.format, "3dpointclouds", System.StringComparison.OrdinalIgnoreCase);
-                        bool isWms = string.Equals(res.format, "wms", System.StringComparison.OrdinalIgnoreCase);
+                        bool isWms = string.Equals(res.format, "WMS", System.StringComparison.OrdinalIgnoreCase);
 
                         if (tilesetResources.Count == 1)
                         {
