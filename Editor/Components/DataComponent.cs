@@ -20,7 +20,7 @@ namespace Rotterdam.DigitalTwins.Editor
         private int _currentRequestId = 0;
         private IVisualElementScheduledItem _searchScheduledItem;
 
-        private static readonly string[] AllowedFormats = { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles", "3dpointclouds", "WMS" };
+        private static readonly string[] AllowedFormats = { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles", "3dpointclouds", "WMS", "wms" };
 
         public DataComponent(ICatalogService catalogService)
         {
