@@ -26,26 +26,14 @@ namespace Rotterdam.DigitalTwins.Editor.Setup
         public static void InstallOfficialCesium()
         {
             Debug.Log($"[CesiumSetupService] Installing official {PackageName}...");
-            
-            // Remove local package if it exists in manifest
-            RemoveLocalPackage();
-            
             AddScopedRegistry();
             InstallPackage(PackageName);
         }
 
-        private static void RemoveLocalPackage()
+        public static void InstallForkedCesium()
         {
-            string manifestPath = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
-            if (!File.Exists(manifestPath)) return;
-            string manifestText = File.ReadAllText(manifestPath);
-            
-            string pattern = "\"com.cesium.unity\"\\s*:\\s*\"file:[^\"]*\"";
-            if (System.Text.RegularExpressions.Regex.IsMatch(manifestText, pattern))
-            {
-                manifestText = System.Text.RegularExpressions.Regex.Replace(manifestText, pattern, "\"com.cesium.unity\": \"1.23.0\""); // Default back to a version
-                File.WriteAllText(manifestPath, manifestText);
-            }
+            Debug.Log($"[CesiumSetupService] Installing forked {PackageName} from {ForkUrl}...");
+            InstallPackage(ForkUrl);
         }
 
         public static bool IsForkInstalled()
