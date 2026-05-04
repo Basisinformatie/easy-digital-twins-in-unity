@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using Rotterdam.DigitalTwins.Runtime;
+using System.Threading;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
