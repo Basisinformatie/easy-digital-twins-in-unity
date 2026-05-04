@@ -219,7 +219,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
             CesiumWebMapServiceRasterOverlay wms = target.AddComponent<CesiumWebMapServiceRasterOverlay>();
             wms.baseUrl = baseUrl;
-            wms.layers = layers;
+            wms.layers = "0";
             wms.maximumLevel = 22;
 
             Undo.RegisterCreatedObjectUndo(wms, "Add WMS Overlay");
