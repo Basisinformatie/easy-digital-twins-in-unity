@@ -139,7 +139,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 {
                     foreach (var res in wmsResources)
                     {
-                        AddWmsToGameObject(createdTerrains[0], res.url, res.name);
+                        AddWmsToGameObject(createdTerrains[0], res.url);
                     }
                     return;
                 }
@@ -149,12 +149,12 @@ namespace Rotterdam.DigitalTwins.Editor
                 {
                     string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
                     string tilesetName = $"{baseName} ({displayName})";
-                    AddWmsOverlay(tilesetName, res.url, res.name);
+                    AddWmsOverlay(tilesetName, res.url);
                 }
             }
         }
 
-        public static void AddWmsOverlay(string name, string url, string layers = null, int maximumLevel = 22)
+        public static void AddWmsOverlay(string name, string url, string layers = "0", int maximumLevel = 22)
         {
 #if USING_CESIUM
             var terrainTags = Object.FindObjectsByType<Rotterdam.DigitalTwins.Runtime.CesiumTerrainTag>(FindObjectsSortMode.None);
@@ -187,7 +187,7 @@ namespace Rotterdam.DigitalTwins.Editor
         }
 
 #if USING_CESIUM
-        private static void AddWmsToGameObject(GameObject target, string url, string layers = null, int maximumLevel = 22)
+        private static void AddWmsToGameObject(GameObject target, string url, string layers = "0", int maximumLevel = 22)
         {
             string baseUrl = url;
             string parsedLayers = "";
@@ -200,38 +200,13 @@ namespace Rotterdam.DigitalTwins.Editor
                     {
                         baseUrl = uri.GetLeftPart(System.UriPartial.Path);
                         var query = uri.Query.TrimStart('?');
-                        var queryParams = query.Split('&', System.StringSplitOptions.RemoveEmptyEntries);
-                        var otherParams = new List<string>();
-
+                        var queryParams = query.Split('&');
                         foreach (var param in queryParams)
                         {
                             if (param.StartsWith("layers=", System.StringComparison.OrdinalIgnoreCase))
                             {
                                 parsedLayers = System.Uri.UnescapeDataString(param.Substring(7));
                             }
-                            else if (param.StartsWith("request=", System.StringComparison.OrdinalIgnoreCase) ||
-                                     param.StartsWith("service=", System.StringComparison.OrdinalIgnoreCase) ||
-                                     param.StartsWith("version=", System.StringComparison.OrdinalIgnoreCase) ||
-                                     param.StartsWith("format=", System.StringComparison.OrdinalIgnoreCase) ||
-                                     param.StartsWith("bbox=", System.StringComparison.OrdinalIgnoreCase) ||
-                                     param.StartsWith("width=", System.StringComparison.OrdinalIgnoreCase) ||
-                                     param.StartsWith("height=", System.StringComparison.OrdinalIgnoreCase) ||
-                                     param.StartsWith("crs=", System.StringComparison.OrdinalIgnoreCase) ||
-                                     param.StartsWith("srs=", System.StringComparison.OrdinalIgnoreCase) ||
-                                     param.StartsWith("styles=", System.StringComparison.OrdinalIgnoreCase) ||
-                                     param.StartsWith("transparent=", System.StringComparison.OrdinalIgnoreCase))
-                            {
-                                // Skip parameters that Cesium will override or handle itself
-                            }
-                            else
-                            {
-                                otherParams.Add(param);
-                            }
-                        }
-
-                        if (otherParams.Count > 0)
-                        {
-                            baseUrl += "?" + string.Join("&", otherParams);
                         }
                     }
                 }
@@ -241,15 +216,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 Debug.LogWarning($"Failed to parse WMS URL: {url}. Error: {e.Message}");
             }
 
-            string finalLayers = layers;
-            if (string.IsNullOrEmpty(finalLayers))
-            {
-                finalLayers = parsedLayers;
-            }
-            if (string.IsNullOrEmpty(finalLayers))
-            {
-                finalLayers = "0";
-            }
+            string finalLayers = (layers != "0") ? layers : (string.IsNullOrEmpty(parsedLayers) ? "0" : parsedLayers);
 
             CesiumWebMapServiceRasterOverlay wms = target.AddComponent<CesiumWebMapServiceRasterOverlay>();
             wms.baseUrl = baseUrl;
