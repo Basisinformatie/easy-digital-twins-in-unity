@@ -191,7 +191,7 @@ namespace Rotterdam.DigitalTwins.Editor
         private static void AddWmsToGameObject(GameObject target, string url)
         {
             string baseUrl = url;
-            string layers = "";
+            int layers = 0;
 
             try
             {
@@ -202,13 +202,6 @@ namespace Rotterdam.DigitalTwins.Editor
                         baseUrl = uri.GetLeftPart(System.UriPartial.Path);
                         var query = uri.Query.TrimStart('?');
                         var queryParams = query.Split('&');
-                        foreach (var param in queryParams)
-                        {
-                            if (param.StartsWith("layers=", System.StringComparison.OrdinalIgnoreCase))
-                            {
-                                layers = System.Uri.UnescapeDataString(param.Substring(7));
-                            }
-                        }
                     }
                 }
             }
