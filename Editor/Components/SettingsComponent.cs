@@ -43,7 +43,7 @@ namespace Rotterdam.DigitalTwins.Editor
             experimentalTitle.style.color = new Color(1f, 0.5f, 0f);
             experimentalSection.Add(experimentalTitle);
 
-            Label disclaimer = new Label("Cesium for Unity has a known bug with instanced tiles (I3DM) positioning. A community patch is available from 360Fabriek, but it must be built manually from source (C++) to work correctly.");
+            Label disclaimer = new Label("Cesium for Unity has a known bug with instanced tiles (I3DM) positioning. A community patch is available but not yet officially merged. Swapping to this patch will fix instancing but requires a full re-import of the Cesium package.");
             disclaimer.style.whiteSpace = WhiteSpace.Normal;
             disclaimer.style.fontSize = 11;
             disclaimer.style.marginTop = 5;
@@ -52,42 +52,26 @@ namespace Rotterdam.DigitalTwins.Editor
             experimentalSection.Add(disclaimer);
 
             bool isForked = CesiumSetupService.IsForkInstalled();
-            if (isForked)
-            {
-                Button restoreButton = new Button(() => OnRestoreClicked()) { text = "Restore Official Cesium (Fix Errors)" };
-                restoreButton.style.paddingTop = 6;
-                restoreButton.style.paddingBottom = 6;
-                restoreButton.style.backgroundColor = new Color(0.3f, 0.1f, 0.1f);
-                experimentalSection.Add(restoreButton);
-                
-                Label statusLabel = new Label("Currently using a non-registry version of Cesium.");
-                statusLabel.style.fontSize = 10;
-                statusLabel.style.marginTop = 5;
-                statusLabel.style.color = new Color(0.5f, 0.8f, 0.5f);
-                experimentalSection.Add(statusLabel);
-            }
-            else
-            {
-                Button buildButton = new Button(() => CesiumPatchService.StartPatchBuild()) { text = "Automated Build & Apply Patch" };
-                buildButton.style.paddingTop = 6;
-                buildButton.style.paddingBottom = 6;
-                buildButton.style.backgroundColor = new Color(0.1f, 0.3f, 0.1f);
-                experimentalSection.Add(buildButton);
-                
-                Label infoLabel = new Label("This will attempt to clone, build and install the patch automatically. Requires git, dotnet, and cmake.");
-                infoLabel.style.fontSize = 10;
-                infoLabel.style.unityFontStyleAndWeight = FontStyle.Italic;
-                infoLabel.style.marginTop = 5;
-                experimentalSection.Add(infoLabel);
-            }
+            string buttonText = isForked ? "Restore Official Cesium" : "Apply Instancing Patch (Fork)";
+            Button patchButton = new Button(() => OnPatchClicked(isForked)) { text = buttonText };
+            patchButton.style.paddingTop = 6;
+            patchButton.style.paddingBottom = 6;
+            experimentalSection.Add(patchButton);
         }
 
-        private void OnRestoreClicked()
+        private void OnPatchClicked(bool isForked)
         {
-            if (EditorUtility.DisplayDialog("Restore Official Cesium", 
-                "This will attempt to restore the official Cesium Registry version to fix compilation errors. Unity will re-import the package. Continue?", "Yes", "Cancel"))
+            string title = isForked ? "Restore Official Cesium" : "Apply Experimental Patch";
+            string message = isForked 
+                ? "This will restore the official Cesium Registry version. Unity will re-import the package, which may take several minutes. Continue?"
+                : "This will replace the official Cesium package with a community-patched version from GitHub. \n\nWARNING: This is an experimental feature. \n\nContinue?";
+
+            if (EditorUtility.DisplayDialog(title, message, "Yes", "Cancel"))
             {
-                CesiumSetupService.InstallOfficialCesium();
+                if (isForked)
+                    CesiumSetupService.InstallOfficialCesium();
+                else
+                    CesiumSetupService.InstallForkedCesium();
             }
         }
     }

@@ -11,6 +11,7 @@ namespace Rotterdam.DigitalTwins.Editor.Setup
         private const string RegistryName = "Cesium";
         private const string RegistryUrl = "https://unity.pkg.cesium.com";
         private const string RegistryScope = "com.cesium.unity";
+        private const string ForkUrl = "https://github.com/360Fabriek/cesium-unity.git";
 
         public static void EnsureCesiumIsInstalled()
         {
@@ -29,14 +30,19 @@ namespace Rotterdam.DigitalTwins.Editor.Setup
             InstallPackage(PackageName);
         }
 
+        public static void InstallForkedCesium()
+        {
+            Debug.Log($"[CesiumSetupService] Installing forked {PackageName} from {ForkUrl}...");
+            InstallPackage(ForkUrl);
+        }
+
         public static bool IsForkInstalled()
         {
             string manifestPath = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
             if (!File.Exists(manifestPath)) return false;
 
             string manifestText = File.ReadAllText(manifestPath);
-            return manifestText.Contains("\"com.cesium.unity\"") && 
-                  (manifestText.Contains("https://") || manifestText.Contains("git@") || manifestText.Contains("file:"));
+            return manifestText.Contains(ForkUrl);
         }
 
         private static bool IsPackageInstalled(string packageName)
