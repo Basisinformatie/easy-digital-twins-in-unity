@@ -494,10 +494,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomCarCamera
   _targetCar: {fileID: 7272794647871262538}
-  _distance: 10.5
+  _distance: 9.5
   _height: 4.5
   _lookAtHeight: 4
-  _followVelocity: 0
+  _followVelocity: 1
   _flipSpeedKPH: 5
   _rotationDamping: 5
   _heightDamping: 5
