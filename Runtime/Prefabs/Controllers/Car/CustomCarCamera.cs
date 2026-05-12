@@ -8,9 +8,9 @@ namespace Rotterdam.DigitalTwins.Runtime
     [SerializeField] private CustomCarController _targetCar;
 
     [Header("Positioning")]
-    [SerializeField, Min(0f)] private float _distance = 9.5f;
-    [SerializeField, Min(0f)] private float _height = 2f;
-    [SerializeField, Min(0f)] private float _lookAtHeight = 1f;
+    [SerializeField, Min(0f)] private float _distance = 9f;
+    [SerializeField, Min(0f)] private float _height = 4f;
+    [SerializeField, Min(0f)] private float _lookAtHeight = 4f;
 
     [Header("Following")]
     [SerializeField] private bool _followVelocity = true;
