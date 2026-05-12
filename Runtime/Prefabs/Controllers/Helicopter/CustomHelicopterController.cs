@@ -40,13 +40,14 @@ namespace Rotterdam.DigitalTwins.Runtime
     public KeyCode backwardKey = KeyCode.S;
     public KeyCode leftKey = KeyCode.A;
     public KeyCode rightKey = KeyCode.D;
-    public KeyCode turnLeftKey = KeyCode.Q;
-    public KeyCode turnRightKey = KeyCode.E;
-    public KeyCode strafeLeftKey = KeyCode.Z;
-    public KeyCode strafeRightKey = KeyCode.C;
+    public KeyCode turnLeftKey = KeyCode.Z;
+    public KeyCode turnRightKey = KeyCode.C;
+    public KeyCode strafeLeftKey = KeyCode.Q;
+    public KeyCode strafeRightKey = KeyCode.E;
 
     [Header("Strafe Settings")]
     public float strafeForce = 20f;
+    public float strafeTiltForce = 20f;
 
     private Rigidbody rb;
     private Vector2 hMove = Vector2.zero;
@@ -204,7 +205,7 @@ namespace Rotterdam.DigitalTwins.Runtime
 
     private void TiltProcess()
     {
-        hTilt.x = Mathf.Lerp(hTilt.x, hMove.x * turnTiltForce, Time.deltaTime);
+        hTilt.x = Mathf.Lerp(hTilt.x, hMove.x * turnTiltForce + hStrafe * strafeTiltForce, Time.deltaTime);
         hTilt.y = Mathf.Lerp(hTilt.y, hMove.y * forwardTiltForce, Time.deltaTime);
         transform.localRotation = Quaternion.Euler(hTilt.y, transform.localEulerAngles.y, -hTilt.x);
     }
