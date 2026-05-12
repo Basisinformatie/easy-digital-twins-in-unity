@@ -82,18 +82,37 @@ namespace Rotterdam.DigitalTwins.Editor
 
             Add(filterBar);
 
+            VisualElement cesiumButtonsContainer = new VisualElement();
+            cesiumButtonsContainer.style.flexDirection = FlexDirection.Row;
+            cesiumButtonsContainer.style.marginBottom = 10;
+
             Button blankTilesetButton = new Button(() => CesiumSceneHelper.CreateBlank3DTileset());
             blankTilesetButton.text = "Blank 3D Tiles Tileset";
             blankTilesetButton.tooltip = "Creates a CesiumGeoreference and a Blank 3D Tiles Tileset in the scene.";
             blankTilesetButton.style.height = 30;
-            blankTilesetButton.style.marginBottom = 10;
+            blankTilesetButton.style.flexGrow = 1;
             blankTilesetButton.style.backgroundColor = new Color(0.25f, 0.25f, 0.25f);
             blankTilesetButton.style.borderBottomLeftRadius = 5;
             blankTilesetButton.style.borderBottomRightRadius = 5;
             blankTilesetButton.style.borderTopLeftRadius = 5;
             blankTilesetButton.style.borderTopRightRadius = 5;
             blankTilesetButton.style.unityFontStyleAndWeight = FontStyle.Bold;
-            Add(blankTilesetButton);
+            cesiumButtonsContainer.Add(blankTilesetButton);
+
+            Button removeGeoreferenceButton = new Button(() => CesiumSceneHelper.RemoveGeoreference());
+            removeGeoreferenceButton.text = "Remove Tilesets";
+            removeGeoreferenceButton.tooltip = "Removes the CesiumGeoreference and 3Dtilesets from the scene.";
+            removeGeoreferenceButton.style.height = 30;
+            removeGeoreferenceButton.style.marginLeft = 5;
+            removeGeoreferenceButton.style.backgroundColor = new Color(0.35f, 0.25f, 0.25f);
+            removeGeoreferenceButton.style.borderBottomLeftRadius = 5;
+            removeGeoreferenceButton.style.borderBottomRightRadius = 5;
+            removeGeoreferenceButton.style.borderTopLeftRadius = 5;
+            removeGeoreferenceButton.style.borderTopRightRadius = 5;
+            removeGeoreferenceButton.style.unityFontStyleAndWeight = FontStyle.Bold;
+            cesiumButtonsContainer.Add(removeGeoreferenceButton);
+
+            Add(cesiumButtonsContainer);
 
             VisualElement resultsContainer = new VisualElement();
             resultsContainer.style.flexGrow = 1;

@@ -19,6 +19,24 @@ namespace Rotterdam.DigitalTwins.Editor
 #endif
         }
 
+        public static void RemoveGeoreference()
+        {
+#if USING_CESIUM
+            CesiumGeoreference georeference = Object.FindAnyObjectByType<CesiumGeoreference>();
+            if (georeference != null)
+            {
+                Undo.DestroyObjectImmediate(georeference.gameObject);
+                Debug.Log("Removed CesiumGeoreference from the scene.");
+            }
+            else
+            {
+                Debug.LogWarning("No CesiumGeoreference found in the scene.");
+            }
+#else
+            Debug.LogWarning("Cesium is not installed. Cannot remove Georeference.");
+#endif
+        }
+
         public static GameObject Create3DTilesetFromUrl(string name, string url, bool isPointCloud = false, bool isTerrain = false)
         {
 #if USING_CESIUM
