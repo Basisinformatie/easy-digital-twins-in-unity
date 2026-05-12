@@ -38,15 +38,16 @@ namespace Rotterdam.DigitalTwins.Runtime
     public KeyCode liftDownKey = KeyCode.LeftShift;
     public KeyCode forwardKey = KeyCode.W;
     public KeyCode backwardKey = KeyCode.S;
-    public KeyCode leftKey = KeyCode.A;
-    public KeyCode rightKey = KeyCode.D;
-    public KeyCode turnLeftKey = KeyCode.Q;
-    public KeyCode turnRightKey = KeyCode.E;
+    public KeyCode turnLeftKey = KeyCode.A;
+    public KeyCode turnRightKey = KeyCode.D;
+    public KeyCode strafeLeftKey = KeyCode.Q;
+    public KeyCode strafeRightKey = KeyCode.E;
 
     private Rigidbody rb;
     private Vector2 hMove = Vector2.zero;
     private Vector2 hTilt = Vector2.zero;
     private float hTurn = 0f;
+    private float hTurnInput = 0f;
     public bool isOnGround = true;
 
     void Start()
@@ -98,6 +99,7 @@ namespace Rotterdam.DigitalTwins.Runtime
     {
         float tempY = 0;
         float tempX = 0;
+        float tempTurn = 0;
 
         if (hMove.y > 0)
             tempY = -Time.fixedDeltaTime;
@@ -109,50 +111,47 @@ namespace Rotterdam.DigitalTwins.Runtime
         else if (hMove.x < 0)
             tempX = Time.fixedDeltaTime;
 
+        if (hTurnInput > 0)
+            tempTurn = -Time.fixedDeltaTime;
+        else if (hTurnInput < 0)
+            tempTurn = Time.fixedDeltaTime;
+
         if (!isOnGround)
         {
             bool forward = false;
             bool backward = false;
-            bool left = false;
-            bool right = false;
             bool turnLeft = false;
             bool turnRight = false;
+            bool strafeLeft = false;
+            bool strafeRight = false;
 
 #if ROTTERDAM_ENABLE_INPUT_SYSTEM
             if (Keyboard.current != null)
             {
                 forward = Keyboard.current.wKey.isPressed;
                 backward = Keyboard.current.sKey.isPressed;
-                left = Keyboard.current.aKey.isPressed;
-                right = Keyboard.current.dKey.isPressed;
-                turnLeft = Keyboard.current.qKey.isPressed;
-                turnRight = Keyboard.current.eKey.isPressed;
+                turnLeft = Keyboard.current.aKey.isPressed;
+                turnRight = Keyboard.current.dKey.isPressed;
+                strafeLeft = Keyboard.current.qKey.isPressed;
+                strafeRight = Keyboard.current.eKey.isPressed;
             }
 #elif ENABLE_LEGACY_INPUT_MANAGER
             forward = Input.GetKey(forwardKey);
             backward = Input.GetKey(backwardKey);
-            left = Input.GetKey(leftKey);
-            right = Input.GetKey(rightKey);
             turnLeft = Input.GetKey(turnLeftKey);
             turnRight = Input.GetKey(turnRightKey);
+            strafeLeft = Input.GetKey(strafeLeftKey);
+            strafeRight = Input.GetKey(strafeRightKey);
 #endif
 
             if (forward) tempY = Time.fixedDeltaTime;
             else if (backward) tempY = -Time.fixedDeltaTime;
 
-            if (left) tempX = -Time.fixedDeltaTime;
-            else if (right) tempX = Time.fixedDeltaTime;
+            if (strafeLeft) tempX = -Time.fixedDeltaTime;
+            else if (strafeRight) tempX = Time.fixedDeltaTime;
 
-            if (turnRight)
-            {
-                float force = (turnForcePercent - Mathf.Abs(hMove.y)) * rb.mass;
-                rb.AddRelativeTorque(0f, force, 0);
-            }
-            else if (turnLeft)
-            {
-                float force = -(turnForcePercent - Mathf.Abs(hMove.y)) * rb.mass;
-                rb.AddRelativeTorque(0f, force, 0);
-            }
+            if (turnLeft) tempTurn = -Time.fixedDeltaTime;
+            else if (turnRight) tempTurn = Time.fixedDeltaTime;
         }
 
         hMove.x += tempX;
@@ -160,6 +159,9 @@ namespace Rotterdam.DigitalTwins.Runtime
 
         hMove.y += tempY;
         hMove.y = Mathf.Clamp(hMove.y, -1, 1);
+
+        hTurnInput += tempTurn;
+        hTurnInput = Mathf.Clamp(hTurnInput, -1, 1);
     }
 
     private void LiftProcess()
@@ -171,7 +173,7 @@ namespace Rotterdam.DigitalTwins.Runtime
 
     private void MoveProcess()
     {
-        var turn = turnForce * Mathf.Lerp(hMove.x, hMove.x * (turnTiltForcePercent - Mathf.Abs(hMove.y)), Mathf.Max(0f, hMove.y));
+        var turn = turnForce * Mathf.Lerp(hTurnInput, hTurnInput * (turnTiltForcePercent - Mathf.Abs(hMove.y)), Mathf.Max(0f, hMove.y));
         hTurn = Mathf.Lerp(hTurn, turn, Time.fixedDeltaTime * turnForce);
         rb.AddRelativeTorque(0f, hTurn * rb.mass, 0f);
         rb.AddRelativeForce(Vector3.forward * Mathf.Max(0f, hMove.y * forwardForce * rb.mass));
