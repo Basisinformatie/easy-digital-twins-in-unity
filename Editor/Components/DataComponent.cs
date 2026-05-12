@@ -100,8 +100,8 @@ namespace Rotterdam.DigitalTwins.Editor
             cesiumButtonsContainer.Add(blankTilesetButton);
 
             Button removeGeoreferenceButton = new Button(() => CesiumSceneHelper.RemoveGeoreference());
-            removeGeoreferenceButton.text = "Remove Tilesets";
-            removeGeoreferenceButton.tooltip = "Removes the CesiumGeoreference and 3Dtilesets from the scene.";
+            removeGeoreferenceButton.text = "Clear Tilesets";
+            removeGeoreferenceButton.tooltip = "Remove the CesiumGeoreference and 3Dtilesets from the scene.";
             removeGeoreferenceButton.style.height = 30;
             removeGeoreferenceButton.style.marginLeft = 5;
             removeGeoreferenceButton.style.backgroundColor = new Color(0.35f, 0.25f, 0.25f);
