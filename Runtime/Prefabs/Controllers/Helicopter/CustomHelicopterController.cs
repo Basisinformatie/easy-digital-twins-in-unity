@@ -140,10 +140,10 @@ namespace Rotterdam.DigitalTwins.Runtime
                 backward = Keyboard.current.sKey.isPressed;
                 left = Keyboard.current.aKey.isPressed;
                 right = Keyboard.current.dKey.isPressed;
-                turnLeft = Keyboard.current.zKey.isPressed;
-                turnRight = Keyboard.current.cKey.isPressed;
-                strafeLeft = Keyboard.current.qKey.isPressed;
-                strafeRight = Keyboard.current.eKey.isPressed;
+                turnLeft = Keyboard.current[turnLeftKey.ToString().ToLower() + "Key"].isPressed;
+                turnRight = Keyboard.current[turnRightKey.ToString().ToLower() + "Key"].isPressed;
+                strafeLeft = Keyboard.current[strafeLeftKey.ToString().ToLower() + "Key"].isPressed;
+                strafeRight = Keyboard.current[strafeRightKey.ToString().ToLower() + "Key"].isPressed;
             }
 #elif ENABLE_LEGACY_INPUT_MANAGER
             forward = Input.GetKey(forwardKey);

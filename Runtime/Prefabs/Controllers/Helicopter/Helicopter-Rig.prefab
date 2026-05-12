@@ -7601,8 +7601,10 @@ MonoBehaviour:
   backwardKey: 115
   leftKey: 97
   rightKey: 100
-  turnLeftKey: 113
-  turnRightKey: 101
+  turnLeftKey: 122
+  turnRightKey: 99
+  strafeLeftKey: 113
+  strafeRightKey: 101
   isOnGround: 1
 --- !u!1 &8067289424987437150
 GameObject:
