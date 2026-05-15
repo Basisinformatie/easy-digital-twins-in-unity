@@ -44,6 +44,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     case "None":
                     default:
                         SceneControllerUtil.RemoveExistingControllers();
+                        SceneControllerUtil.AddMainCamera();
                         break;
                 }
             });

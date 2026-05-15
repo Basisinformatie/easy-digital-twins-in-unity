@@ -9,6 +9,8 @@ namespace Rotterdam.DigitalTwins.Editor
     {
         private const string PackagePath = "Packages/com.rotterdam.digital-twins/Runtime/Prefabs/Controllers/";
         private const string LocalPath = "Assets/Runtime/Prefabs/Controllers/";
+        private const string FeaturesPackagePath = "Packages/com.rotterdam.digital-twins/Runtime/Prefabs/Features/";
+        private const string FeaturesLocalPath = "Assets/Runtime/Prefabs/Features/";
 
         public static void ReplaceController(string prefabName)
         {
@@ -44,6 +46,30 @@ namespace Rotterdam.DigitalTwins.Editor
             Selection.activeGameObject = instance;
             
             Debug.Log($"Controller replaced with {prefabName}.");
+        }
+
+        public static void AddMainCamera()
+        {
+            string prefabName = "Main Camera.prefab";
+            string fullPath = $"{FeaturesPackagePath}{prefabName}";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(fullPath);
+            if (prefab == null)
+            {
+                fullPath = $"{FeaturesLocalPath}{prefabName}";
+                prefab = AssetDatabase.LoadAssetAtPath<GameObject>(fullPath);
+            }
+
+            if (prefab == null)
+            {
+                Debug.LogError($"Main Camera prefab not found at paths: {FeaturesPackagePath} or {FeaturesLocalPath}");
+                return;
+            }
+
+            GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+            Undo.RegisterCreatedObjectUndo(instance, "Add Main Camera");
+
+            Selection.activeGameObject = instance;
+            Debug.Log("Main Camera added.");
         }
 
         public static void RemoveExistingControllers()
