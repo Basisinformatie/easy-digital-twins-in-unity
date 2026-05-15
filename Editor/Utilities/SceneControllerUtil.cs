@@ -48,6 +48,102 @@ namespace Rotterdam.DigitalTwins.Editor
             Debug.Log($"Controller replaced with {prefabName}.");
         }
 
+        public static void SetAdaptiveLighting(bool enabled)
+        {
+            if (enabled)
+            {
+                EnableAdaptiveLighting();
+            }
+            else
+            {
+                DisableAdaptiveLighting();
+            }
+        }
+
+        private static void EnableAdaptiveLighting()
+        {
+            RemoveObjectByName("Directional Light");
+
+            GameObject adaptiveLighting = InstantiateFeaturePrefab("Adaptive Lighting");
+            if (adaptiveLighting == null) return;
+
+            Material skybox = LoadFeatureAsset<Material>("ToolboxSky1.mat");
+            if (skybox != null)
+            {
+                RenderSettings.skybox = skybox;
+            }
+
+            Light sunLight = adaptiveLighting.GetComponent<Light>();
+            if (sunLight != null)
+            {
+                RenderSettings.sun = sunLight;
+            }
+            
+            Debug.Log("Adaptive Lighting enabled.");
+        }
+
+        private static void DisableAdaptiveLighting()
+        {
+            RemoveObjectByName("Adaptive Lighting");
+
+            GameObject directionalLight = InstantiateFeaturePrefab("Directional Light");
+            
+            if (directionalLight != null)
+            {
+                RenderSettings.sun = directionalLight.GetComponent<Light>();
+            }
+            
+            Debug.Log("Adaptive Lighting disabled.");
+        }
+
+        private static void RemoveObjectByName(string name)
+        {
+            GameObject go = GameObject.Find(name);
+            if (go != null)
+            {
+                Undo.DestroyObjectImmediate(go);
+            }
+        }
+
+        private static GameObject InstantiateFeaturePrefab(string prefabName)
+        {
+            string fileName = prefabName.EndsWith(".prefab") ? prefabName : prefabName + ".prefab";
+            string fullPath = $"{FeaturesPackagePath}{fileName}";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(fullPath);
+            if (prefab == null)
+            {
+                fullPath = $"{FeaturesLocalPath}{fileName}";
+                prefab = AssetDatabase.LoadAssetAtPath<GameObject>(fullPath);
+            }
+
+            if (prefab == null)
+            {
+                Debug.LogError($"Prefab {fileName} not found at paths: {FeaturesPackagePath} or {FeaturesLocalPath}");
+                return null;
+            }
+
+            GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+            Undo.RegisterCreatedObjectUndo(instance, $"Instantiate {prefabName}");
+            return instance;
+        }
+
+        private static T LoadFeatureAsset<T>(string fileName) where T : Object
+        {
+            string fullPath = $"{FeaturesPackagePath}{fileName}";
+            T asset = AssetDatabase.LoadAssetAtPath<T>(fullPath);
+            if (asset == null)
+            {
+                fullPath = $"{FeaturesLocalPath}{fileName}";
+                asset = AssetDatabase.LoadAssetAtPath<T>(fullPath);
+            }
+            return asset;
+        }
+
+        public static bool IsAdaptiveLightingEnabled()
+        {
+            return GameObject.Find("Adaptive Lighting") != null;
+        }
+
         public static void AddMainCamera()
         {
             string prefabName = "Main Camera.prefab";

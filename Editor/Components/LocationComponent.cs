@@ -60,6 +60,22 @@ namespace Rotterdam.DigitalTwins.Editor
             info2.style.marginTop = 10;
             info2.style.marginBottom = 10;
             Add(info2);
+
+            Label lightingLabel = new Label("Adaptive Lighting");
+            lightingLabel.style.fontSize = 16;
+            lightingLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+            lightingLabel.style.marginTop = 20;
+            Add(lightingLabel);
+
+            Toggle adaptiveLightingToggle = new Toggle("Enable Adaptive Lighting")
+            {
+                value = SceneControllerUtil.IsAdaptiveLightingEnabled()
+            };
+            adaptiveLightingToggle.RegisterValueChangedCallback(evt =>
+            {
+                SceneControllerUtil.SetAdaptiveLighting(evt.newValue);
+            });
+            Add(adaptiveLightingToggle);
         }
 
         private void UpdateGeoreference()
