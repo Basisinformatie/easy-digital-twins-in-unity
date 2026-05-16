@@ -8,11 +8,11 @@ public class SunRotation : MonoBehaviour
     public RotationMode mode;
 
     [Tooltip("Continuous mode: degrees per frame. X is speed. Y and Z determine axis orientation.")]
-    public Vector3 rotationSet = new Vector3(0.05f, 0, 0);
+    public Vector3 rotationSet = new Vector3(-0.05f, 0, 0);
     
     [Range(-90, 90)]
     [Tooltip("Latitude affects the sun's arc. 0 is equator, 52 is Netherlands.")]
-    public float latitude = 52f;
+    public float latitude = -15f;
 
     [Range(0, 24)]
     [Tooltip("Time of day (0-24hours). Only used in 'SpecificTime' mode.")]
