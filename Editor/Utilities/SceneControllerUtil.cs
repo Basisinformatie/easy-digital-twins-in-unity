@@ -184,17 +184,6 @@ namespace Rotterdam.DigitalTwins.Editor
             }
         }
 
-        public static void SetSunRotationLatitude(float latitude)
-        {
-            SunRotation sunRotation = GetSunRotation();
-            if (sunRotation != null)
-            {
-                Undo.RecordObject(sunRotation, "Set Sun Rotation Latitude");
-                sunRotation.latitude = latitude;
-                EditorUtility.SetDirty(sunRotation);
-            }
-        }
-
         public static void AddMainCamera()
         {
             string prefabName = "Main Camera.prefab";
