@@ -144,6 +144,46 @@ namespace Rotterdam.DigitalTwins.Editor
             return GameObject.Find("Adaptive Lighting") != null;
         }
 
+        public static SunRotation GetSunRotation()
+        {
+            GameObject adaptiveLighting = GameObject.Find("Adaptive Lighting");
+            return adaptiveLighting != null ? adaptiveLighting.GetComponent<SunRotation>() : null;
+        }
+
+        public static void SetSunRotationMode(SunRotation.RotationMode mode)
+        {
+            SunRotation sunRotation = GetSunRotation();
+            if (sunRotation != null)
+            {
+                Undo.RecordObject(sunRotation, "Set Sun Rotation Mode");
+                sunRotation.mode = mode;
+                EditorUtility.SetDirty(sunRotation);
+            }
+        }
+
+        public static void SetSunRotationTime(float time)
+        {
+            SunRotation sunRotation = GetSunRotation();
+            if (sunRotation != null)
+            {
+                Undo.RecordObject(sunRotation, "Set Sun Rotation Time");
+                sunRotation.timeOfDay = time;
+                EditorUtility.SetDirty(sunRotation);
+            }
+        }
+
+        public static void SetSunRotationCycle(float seconds)
+        {
+            SunRotation sunRotation = GetSunRotation();
+            if (sunRotation != null)
+            {
+                Undo.RecordObject(sunRotation, "Set Sun Rotation Cycle");
+                float rotationVal = 0.5f / seconds;
+                sunRotation.rotationSet = new Vector3(rotationVal, sunRotation.rotationSet.y, sunRotation.rotationSet.z);
+                EditorUtility.SetDirty(sunRotation);
+            }
+        }
+
         public static void AddMainCamera()
         {
             string prefabName = "Main Camera.prefab";
