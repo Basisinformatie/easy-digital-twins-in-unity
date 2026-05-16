@@ -188,7 +188,8 @@ namespace Rotterdam.DigitalTwins.Editor
                 Undo.RecordObject(sunRotation, "Set Sun Rotation Cycle");
                 float rotationVal = 0.5f / seconds;
                 float yRotation = sunRotation.rotationSet.y != 0 ? sunRotation.rotationSet.y : 270f;
-                sunRotation.rotationSet = new Vector3(rotationVal, yRotation, sunRotation.rotationSet.z);
+                float zRotation = sunRotation.rotationSet.z != 0 ? sunRotation.rotationSet.z : 52f;
+                sunRotation.rotationSet = new Vector3(rotationVal, yRotation, zRotation);
                 if (sunRotation.mode == SunRotation.RotationMode.SpecificTime)
                 {
                     sunRotation.UpdateSunPosition();
