@@ -36,12 +36,14 @@ namespace Rotterdam.DigitalTwins.Editor
             label.style.fontSize = 16;
             label.style.unityFontStyleAndWeight = FontStyle.Bold;
             label.style.marginBottom = 10;
+            label.style.flexShrink = 0;
             Add(label);
             
             Label info = new Label("Making a selection adds live city data to your experience. Using the Open Urban Platform (OUP) as a catalogue we can browse and add data, the added data sources are processed and live streamed with Cesium.");
             info.style.whiteSpace = WhiteSpace.Normal;
             info.style.marginTop = 10;
             info.style.marginBottom = 10;
+            info.style.flexShrink = 0;
             Add(info);
 
             if (_availableServices != null && _availableServices.Count > 0)
@@ -49,6 +51,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 VisualElement catalogBar = new VisualElement();
                 catalogBar.style.flexDirection = FlexDirection.Row;
                 catalogBar.style.marginBottom = 10;
+                catalogBar.style.flexShrink = 0;
 
                 _catalogDropdown = new DropdownField("Catalog", _availableServices.Select(s => s.Name).ToList(), 0);
                 _catalogDropdown.style.flexGrow = 1;
@@ -65,6 +68,7 @@ namespace Rotterdam.DigitalTwins.Editor
             VisualElement topBar = new VisualElement();
             topBar.style.flexDirection = FlexDirection.Row;
             topBar.style.marginBottom = 10;
+            topBar.style.flexShrink = 0;
 
             List<string> types = new List<string> { "Datasets", "Digital Twins" };
             _typeDropdown = new DropdownField("Type", types, 0);
@@ -87,6 +91,7 @@ namespace Rotterdam.DigitalTwins.Editor
             VisualElement filterBar = new VisualElement();
             filterBar.style.flexDirection = FlexDirection.Row;
             filterBar.style.marginBottom = 10;
+            filterBar.style.flexShrink = 0;
 
             _searchField = new TextField("Search");
             _searchField.tooltip = "Search by title, description, location or tags";
@@ -108,6 +113,7 @@ namespace Rotterdam.DigitalTwins.Editor
             VisualElement cesiumButtonsContainer = new VisualElement();
             cesiumButtonsContainer.style.flexDirection = FlexDirection.Row;
             cesiumButtonsContainer.style.marginBottom = 10;
+            cesiumButtonsContainer.style.flexShrink = 0;
 
             Button blankTilesetButton = new Button(() => CesiumSceneHelper.CreateBlank3DTileset());
             blankTilesetButton.text = "Blank 3D Tiles Tileset";
@@ -176,6 +182,7 @@ namespace Rotterdam.DigitalTwins.Editor
             footer.style.paddingTop = 5;
             footer.style.borderTopWidth = 1;
             footer.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f);
+            footer.style.flexShrink = 0;
 
             _statusLabel = new Label("API Status: Checking...");
             _statusLabel.style.fontSize = 10;
