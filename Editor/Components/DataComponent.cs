@@ -16,6 +16,7 @@ namespace Rotterdam.DigitalTwins.Editor
         private DropdownField _hubDropdown;
         private DropdownField _typeDropdown;
         private Toggle _resourceFilterToggle;
+        private Label _statusLabel;
         private List<OUPHub> _hubs = new();
 
         private VisualElement _loadingIndicator;
@@ -55,6 +56,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     _catalogService = _availableServices[_catalogDropdown.index];
                     LoadHubs();
                     RefreshData();
+                    UpdateApiStatus();
                 });
                 catalogBar.Add(_catalogDropdown);
                 Add(catalogBar);
@@ -167,8 +169,35 @@ namespace Rotterdam.DigitalTwins.Editor
             
             resultsContainer.Add(_loadingIndicator);
 
+            VisualElement footer = new VisualElement();
+            footer.style.flexDirection = FlexDirection.Row;
+            footer.style.justifyContent = Justify.FlexEnd;
+            footer.style.marginTop = 5;
+            footer.style.paddingTop = 5;
+            footer.style.borderTopWidth = 1;
+            footer.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f);
+
+            _statusLabel = new Label("API Status: Checking...");
+            _statusLabel.style.fontSize = 10;
+            _statusLabel.style.color = Color.gray;
+            footer.Add(_statusLabel);
+            Add(footer);
+
+            schedule.Execute(() => UpdateApiStatus()).Every(30000);
+
             LoadHubs();
             RefreshData();
+            UpdateApiStatus();
+        }
+
+        private void UpdateApiStatus()
+        {
+            if (_catalogService == null) return;
+
+            _catalogService.CheckStatus((status, isSuccess) => {
+                _statusLabel.text = $"API Status: {status}";
+                _statusLabel.style.color = isSuccess ? new Color(0.2f, 0.8f, 0.2f) : new Color(1f, 0.3f, 0.3f);
+            });
         }
 
         private void LoadHubs()

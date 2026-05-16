@@ -36,5 +36,10 @@ namespace Rotterdam.DigitalTwins.Editor
             };
             onSuccess?.Invoke(mockHubs);
         }
+
+        public void CheckStatus(Action<string, bool> onResult)
+        {
+            onResult?.Invoke("200 OK (Mock)", true);
+        }
     }
 }

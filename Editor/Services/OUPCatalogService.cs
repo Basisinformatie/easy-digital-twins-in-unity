@@ -198,6 +198,26 @@ namespace Rotterdam.DigitalTwins.Editor
             };
         }
 
+        public void CheckStatus(Action<string, bool> onResult)
+        {
+            string url = $"{BaseUrl}/hubs";
+            UnityWebRequest request = UnityWebRequest.Get(url);
+            var operation = request.SendWebRequest();
+            operation.completed += _ =>
+            {
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    string status = request.responseCode > 0 ? $"{request.responseCode} Offline" : "Offline";
+                    onResult?.Invoke(status, false);
+                }
+                else
+                {
+                    onResult?.Invoke($"{request.responseCode} OK", true);
+                }
+                request.Dispose();
+            };
+        }
+
         [Serializable]
         private class HubResponse
         {
