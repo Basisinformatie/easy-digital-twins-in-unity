@@ -19,13 +19,23 @@ namespace Rotterdam.DigitalTwins.Editor
             ShoppingWindow wnd = GetWindow<ShoppingWindow>();
             wnd.titleContent = new GUIContent("Main Menu");
             wnd.minSize = new Vector2(350, 450);
-            wnd._catalogServices = new List<ICatalogService> { new OUPCatalogService() };
+            wnd._catalogServices = new List<ICatalogService> 
+            { 
+                new OUPCatalogService(),
+                new MockCatalogService()
+            };
         }
 
         public void CreateGUI()
         {
             if (_catalogServices == null || _catalogServices.Count == 0)
-                _catalogServices = new List<ICatalogService> { new OUPCatalogService() };
+            {
+                _catalogServices = new List<ICatalogService> 
+                { 
+                    new OUPCatalogService(),
+                    new MockCatalogService()
+                };
+            }
             VisualElement root = rootVisualElement;
             root.style.paddingLeft = 10;
             root.style.paddingRight = 10;

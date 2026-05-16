@@ -47,7 +47,7 @@ namespace Rotterdam.DigitalTwins.Editor
             topBar.style.flexDirection = FlexDirection.Row;
             topBar.style.marginBottom = 10;
 
-            if (_availableServices != null && _availableServices.Count > 1)
+            if (_availableServices != null && _availableServices.Count > 0)
             {
                 _catalogDropdown = new DropdownField("Catalog", _availableServices.Select(s => s.Name).ToList(), 0);
                 _catalogDropdown.style.flexGrow = 1;
