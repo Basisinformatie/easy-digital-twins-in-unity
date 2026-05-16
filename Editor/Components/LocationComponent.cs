@@ -97,7 +97,6 @@ namespace Rotterdam.DigitalTwins.Editor
             });
             _adaptiveLightingOptions.Add(_rotationModeField);
 
-            // Specific Time UI
             VisualElement specificTimeContainer = new VisualElement();
             _timeSlider = new Slider("Time of Day", 0, 24) { value = sunRotation != null ? sunRotation.timeOfDay : 12f };
             _timeSlider.RegisterValueChangedCallback(evt =>
