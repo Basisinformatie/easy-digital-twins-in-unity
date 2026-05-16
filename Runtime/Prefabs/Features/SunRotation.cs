@@ -36,14 +36,7 @@ public class SunRotation : MonoBehaviour
 
     public void UpdateSunPosition()
     {
-        // 06:00 (Oost) -> X = 0
-        // 12:00 (Middag) -> X = 90
-        // 18:00 (West) -> X = 180
-        // 24:00/00:00 (Middernacht) -> X = 270
-        float angle = (timeOfDay / 24f) * 360f - 90f;
-        
-        // Y = 270 zorgt ervoor dat de zon van Oost (+X) naar West (-X) draait over de X-as.
-        float yRotation = rotationSet.y != 0 ? rotationSet.y : 270f;
-        transform.localEulerAngles = new Vector3(angle, yRotation, rotationSet.z);
+        float angle = ((timeOfDay-1.5f) / 24f) * 360f - 90f;
+        transform.localEulerAngles = new Vector3(angle, rotationSet.y, rotationSet.z);
     }
 }
