@@ -43,12 +43,12 @@ namespace Rotterdam.DigitalTwins.Editor
             info.style.marginBottom = 10;
             Add(info);
 
-            VisualElement topBar = new VisualElement();
-            topBar.style.flexDirection = FlexDirection.Row;
-            topBar.style.marginBottom = 10;
-
             if (_availableServices != null && _availableServices.Count > 0)
             {
+                VisualElement catalogBar = new VisualElement();
+                catalogBar.style.flexDirection = FlexDirection.Row;
+                catalogBar.style.marginBottom = 10;
+
                 _catalogDropdown = new DropdownField("Catalog", _availableServices.Select(s => s.Name).ToList(), 0);
                 _catalogDropdown.style.flexGrow = 1;
                 _catalogDropdown.RegisterValueChangedCallback(evt => {
@@ -56,8 +56,13 @@ namespace Rotterdam.DigitalTwins.Editor
                     LoadHubs();
                     RefreshData();
                 });
-                topBar.Add(_catalogDropdown);
+                catalogBar.Add(_catalogDropdown);
+                Add(catalogBar);
             }
+
+            VisualElement topBar = new VisualElement();
+            topBar.style.flexDirection = FlexDirection.Row;
+            topBar.style.marginBottom = 10;
 
             List<string> types = new List<string> { "Datasets", "Digital Twins" };
             _typeDropdown = new DropdownField("Type", types, 0);
