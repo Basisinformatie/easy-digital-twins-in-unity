@@ -172,13 +172,13 @@ namespace Rotterdam.DigitalTwins.Editor
             }
         }
 
-        public static void SetSunRotationSpeed(float speed)
+        public static void SetSunRotationCycle(float seconds)
         {
             SunRotation sunRotation = GetSunRotation();
             if (sunRotation != null)
             {
-                Undo.RecordObject(sunRotation, "Set Sun Rotation Speed");
-                float rotationVal = -speed * 0.5f;
+                Undo.RecordObject(sunRotation, "Set Sun Rotation Cycle");
+                float rotationVal = 0.5f / seconds;
                 sunRotation.rotationSet = new Vector3(rotationVal, sunRotation.rotationSet.y, sunRotation.rotationSet.z);
                 EditorUtility.SetDirty(sunRotation);
             }

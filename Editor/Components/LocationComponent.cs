@@ -11,10 +11,9 @@ namespace Rotterdam.DigitalTwins.Editor
         private DoubleField _heightField;
         private VisualElement _adaptiveLightingOptions;
         private EnumField _rotationModeField;
-        private Slider _latitudeSlider;
         private Slider _timeSlider;
         private TextField _timeTextField;
-        private Slider _speedSlider;
+        private FloatField _cycleSecondsField;
 
         public LocationComponent()
         {
@@ -98,13 +97,6 @@ namespace Rotterdam.DigitalTwins.Editor
             });
             _adaptiveLightingOptions.Add(_rotationModeField);
 
-            _latitudeSlider = new Slider("Season (Latitude)", -90, 90) { value = sunRotation != null ? sunRotation.latitude : -15f };
-            _latitudeSlider.RegisterValueChangedCallback(evt =>
-            {
-                SceneControllerUtil.SetSunRotationLatitude(evt.newValue);
-            });
-            _adaptiveLightingOptions.Add(_latitudeSlider);
-
             VisualElement specificTimeContainer = new VisualElement();
             _timeSlider = new Slider("Time of Day", 0, 24) { value = sunRotation != null ? sunRotation.timeOfDay : 12f };
             _timeSlider.RegisterValueChangedCallback(evt =>
@@ -126,18 +118,19 @@ namespace Rotterdam.DigitalTwins.Editor
             specificTimeContainer.Add(_timeTextField);
             _adaptiveLightingOptions.Add(specificTimeContainer);
 
-            // Continuous UI
-            float initialSpeed = 0.1f;
-            if (sunRotation != null)
+            VisualElement continuousContainer = new VisualElement();
+            float initialCycle = 10f;
+            if (sunRotation != null && sunRotation.rotationSet.x != 0)
             {
-                initialSpeed = Mathf.Abs(sunRotation.rotationSet.x) / 0.5f;
+                initialCycle = 0.5f / sunRotation.rotationSet.x;
             }
-            _speedSlider = new Slider("Orbit Speed", 0, 1) { value = initialSpeed };
-            _speedSlider.RegisterValueChangedCallback(evt =>
+            _cycleSecondsField = new FloatField("Cycle in Seconds") { value = initialCycle };
+            _cycleSecondsField.RegisterValueChangedCallback(evt =>
             {
-                SceneControllerUtil.SetSunRotationSpeed(evt.newValue);
+                SceneControllerUtil.SetSunRotationCycle(evt.newValue);
             });
-            _adaptiveLightingOptions.Add(_speedSlider);
+            continuousContainer.Add(_cycleSecondsField);
+            _adaptiveLightingOptions.Add(continuousContainer);
 
             UpdateAdaptiveLightingUI();
         }
@@ -153,8 +146,8 @@ namespace Rotterdam.DigitalTwins.Editor
                 if (sunRotation != null)
                 {
                     bool isSpecificTime = sunRotation.mode == SunRotation.RotationMode.SpecificTime;
-                    _adaptiveLightingOptions.ElementAt(2).style.display = isSpecificTime ? DisplayStyle.Flex : DisplayStyle.None;
-                    _adaptiveLightingOptions.ElementAt(3).style.display = !isSpecificTime ? DisplayStyle.Flex : DisplayStyle.None;
+                    _adaptiveLightingOptions.ElementAt(1).style.display = isSpecificTime ? DisplayStyle.Flex : DisplayStyle.None;
+                    _adaptiveLightingOptions.ElementAt(2).style.display = !isSpecificTime ? DisplayStyle.Flex : DisplayStyle.None;
                 }
             }
         }
