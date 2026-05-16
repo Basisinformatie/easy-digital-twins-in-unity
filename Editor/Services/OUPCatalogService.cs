@@ -11,6 +11,8 @@ namespace Rotterdam.DigitalTwins.Editor
     {
         private const string BaseUrl = "https://hub.clearly.app/api";
 
+        public string Name => "Open Urban Platform (OUP)";
+
         public void FetchDatasets(Action<List<OUPDataset>> onSuccess, Action<string> onError, string searchTerm = "", string hubId = "", List<string> tags = null, List<string> formats = null)
         {
             List<string> queryParams = new List<string>();

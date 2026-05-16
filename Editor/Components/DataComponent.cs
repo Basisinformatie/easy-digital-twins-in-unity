@@ -8,9 +8,11 @@ namespace Rotterdam.DigitalTwins.Editor
 {
     public class DataComponent : VisualElement
     {
-        private readonly ICatalogService _catalogService;
+        private ICatalogService _catalogService;
+        private readonly List<ICatalogService> _availableServices;
         private ScrollView _scrollView;
         private TextField _searchField;
+        private DropdownField _catalogDropdown;
         private DropdownField _hubDropdown;
         private DropdownField _typeDropdown;
         private Toggle _resourceFilterToggle;
@@ -22,9 +24,11 @@ namespace Rotterdam.DigitalTwins.Editor
 
         private static readonly string[] AllowedFormats = { "3dtileset", "3dtile", "3dtiles", "3dterrain", "3d tiles", "3d-tiles", "3dpointclouds", "WMS", "wms" };
 
-        public DataComponent(ICatalogService catalogService)
+        public DataComponent(List<ICatalogService> catalogServices)
         {
-            _catalogService = catalogService;
+            _availableServices = catalogServices;
+            _catalogService = _availableServices.FirstOrDefault();
+            
             style.flexGrow = 1;
 
             Label label = new Label("Browse Data Catalogue");
@@ -42,6 +46,18 @@ namespace Rotterdam.DigitalTwins.Editor
             VisualElement topBar = new VisualElement();
             topBar.style.flexDirection = FlexDirection.Row;
             topBar.style.marginBottom = 10;
+
+            if (_availableServices != null && _availableServices.Count > 1)
+            {
+                _catalogDropdown = new DropdownField("Catalog", _availableServices.Select(s => s.Name).ToList(), 0);
+                _catalogDropdown.style.flexGrow = 1;
+                _catalogDropdown.RegisterValueChangedCallback(evt => {
+                    _catalogService = _availableServices[_catalogDropdown.index];
+                    LoadHubs();
+                    RefreshData();
+                });
+                topBar.Add(_catalogDropdown);
+            }
 
             List<string> types = new List<string> { "Datasets", "Digital Twins" };
             _typeDropdown = new DropdownField("Type", types, 0);

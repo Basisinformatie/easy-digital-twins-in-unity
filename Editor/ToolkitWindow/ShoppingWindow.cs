@@ -8,7 +8,7 @@ namespace Rotterdam.DigitalTwins.Editor
     {
         private VisualElement _contentContainer;
 
-        private ICatalogService _catalogService;
+        private List<ICatalogService> _catalogServices;
         private bool _isWaitingForInstallation = false;
         private double _installationDetectionTime = 0;
         private const double DelayAfterInstallation = 1.0;
@@ -18,13 +18,13 @@ namespace Rotterdam.DigitalTwins.Editor
             ShoppingWindow wnd = GetWindow<ShoppingWindow>();
             wnd.titleContent = new GUIContent("Main Menu");
             wnd.minSize = new Vector2(350, 450);
-            wnd._catalogService = new OUPCatalogService();
+            wnd._catalogServices = new List<ICatalogService> { new OUPCatalogService() };
         }
 
         public void CreateGUI()
         {
-            if (_catalogService == null)
-                _catalogService = new OUPCatalogService();
+            if (_catalogServices == null || _catalogServices.Count == 0)
+                _catalogServices = new List<ICatalogService> { new OUPCatalogService() };
             VisualElement root = rootVisualElement;
             root.style.paddingLeft = 10;
             root.style.paddingRight = 10;
@@ -226,7 +226,7 @@ namespace Rotterdam.DigitalTwins.Editor
             toolbar.style.paddingTop = 5;
             toolbar.style.paddingBottom = 5;
 
-            Button dataTab = new Button(() => SwitchTab(new DataComponent(_catalogService))) { text = "Data Catalogue" };
+            Button dataTab = new Button(() => SwitchTab(new DataComponent(_catalogServices))) { text = "Data Catalogue" };
             Button controllerTab = new Button(() => SwitchTab(new ControllerComponent())) { text = "Controller" };
             Button locationTab = new Button(() => SwitchTab(new LocationComponent())) { text = "Location" };
 
@@ -251,7 +251,7 @@ namespace Rotterdam.DigitalTwins.Editor
             backButton.style.paddingBottom = 8;
             _contentContainer.Add(backButton);
 
-            SwitchTab(new DataComponent(_catalogService));
+            SwitchTab(new DataComponent(_catalogServices));
         }
 
         private void SwitchTab(VisualElement content)
