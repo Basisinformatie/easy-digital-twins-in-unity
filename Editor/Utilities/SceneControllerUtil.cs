@@ -157,6 +157,10 @@ namespace Rotterdam.DigitalTwins.Editor
             {
                 Undo.RecordObject(sunRotation, "Set Sun Rotation Mode");
                 sunRotation.mode = mode;
+                if (mode == SunRotation.RotationMode.SpecificTime)
+                {
+                    sunRotation.UpdateSunPosition();
+                }
                 EditorUtility.SetDirty(sunRotation);
             }
         }
@@ -168,6 +172,10 @@ namespace Rotterdam.DigitalTwins.Editor
             {
                 Undo.RecordObject(sunRotation, "Set Sun Rotation Time");
                 sunRotation.timeOfDay = time;
+                if (sunRotation.mode == SunRotation.RotationMode.SpecificTime)
+                {
+                    sunRotation.UpdateSunPosition();
+                }
                 EditorUtility.SetDirty(sunRotation);
             }
         }
@@ -180,6 +188,10 @@ namespace Rotterdam.DigitalTwins.Editor
                 Undo.RecordObject(sunRotation, "Set Sun Rotation Cycle");
                 float rotationVal = 0.5f / seconds;
                 sunRotation.rotationSet = new Vector3(rotationVal, sunRotation.rotationSet.y, sunRotation.rotationSet.z);
+                if (sunRotation.mode == SunRotation.RotationMode.SpecificTime)
+                {
+                    sunRotation.UpdateSunPosition();
+                }
                 EditorUtility.SetDirty(sunRotation);
             }
         }

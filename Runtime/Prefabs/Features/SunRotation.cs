@@ -34,7 +34,7 @@ public class SunRotation : MonoBehaviour
         }
     }
 
-    private void UpdateSunPosition()
+    public void UpdateSunPosition()
     {
         float angle = ((timeOfDay-1.5f) / 24f) * 360f - 90f;
         transform.localEulerAngles = new Vector3(angle, rotationSet.y, rotationSet.z);
