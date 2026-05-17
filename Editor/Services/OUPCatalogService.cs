@@ -45,6 +45,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
             UnityWebRequest request = UnityWebRequest.Get(url);
             request.SetRequestHeader("accept", "application/json");
+            request.timeout = 10;
             var operation = request.SendWebRequest();
 
             operation.completed += _ =>
@@ -115,6 +116,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
             UnityWebRequest request = UnityWebRequest.Get(url);
             request.SetRequestHeader("accept", "application/json");
+            request.timeout = 10;
             var operation = request.SendWebRequest();
 
             operation.completed += _ =>
@@ -166,6 +168,7 @@ namespace Rotterdam.DigitalTwins.Editor
             string url = $"{BaseUrl}/hubs";
             UnityWebRequest request = UnityWebRequest.Get(url);
             request.SetRequestHeader("accept", "application/json");
+            request.timeout = 10;
             var operation = request.SendWebRequest();
 
             operation.completed += _ =>
@@ -202,6 +205,7 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             string url = $"{BaseUrl}/hubs";
             UnityWebRequest request = UnityWebRequest.Get(url);
+            request.timeout = 5;
             var operation = request.SendWebRequest();
             operation.completed += _ =>
             {

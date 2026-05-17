@@ -211,6 +211,7 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             _catalogService.FetchHubs(hubs =>
             {
+                UpdateApiStatus();
                 _hubs = hubs;
                 var choices = new List<string> { "All Hubs" };
                 choices.AddRange(hubs.Select(h => h.name));
@@ -238,6 +239,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 {
                     if (requestId != _currentRequestId) return;
                     _loadingIndicator.style.display = DisplayStyle.None;
+                    UpdateApiStatus();
 
                     foreach (var dataset in datasets)
                     {
@@ -247,6 +249,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     if (requestId != _currentRequestId) return;
                     _loadingIndicator.style.display = DisplayStyle.None;
                     Debug.LogError($"Failed to load datasets: {error}");
+                    UpdateApiStatus();
                 }, _searchField.value, selectedHubId, null, AllowedFormats.ToList());
             }
             else // Digital Twins
@@ -255,6 +258,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 {
                     if (requestId != _currentRequestId) return;
                     _loadingIndicator.style.display = DisplayValueToNone();
+                    UpdateApiStatus();
 
                     foreach (var twin in twins)
                     {
@@ -271,6 +275,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     if (requestId != _currentRequestId) return;
                     _loadingIndicator.style.display = DisplayValueToNone();
                     Debug.LogError($"Failed to load digital twins: {error}");
+                    UpdateApiStatus();
                 }, _searchField.value, selectedHubId);
             }
 
