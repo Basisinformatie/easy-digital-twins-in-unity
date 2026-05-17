@@ -190,7 +190,7 @@ namespace Rotterdam.DigitalTwins.Editor
             
             if (tilesets.Length == 0)
             {
-                EditorUtility.DisplayDialog("No 3D Tileset Found", "Could not find a 3D Tileset in the scene. Please add a 3D tileset first.", "OK");
+                EditorUtility.DisplayDialog("No 3D Tileset Found", "Could not find a 3D Tileset in the scene or Digital Twin to project the WMS resource on.", "OK");
                 _wmsQueue.Clear();
                 return;
             }

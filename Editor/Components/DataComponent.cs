@@ -79,8 +79,9 @@ namespace Rotterdam.DigitalTwins.Editor
             });
             topBar.Add(_typeDropdown);
 
-            _resourceFilterToggle = new Toggle("Only 3D Resources");
-            _resourceFilterToggle.tooltip = "Hide digital twins that do not have any supported 3D resources (3D Tiles, Terrain, etc.)";
+            _resourceFilterToggle = new Toggle("Only supported Resources");
+            _resourceFilterToggle.value = true;
+            _resourceFilterToggle.tooltip = "Hide digital twins that do not have any supported resources (3D Tiles, Terrain, WMS, etc.)";
             _resourceFilterToggle.style.display = DisplayStyle.None;
             _resourceFilterToggle.style.marginLeft = 10;
             _resourceFilterToggle.RegisterValueChangedCallback(_ => RefreshData());
