@@ -10,6 +10,16 @@ namespace Rotterdam.DigitalTwins.Editor
 {
     public static class CesiumSceneHelper
     {
+        private struct WmsRequest
+        {
+            public string Name;
+            public string Url;
+            public string Layers;
+            public int MaximumLevel;
+        }
+
+        private static Queue<WmsRequest> _wmsQueue = new Queue<WmsRequest>();
+
         public static void CreateBlank3DTileset()
         {
 #if USING_CESIUM
@@ -151,17 +161,6 @@ namespace Rotterdam.DigitalTwins.Editor
             var wmsResources = matchingResources.Where(r => string.Equals(r.format, "WMS", System.StringComparison.OrdinalIgnoreCase)).ToList();
             if (wmsResources.Count > 0)
             {
-#if USING_CESIUM
-                if (createdTerrains.Count == 1)
-                {
-                    foreach (var res in wmsResources)
-                    {
-                        AddWmsToGameObject(createdTerrains[0], res.url);
-                    }
-                    return;
-                }
-#endif
-                
                 foreach (var res in wmsResources)
                 {
                     string displayName = string.IsNullOrEmpty(res.name) ? res.format.ToUpper() : res.name;
@@ -173,33 +172,59 @@ namespace Rotterdam.DigitalTwins.Editor
 
         public static void AddWmsOverlay(string name, string url, string layers = "0", int maximumLevel = 22)
         {
-#if USING_CESIUM
-            var terrainTags = Object.FindObjectsByType<Rotterdam.DigitalTwins.Runtime.CesiumTerrainTag>(FindObjectsSortMode.None);
-            
-            if (terrainTags.Length == 0)
+            _wmsQueue.Enqueue(new WmsRequest { Name = name, Url = url, Layers = layers, MaximumLevel = maximumLevel });
+
+            if (_wmsQueue.Count == 1)
             {
-                EditorUtility.DisplayDialog("No Terrain Found", "Could not find a 3D Terrain tileset in the scene. Please add a terrain tileset first.", "OK");
+                ProcessWmsQueue();
+            }
+        }
+
+        private static void ProcessWmsQueue()
+        {
+            if (_wmsQueue.Count == 0) return;
+
+#if USING_CESIUM
+            var request = _wmsQueue.Peek();
+            var tilesets = Object.FindObjectsByType<Cesium3DTileset>(FindObjectsSortMode.None);
+            
+            if (tilesets.Length == 0)
+            {
+                EditorUtility.DisplayDialog("No 3D Tileset Found", "Could not find a 3D Tileset in the scene. Please add a 3D tileset first.", "OK");
+                _wmsQueue.Clear();
                 return;
             }
 
-            if (terrainTags.Length == 1)
+            GenericMenu menu = new GenericMenu();
+            string queueInfo = _wmsQueue.Count > 1 ? $" ({_wmsQueue.Count} pending)" : "";
+            menu.AddDisabledItem(new GUIContent($"Select 3D Tileset for WMS{queueInfo}: {request.Name}"));
+            menu.AddSeparator("");
+            foreach (var tileset in tilesets.OrderBy(t => t.gameObject.name))
             {
-                AddWmsToGameObject(terrainTags[0].gameObject, url, layers, maximumLevel);
-            }
-            else
-            {
-                GenericMenu menu = new GenericMenu();
-                menu.AddDisabledItem(new GUIContent($"Select terrain for WMS: {name}"));
-                menu.AddSeparator("");
-                foreach (var tag in terrainTags.OrderBy(t => t.gameObject.name))
+                GameObject target = tileset.gameObject;
+                menu.AddItem(new GUIContent(target.name), false, () => 
                 {
-                    GameObject target = tag.gameObject;
-                    menu.AddItem(new GUIContent(target.name), false, () => AddWmsToGameObject(target, url, layers, maximumLevel));
-                }
-                menu.ShowAsContext();
+                    AddWmsToGameObject(target, request.Url, request.Layers, request.MaximumLevel);
+                    _wmsQueue.Dequeue();
+                    ProcessWmsQueue();
+                });
             }
+            
+            menu.AddSeparator("");
+            menu.AddItem(new GUIContent("Skip this WMS"), false, () => 
+            {
+                _wmsQueue.Dequeue();
+                ProcessWmsQueue();
+            });
+            menu.AddItem(new GUIContent("Cancel all remaining WMS"), false, () => 
+            {
+                _wmsQueue.Clear();
+            });
+            
+            menu.ShowAsContext();
 #else
             Debug.LogWarning("Cesium is not installed. Cannot add WMS overlay.");
+            _wmsQueue.Clear();
 #endif
         }
 
