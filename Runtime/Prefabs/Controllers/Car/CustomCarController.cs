@@ -248,16 +248,23 @@ namespace Rotterdam.DigitalTwins.Runtime
     private float GetRawSteerInput()
     {
 #if ROTTERDAM_ENABLE_INPUT_SYSTEM
+        float steer = 0f;
         if (Keyboard.current != null)
         {
-            if (Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed) return -1f;
-            if (Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed) return 1f;
+            if (Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed) steer -= 1f;
+            if (Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed) steer += 1f;
         }
-        return 0f;
+        if (Gamepad.current != null)
+        {
+            float stickX = Gamepad.current.leftStick.x.ReadValue();
+            if (Mathf.Abs(stickX) > 0.1f) steer = Mathf.Clamp(steer + stickX, -1f, 1f);
+        }
+        return steer;
 #elif ENABLE_LEGACY_INPUT_MANAGER
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) return -1f;
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) return 1f;
-        return 0f;
+        float steer = Input.GetAxis("Horizontal");
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) steer = -1f;
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) steer = 1f;
+        return steer;
 #else
         return 0f;
 #endif
@@ -266,14 +273,21 @@ namespace Rotterdam.DigitalTwins.Runtime
     private float GetRawThrottleInput()
     {
 #if ROTTERDAM_ENABLE_INPUT_SYSTEM
+        float throttle = 0f;
         if (Keyboard.current != null)
         {
-            if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed) return 1f;
+            if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed) throttle = 1f;
         }
-        return 0f;
+        if (Gamepad.current != null)
+        {
+            float trigger = Gamepad.current.rightTrigger.ReadValue();
+            if (trigger > 0.1f) throttle = Mathf.Max(throttle, trigger);
+        }
+        return throttle;
 #elif ENABLE_LEGACY_INPUT_MANAGER
-        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) return 1f;
-        return 0f;
+        float throttle = Mathf.Max(0f, Input.GetAxis("Vertical"));
+        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) throttle = 1f;
+        return throttle;
 #else
         return 0f;
 #endif
@@ -282,14 +296,21 @@ namespace Rotterdam.DigitalTwins.Runtime
     private float GetRawBrakeInput()
     {
 #if ROTTERDAM_ENABLE_INPUT_SYSTEM
+        float brake = 0f;
         if (Keyboard.current != null)
         {
-            if (Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed) return 1f;
+            if (Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed) brake = 1f;
         }
-        return 0f;
+        if (Gamepad.current != null)
+        {
+            float trigger = Gamepad.current.leftTrigger.ReadValue();
+            if (trigger > 0.1f) brake = Mathf.Max(brake, trigger);
+        }
+        return brake;
 #elif ENABLE_LEGACY_INPUT_MANAGER
-        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) return 1f;
-        return 0f;
+        float brake = Mathf.Max(0f, -Input.GetAxis("Vertical"));
+        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) brake = 1f;
+        return brake;
 #else
         return 0f;
 #endif

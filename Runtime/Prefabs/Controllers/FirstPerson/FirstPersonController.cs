@@ -55,10 +55,32 @@ namespace Rotterdam.DigitalTwins.Runtime
                 jumpPressed = Keyboard.current.spaceKey.isPressed;
             }
 
+            if (Gamepad.current != null)
+            {
+                if (Gamepad.current.leftStickButton.isPressed) isRunning = true;
+                Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
+                if (leftStick.magnitude > 0.1f)
+                {
+                    verticalAxis = Mathf.Clamp(verticalAxis + leftStick.y, -1f, 1f);
+                    horizontalAxis = Mathf.Clamp(horizontalAxis + leftStick.x, -1f, 1f);
+                }
+                if (Gamepad.current.buttonSouth.isPressed) jumpPressed = true;
+            }
+
             if (Mouse.current != null)
             {
                 mouseX = Mouse.current.delta.x.ReadValue() * 0.05f;
                 mouseY = Mouse.current.delta.y.ReadValue() * 0.05f;
+            }
+
+            if (Gamepad.current != null)
+            {
+                Vector2 rightStick = Gamepad.current.rightStick.ReadValue();
+                if (rightStick.magnitude > 0.1f)
+                {
+                    mouseX += rightStick.x * 20f * Time.deltaTime;
+                    mouseY += rightStick.y * 20f * Time.deltaTime;
+                }
             }
 #elif ENABLE_LEGACY_INPUT_MANAGER
         isRunning = Input.GetKey(KeyCode.LeftShift);
