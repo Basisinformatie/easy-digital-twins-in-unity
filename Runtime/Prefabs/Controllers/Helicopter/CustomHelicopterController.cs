@@ -2,6 +2,7 @@ using UnityEngine;
 
 #if ROTTERDAM_ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 #endif
 
 namespace Rotterdam.DigitalTwins.Runtime
@@ -45,6 +46,18 @@ namespace Rotterdam.DigitalTwins.Runtime
     public KeyCode strafeLeftKey = KeyCode.Q;
     public KeyCode strafeRightKey = KeyCode.E;
 
+    [Header("Gamepad Buttons")]
+    public string liftUpButton = "buttonSouth";
+    public string liftDownButton = "buttonEast";
+    public string forwardAxis = "leftStick/y";
+    public string backwardAxis = "leftStick/y";
+    public string leftAxis = "leftStick/x";
+    public string rightAxis = "leftStick/x";
+    public string turnLeftButton = "leftShoulder";
+    public string turnRightButton = "rightShoulder";
+    public string strafeLeftAxis = "rightStick/x";
+    public string strafeRightAxis = "rightStick/x";
+
     [Header("Strafe Settings")]
     public float strafeForce = 20f;
     public float strafeTiltForce = 20f;
@@ -84,14 +97,18 @@ namespace Rotterdam.DigitalTwins.Runtime
 #if ROTTERDAM_ENABLE_INPUT_SYSTEM
         if (Keyboard.current != null)
         {
-            liftUp = Keyboard.current.spaceKey.isPressed;
-            liftDown = Keyboard.current.leftShiftKey.isPressed;
+            var liftUpControl = Keyboard.current[KeyFromKeyCode(liftUpKey)];
+            var liftDownControl = Keyboard.current[KeyFromKeyCode(liftDownKey)];
+            if (liftUpControl != null) liftUp = liftUpControl.isPressed;
+            if (liftDownControl != null) liftDown = liftDownControl.isPressed;
         }
 
         if (Gamepad.current != null)
         {
-            if (Gamepad.current.buttonSouth.isPressed) liftUp = true;
-            if (Gamepad.current.buttonEast.isPressed) liftDown = true;
+            var liftUpControl = Gamepad.current[liftUpButton] as ButtonControl;
+            var liftDownControl = Gamepad.current[liftDownButton] as ButtonControl;
+            if (liftUpControl != null && liftUpControl.isPressed) liftUp = true;
+            if (liftDownControl != null && liftDownControl.isPressed) liftDown = true;
         }
 #elif ENABLE_LEGACY_INPUT_MANAGER
         liftUp = Input.GetKey(liftUpKey) || Input.GetButton("Jump");
@@ -142,36 +159,43 @@ namespace Rotterdam.DigitalTwins.Runtime
 #if ROTTERDAM_ENABLE_INPUT_SYSTEM
             if (Keyboard.current != null)
             {
-                forward = Keyboard.current.wKey.isPressed;
-                backward = Keyboard.current.sKey.isPressed;
-                left = Keyboard.current.aKey.isPressed;
-                right = Keyboard.current.dKey.isPressed;
-                turnLeft = Keyboard.current.zKey.isPressed;
-                turnRight = Keyboard.current.cKey.isPressed;
-                strafeLeft = Keyboard.current.qKey.isPressed;
-                strafeRight = Keyboard.current.eKey.isPressed;
+                forward = Keyboard.current[KeyFromKeyCode(forwardKey)].isPressed;
+                backward = Keyboard.current[KeyFromKeyCode(backwardKey)].isPressed;
+                left = Keyboard.current[KeyFromKeyCode(leftKey)].isPressed;
+                right = Keyboard.current[KeyFromKeyCode(rightKey)].isPressed;
+                turnLeft = Keyboard.current[KeyFromKeyCode(turnLeftKey)].isPressed;
+                turnRight = Keyboard.current[KeyFromKeyCode(turnRightKey)].isPressed;
+                strafeLeft = Keyboard.current[KeyFromKeyCode(strafeLeftKey)].isPressed;
+                strafeRight = Keyboard.current[KeyFromKeyCode(strafeRightKey)].isPressed;
             }
 
             if (Gamepad.current != null)
             {
-                Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
-                Vector2 rightStick = Gamepad.current.rightStick.ReadValue();
+                float fwdValue = GetGamepadAxis(forwardAxis);
+                float sideValue = GetGamepadAxis(leftAxis);
+                float strafeValue = GetGamepadAxis(strafeLeftAxis);
 
-                if (leftStick.y > 0.1f) forward = true;
-                if (leftStick.y < -0.1f) backward = true;
-                if (leftStick.x < -0.1f) left = true;
-                if (leftStick.x > 0.1f) right = true;
+                if (fwdValue > 0.1f) forward = true;
+                if (fwdValue < -0.1f) backward = true;
+                if (sideValue < -0.1f) left = true;
+                if (sideValue > 0.1f) right = true;
+                if (strafeValue < -0.1f) strafeLeft = true;
+                if (strafeValue > 0.1f) strafeRight = true;
 
-                if (rightStick.x < -0.1f) strafeLeft = true;
-                if (rightStick.x > 0.1f) strafeRight = true;
-
+                var tLeftControl = Gamepad.current[turnLeftButton] as ButtonControl;
+                var tRightControl = Gamepad.current[turnRightButton] as ButtonControl;
+                if (tLeftControl != null && tLeftControl.isPressed) turnLeft = true;
+                if (tRightControl != null && tRightControl.isPressed) turnRight = true;
             }
 #elif ENABLE_LEGACY_INPUT_MANAGER
             forward = Input.GetKey(forwardKey) || Input.GetAxis("Vertical") > 0.1f;
             backward = Input.GetKey(backwardKey) || Input.GetAxis("Vertical") < -0.1f;
             left = Input.GetKey(leftKey) || Input.GetAxis("Horizontal") < -0.1f;
             right = Input.GetKey(rightKey) || Input.GetAxis("Horizontal") > 0.1f;
-
+            turnLeft = Input.GetKey(turnLeftKey);
+            turnRight = Input.GetKey(turnRightKey);
+            strafeLeft = Input.GetKey(strafeLeftKey);
+            strafeRight = Input.GetKey(strafeRightKey);
 #endif
 
             if (forward) tempY = Time.fixedDeltaTime;
@@ -246,5 +270,75 @@ namespace Rotterdam.DigitalTwins.Runtime
     {
         isOnGround = false;
     }
+
+#if ROTTERDAM_ENABLE_INPUT_SYSTEM
+    private Key KeyFromKeyCode(KeyCode keyCode)
+    {
+        switch (keyCode)
+        {
+            case KeyCode.A: return Key.A;
+            case KeyCode.B: return Key.B;
+            case KeyCode.C: return Key.C;
+            case KeyCode.D: return Key.D;
+            case KeyCode.E: return Key.E;
+            case KeyCode.F: return Key.F;
+            case KeyCode.G: return Key.G;
+            case KeyCode.H: return Key.H;
+            case KeyCode.I: return Key.I;
+            case KeyCode.J: return Key.J;
+            case KeyCode.K: return Key.K;
+            case KeyCode.L: return Key.L;
+            case KeyCode.M: return Key.M;
+            case KeyCode.N: return Key.N;
+            case KeyCode.O: return Key.O;
+            case KeyCode.P: return Key.P;
+            case KeyCode.Q: return Key.Q;
+            case KeyCode.R: return Key.R;
+            case KeyCode.S: return Key.S;
+            case KeyCode.T: return Key.T;
+            case KeyCode.U: return Key.U;
+            case KeyCode.V: return Key.V;
+            case KeyCode.W: return Key.W;
+            case KeyCode.X: return Key.X;
+            case KeyCode.Y: return Key.Y;
+            case KeyCode.Z: return Key.Z;
+            case KeyCode.Digit0: return Key.Digit0;
+            case KeyCode.Digit1: return Key.Digit1;
+            case KeyCode.Digit2: return Key.Digit2;
+            case KeyCode.Digit3: return Key.Digit3;
+            case KeyCode.Digit4: return Key.Digit4;
+            case KeyCode.Digit5: return Key.Digit5;
+            case KeyCode.Digit6: return Key.Digit6;
+            case KeyCode.Digit7: return Key.Digit7;
+            case KeyCode.Digit8: return Key.Digit8;
+            case KeyCode.Digit9: return Key.Digit9;
+            case KeyCode.Space: return Key.Space;
+            case KeyCode.LeftShift: return Key.LeftShift;
+            case KeyCode.RightShift: return Key.RightShift;
+            case KeyCode.LeftControl: return Key.LeftCtrl;
+            case KeyCode.RightControl: return Key.RightCtrl;
+            case KeyCode.LeftAlt: return Key.LeftAlt;
+            case KeyCode.RightAlt: return Key.RightAlt;
+            case KeyCode.Tab: return Key.Tab;
+            case KeyCode.Return: return Key.Enter;
+            case KeyCode.Escape: return Key.Escape;
+            case KeyCode.Backspace: return Key.Backspace;
+            case KeyCode.Delete: return Key.Delete;
+            case KeyCode.UpArrow: return Key.UpArrow;
+            case KeyCode.DownArrow: return Key.DownArrow;
+            case KeyCode.LeftArrow: return Key.LeftArrow;
+            case KeyCode.RightArrow: return Key.RightArrow;
+            default: return Key.None;
+        }
+    }
+
+    private float GetGamepadAxis(string path)
+    {
+        if (Gamepad.current == null) return 0f;
+        var control = Gamepad.current[path];
+        if (control is AxisControl axis) return axis.ReadValue();
+        return 0f;
+    }
+#endif
 }
 }
