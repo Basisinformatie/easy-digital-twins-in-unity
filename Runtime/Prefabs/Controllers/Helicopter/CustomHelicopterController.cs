@@ -87,8 +87,14 @@ namespace Rotterdam.DigitalTwins.Runtime
             liftUp = Keyboard.current.spaceKey.isPressed;
             liftDown = Keyboard.current.leftShiftKey.isPressed;
         }
+
+        if (Gamepad.current != null)
+        {
+            if (Gamepad.current.buttonSouth.isPressed) liftUp = true;
+            if (Gamepad.current.buttonEast.isPressed) liftDown = true;
+        }
 #elif ENABLE_LEGACY_INPUT_MANAGER
-        liftUp = Input.GetKey(liftUpKey);
+        liftUp = Input.GetKey(liftUpKey) || Input.GetButton("Jump");
         liftDown = Input.GetKey(liftDownKey);
 #endif
 
@@ -145,15 +151,27 @@ namespace Rotterdam.DigitalTwins.Runtime
                 strafeLeft = Keyboard.current.qKey.isPressed;
                 strafeRight = Keyboard.current.eKey.isPressed;
             }
+
+            if (Gamepad.current != null)
+            {
+                Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
+                Vector2 rightStick = Gamepad.current.rightStick.ReadValue();
+
+                if (leftStick.y > 0.1f) forward = true;
+                if (leftStick.y < -0.1f) backward = true;
+                if (leftStick.x < -0.1f) left = true;
+                if (leftStick.x > 0.1f) right = true;
+
+                if (rightStick.x < -0.1f) strafeLeft = true;
+                if (rightStick.x > 0.1f) strafeRight = true;
+
+            }
 #elif ENABLE_LEGACY_INPUT_MANAGER
-            forward = Input.GetKey(forwardKey);
-            backward = Input.GetKey(backwardKey);
-            left = Input.GetKey(leftKey);
-            right = Input.GetKey(rightKey);
-            turnLeft = Input.GetKey(turnLeftKey);
-            turnRight = Input.GetKey(turnRightKey);
-            strafeLeft = Input.GetKey(strafeLeftKey);
-            strafeRight = Input.GetKey(strafeRightKey);
+            forward = Input.GetKey(forwardKey) || Input.GetAxis("Vertical") > 0.1f;
+            backward = Input.GetKey(backwardKey) || Input.GetAxis("Vertical") < -0.1f;
+            left = Input.GetKey(leftKey) || Input.GetAxis("Horizontal") < -0.1f;
+            right = Input.GetKey(rightKey) || Input.GetAxis("Horizontal") > 0.1f;
+
 #endif
 
             if (forward) tempY = Time.fixedDeltaTime;
