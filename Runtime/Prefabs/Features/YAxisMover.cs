@@ -54,12 +54,10 @@ namespace Rotterdam.DigitalTwins.Runtime
             if (Gamepad.current != null)
             {
                 vertical += Gamepad.current.dpad.y.ReadValue();
-                vertical += Gamepad.current.leftStick.y.ReadValue();
             }
 #elif ENABLE_LEGACY_INPUT_MANAGER
             if (Input.GetKey(KeyCode.UpArrow)) vertical += 1f;
             if (Input.GetKey(KeyCode.DownArrow)) vertical -= 1f;
-            vertical += Input.GetAxis("Vertical"); 
 #else
             if (Input.GetKey(KeyCode.UpArrow)) vertical += 1f;
             if (Input.GetKey(KeyCode.DownArrow)) vertical -= 1f;
