@@ -14,6 +14,7 @@ namespace Rotterdam.DigitalTwins.Editor
         private Slider _timeSlider;
         private TextField _timeTextField;
         private FloatField _cycleSecondsField;
+        private Label _adaptiveLightingDisclaimer;
 
         public LocationComponent()
         {
@@ -83,6 +84,15 @@ namespace Rotterdam.DigitalTwins.Editor
             });
             Add(adaptiveLightingToggle);
 
+            _adaptiveLightingDisclaimer = new Label("Note: This aesthetical feature is not accurate to actual sun positions or orbit.");
+            _adaptiveLightingDisclaimer.style.whiteSpace = WhiteSpace.Normal;
+            _adaptiveLightingDisclaimer.style.fontSize = 11;
+            _adaptiveLightingDisclaimer.style.unityFontStyleAndWeight = FontStyle.Italic;
+            _adaptiveLightingDisclaimer.style.color = new Color(0.7f, 0.7f, 0.7f);
+            _adaptiveLightingDisclaimer.style.marginLeft = 15;
+            _adaptiveLightingDisclaimer.style.marginBottom = 5;
+            Add(_adaptiveLightingDisclaimer);
+
             _adaptiveLightingOptions = new VisualElement();
             _adaptiveLightingOptions.style.marginLeft = 15;
             Add(_adaptiveLightingOptions);
@@ -140,6 +150,7 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             bool enabled = SceneControllerUtil.IsAdaptiveLightingEnabled();
             _adaptiveLightingOptions.style.display = enabled ? DisplayStyle.Flex : DisplayStyle.None;
+            _adaptiveLightingDisclaimer.style.display = enabled ? DisplayStyle.Flex : DisplayStyle.None;
 
             if (enabled)
             {
