@@ -70,7 +70,7 @@ namespace Rotterdam.DigitalTwins.Editor
             topBar.style.marginBottom = 10;
             topBar.style.flexShrink = 0;
 
-            List<string> types = new List<string> { "Datasets", "Digital Twins" };
+            List<string> types = new List<string> { "Digital Twins", "Datasets"};
             _typeDropdown = new DropdownField("Type", types, 0);
             _typeDropdown.style.flexGrow = 1;
             _typeDropdown.RegisterValueChangedCallback(_ => {
