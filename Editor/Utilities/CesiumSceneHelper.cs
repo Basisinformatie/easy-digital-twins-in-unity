@@ -61,12 +61,8 @@ namespace Rotterdam.DigitalTwins.Editor
             GameObject tilesetGo = new GameObject(name);
             tilesetGo.transform.SetParent(georeference.transform);
             Cesium3DTileset tileset = tilesetGo.AddComponent<Cesium3DTileset>();
-
-            if (!string.IsNullOrEmpty(url))
-            {
-                tileset.tilesetSource = CesiumDataSource.FromUrl;
-                tileset.url = url;
-            }
+            tileset.tilesetSource = CesiumDataSource.FromUrl;
+            tileset.url = url;
 
             if (isPointCloud)
             {
