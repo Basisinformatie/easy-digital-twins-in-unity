@@ -70,11 +70,11 @@ namespace Rotterdam.DigitalTwins.Editor
             topBar.style.marginBottom = 10;
             topBar.style.flexShrink = 0;
 
-            List<string> types = new List<string> { "Datasets", "Digital Twins" };
-            _typeDropdown = new DropdownField("Type", types, 1);
+            List<string> types = new List<string> { "Digital Twins", "Datasets" };
+            _typeDropdown = new DropdownField("Type", types, 0);
             _typeDropdown.style.flexGrow = 1;
             _typeDropdown.RegisterValueChangedCallback(_ => {
-                _resourceFilterToggle.style.display = _typeDropdown.index == 1 ? DisplayStyle.Flex : DisplayStyle.None;
+                _resourceFilterToggle.style.display = _typeDropdown.value == "Digital Twins" ? DisplayStyle.Flex : DisplayStyle.None;
                 RefreshData();
             });
             topBar.Add(_typeDropdown);
@@ -82,7 +82,7 @@ namespace Rotterdam.DigitalTwins.Editor
             _resourceFilterToggle = new Toggle("Only supported Resources");
             _resourceFilterToggle.value = true;
             _resourceFilterToggle.tooltip = "Hide digital twins that do not have any supported resources (3D Tiles, Terrain, WMS, etc.)";
-            _resourceFilterToggle.style.display = DisplayStyle.None;
+            _resourceFilterToggle.style.display = DisplayStyle.Flex;
             _resourceFilterToggle.style.marginLeft = 10;
             _resourceFilterToggle.RegisterValueChangedCallback(_ => RefreshData());
             topBar.Add(_resourceFilterToggle);
@@ -234,7 +234,7 @@ namespace Rotterdam.DigitalTwins.Editor
             _scrollView.Clear();
             _loadingIndicator.style.display = DisplayStyle.Flex;
 
-            if (_typeDropdown.index == 0) // Datasets
+            if (_typeDropdown.value == "Datasets") // Datasets
             {
                 _catalogService.FetchDatasets(datasets =>
                 {
