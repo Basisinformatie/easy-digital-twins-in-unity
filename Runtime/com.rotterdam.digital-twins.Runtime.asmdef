@@ -3,7 +3,8 @@
     "rootNamespace": "Rotterdam.DigitalTwins.Runtime",
     "references": [
         "CesiumForUnity",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "Unity.XR.Interaction.Toolkit"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -22,6 +23,11 @@
             "name": "com.cesium.unity",
             "expression": "",
             "define": "USING_CESIUM"
+        },
+        {
+            "name": "com.unity.xr.interaction.toolkit",
+            "expression": "",
+            "define": "USING_XR_INTERACTION_TOOLKIT"
         }
     ],
     "noEngineReferences": false

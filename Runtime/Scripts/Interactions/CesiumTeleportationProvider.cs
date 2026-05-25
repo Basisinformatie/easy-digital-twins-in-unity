@@ -1,15 +1,22 @@
 using System;
+#if USING_CESIUM && USING_XR_INTERACTION_TOOLKIT
 using CesiumForUnity;
+#endif
 using UnityEngine;
+#if USING_XR_INTERACTION_TOOLKIT
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
+#endif
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+#if USING_CESIUM && USING_XR_INTERACTION_TOOLKIT
     [AddComponentMenu("Cesium/Cesium Teleportation")]
     [RequireComponent(typeof(Cesium3DTileset))]
+#endif
     public class CesiumTeleportationProvider : MonoBehaviour
     {
+#if USING_CESIUM && USING_XR_INTERACTION_TOOLKIT
         [SerializeField]
         [Tooltip("De interactielaag (layers) die aan de tiles worden toegewezen. Laag 31 is meestal 'Teleport' in dit project.")]
         private InteractionLayerMask _teleportLayer = 1 << 31;
@@ -54,5 +61,11 @@ namespace Rotterdam.DigitalTwins.Runtime
             
             teleportationArea.interactionLayers = _teleportLayer;
         }
+#else
+        private void Awake()
+        {
+            Debug.LogWarning("CesiumTeleportationProvider is disabled because USING_CESIUM or USING_XR_INTERACTION_TOOLKIT is not defined.");
+        }
+#endif
     }
 }
