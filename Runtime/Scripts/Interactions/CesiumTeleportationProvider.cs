@@ -1,0 +1,58 @@
+using System;
+using CesiumForUnity;
+using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
+
+namespace Rotterdam.DigitalTwins.Runtime
+{
+    [AddComponentMenu("Cesium/Cesium Teleportation")]
+    [RequireComponent(typeof(Cesium3DTileset))]
+    public class CesiumTeleportationProvider : MonoBehaviour
+    {
+        [SerializeField]
+        [Tooltip("De interactielaag (layers) die aan de tiles worden toegewezen. Laag 31 is meestal 'Teleport' in dit project.")]
+        private InteractionLayerMask _teleportLayer = 1 << 31;
+
+        private Cesium3DTileset _tileset;
+
+        private void Awake()
+        {
+            _tileset = GetComponent<Cesium3DTileset>();
+            if (_tileset != null && !_tileset.createPhysicsMeshes)
+            {
+                Debug.LogWarning($"CesiumTeleportation: 'Create Physics Meshes' is uitgeschakeld op {gameObject.name}. Teleportatie werkt niet zonder colliders.", gameObject);
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (_tileset != null)
+            {
+                _tileset.OnTileGameObjectCreated += OnTileGameObjectCreated;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_tileset != null)
+            {
+                _tileset.OnTileGameObjectCreated -= OnTileGameObjectCreated;
+            }
+        }
+
+        private void OnTileGameObjectCreated(GameObject tile)
+        {
+            if (tile == null || !enabled)
+                return;
+
+            var teleportationArea = tile.GetComponent<TeleportationArea>();
+            if (teleportationArea == null)
+            {
+                teleportationArea = tile.AddComponent<TeleportationArea>();
+            }
+            
+            teleportationArea.interactionLayers = _teleportLayer;
+        }
+    }
+}
