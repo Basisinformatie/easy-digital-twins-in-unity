@@ -18,7 +18,7 @@ namespace Rotterdam.DigitalTwins.Runtime
     {
 #if USING_CESIUM && USING_XR_INTERACTION_TOOLKIT
         [SerializeField]
-        [Tooltip("De interactielaag (layers) die aan de tiles worden toegewezen. Laag 31 is meestal 'Teleport' in dit project.")]
+        [Tooltip("Interaction layer is usually set to 31.")]
         private InteractionLayerMask _teleportLayer = 1 << 31;
 
         private Cesium3DTileset _tileset;
@@ -28,7 +28,7 @@ namespace Rotterdam.DigitalTwins.Runtime
             _tileset = GetComponent<Cesium3DTileset>();
             if (_tileset != null && !_tileset.createPhysicsMeshes)
             {
-                Debug.LogWarning($"CesiumTeleportation: 'Create Physics Meshes' is uitgeschakeld op {gameObject.name}. Teleportatie werkt niet zonder colliders.", gameObject);
+                Debug.LogWarning($"CesiumTeleportation: 'Create Physics Meshes' is off on {gameObject.name}. Teleportation needs colliders.", gameObject);
             }
         }
 
