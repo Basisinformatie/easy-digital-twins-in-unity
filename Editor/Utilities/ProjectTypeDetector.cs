@@ -21,7 +21,8 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             Windows = 1 << 4,
             Mac = 1 << 5,
             Linux = 1 << 6,
-            Universal3D = 1 << 7
+            iOS = 1 << 7,
+            Universal3D = 1 << 8
         }
 
         public static void GetProjectType(Action<ProjectType> callback)
@@ -65,45 +66,58 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             if (isVR) detectedTypes |= ProjectType.VR;
             if (isAR) detectedTypes |= ProjectType.AR;
 
-            BuildTarget activeTarget = EditorUserBuildSettings.activeBuildTarget;
-
-            if (activeTarget == BuildTarget.Android || packageIds.Contains("com.unity.modules.androidjni"))
-                detectedTypes |= ProjectType.Android;
-
-            if (activeTarget == BuildTarget.WebGL)
-                detectedTypes |= ProjectType.WebApp;
-
-            if (activeTarget == BuildTarget.StandaloneWindows || 
-                activeTarget == BuildTarget.StandaloneWindows64)
-                detectedTypes |= ProjectType.Windows;
-
-            if (activeTarget == BuildTarget.StandaloneOSX)
-                detectedTypes |= ProjectType.Mac;
-
-            if (activeTarget == BuildTarget.StandaloneLinux64)
-                detectedTypes |= ProjectType.Linux;
-
             if (!isVR && !isAR)
                 detectedTypes |= ProjectType.Universal3D;
+
+            // Compatibility checks based on installed build support
+            if (IsSupported(BuildTargetGroup.Android, BuildTarget.Android))
+                detectedTypes |= ProjectType.Android;
+
+            if (IsSupported(BuildTargetGroup.WebGL, BuildTarget.WebGL))
+                detectedTypes |= ProjectType.WebApp;
+
+            if (IsSupported(BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows) || 
+                IsSupported(BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows64))
+                detectedTypes |= ProjectType.Windows;
+
+            if (IsSupported(BuildTargetGroup.Standalone, BuildTarget.StandaloneOSX))
+                detectedTypes |= ProjectType.Mac;
+
+            if (IsSupported(BuildTargetGroup.Standalone, BuildTarget.StandaloneLinux64))
+                detectedTypes |= ProjectType.Linux;
+            
+            if (IsSupported(BuildTargetGroup.iOS, BuildTarget.iOS))
+                detectedTypes |= ProjectType.iOS;
 
             return detectedTypes;
         }
 
-        public static string FormatProjectType(ProjectType type)
+        private static bool IsSupported(BuildTargetGroup group, BuildTarget target)
         {
-            if (type == ProjectType.None) return "Unknown";
-            
+            return BuildPipeline.IsBuildTargetSupported(group, target);
+        }
+
+        public static string GetProjectTypes(ProjectType type)
+        {
             List<string> results = new List<string>();
             if (type.HasFlag(ProjectType.Universal3D)) results.Add("Universal 3D");
             if (type.HasFlag(ProjectType.VR)) results.Add("VR");
             if (type.HasFlag(ProjectType.AR)) results.Add("AR");
-            if (type.HasFlag(ProjectType.Android)) results.Add("Android");
-            if (type.HasFlag(ProjectType.WebApp)) results.Add("Web app");
-            if (type.HasFlag(ProjectType.Windows)) results.Add("Windows");
-            if (type.HasFlag(ProjectType.Mac)) results.Add("Mac");
-            if (type.HasFlag(ProjectType.Linux)) results.Add("Linux");
 
             return results.Count > 0 ? string.Join(", ", results) : "Unknown";
+        }
+
+        public static string GetCompatibility(ProjectType type)
+        {
+            List<string> results = new List<string>();
+            if (type.HasFlag(ProjectType.Android)) results.Add("Android");
+            if (type.HasFlag(ProjectType.Windows)) results.Add("Windows");
+            if (type.HasFlag(ProjectType.Mac)) results.Add("MAC");
+            if (type.HasFlag(ProjectType.Linux)) results.Add("Linux");
+            if (type.HasFlag(ProjectType.WebApp)) results.Add("Web app");
+            if (type.HasFlag(ProjectType.iOS)) results.Add("iOS");
+
+            return results.Count > 0 ? string.Join(", ", results) : "None";
         }
     }
 }

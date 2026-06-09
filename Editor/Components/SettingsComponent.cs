@@ -100,7 +100,8 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             label.text = "Detecting project type...";
             ProjectTypeDetector.GetProjectType((type) => {
-                label.text = "Current project is suited for: " + ProjectTypeDetector.FormatProjectType(type);
+                label.text = $"Project type: {ProjectTypeDetector.GetProjectTypes(type)}\n" +
+                             $"Compatibility: {ProjectTypeDetector.GetCompatibility(type)}";
             });
         }
     }
