@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Rotterdam.DigitalTwins.Editor.Setup;
+using Rotterdam.DigitalTwins.Editor.Utilities;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
@@ -19,18 +20,38 @@ namespace Rotterdam.DigitalTwins.Editor
             titleLabel.style.marginBottom = 10;
             Add(titleLabel);
 
-            Label placeholderLabel = new Label("Dit is het settings component placeholder bericht (geladen uit SettingsComponent.cs).");
+            Label placeholderLabel = new Label("Settings Menu.");
             placeholderLabel.style.marginBottom = 20;
             placeholderLabel.style.whiteSpace = WhiteSpace.Normal;
             Add(placeholderLabel);
 
-            Button backButton = new Button(_onBackToMenu) { text = "Terug naar Menu" };
+            Button backButton = new Button(_onBackToMenu) { text = "Back to Main Menu" };
             backButton.style.marginTop = 10;
             backButton.style.paddingTop = 8;
             backButton.style.paddingBottom = 8;
             Add(backButton);
+            
+            // Project Type Detection Section
+            VisualElement projectSection = new VisualElement();
+            projectSection.style.marginTop = 20;
+            projectSection.style.paddingTop = 10;
+            projectSection.style.borderTopWidth = 1;
+            projectSection.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f);
+            Add(projectSection);
 
-            // Experimental Section
+            Label projectTitle = new Label("Project Detection");
+            projectTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
+            projectSection.Add(projectTitle);
+
+            Label projectTypeLabel = new Label("Detecting project type...");
+            projectTypeLabel.style.whiteSpace = WhiteSpace.Normal;
+            projectTypeLabel.style.marginTop = 5;
+            projectSection.Add(projectTypeLabel);
+
+            this.RegisterCallback<AttachToPanelEvent>(evt => RefreshDetection(projectTypeLabel));
+           
+            Label projectInfoLabel = new Label("Refer to the documentation for more information on how to set up your project.");
+            
             VisualElement experimentalSection = new VisualElement();
             experimentalSection.style.marginTop = 30;
             experimentalSection.style.paddingTop = 10;
@@ -73,6 +94,14 @@ namespace Rotterdam.DigitalTwins.Editor
                 else
                     CesiumSetupService.InstallForkedCesium();
             }
+        }
+
+        private void RefreshDetection(Label label)
+        {
+            label.text = "Detecting project type...";
+            ProjectTypeDetector.GetProjectType((type) => {
+                label.text = "Current project is suited for: " + ProjectTypeDetector.FormatProjectType(type);
+            });
         }
     }
 }
