@@ -54,13 +54,13 @@ namespace Rotterdam.DigitalTwins.Editor
             if (georeference == null)
             {
                 GameObject georefGo = new GameObject("CesiumGeoreference");
-                georeference = georefGo.AddComponent<CesiumGeoreference>();
+                georeference = ObjectFactory.AddComponent<CesiumGeoreference>(georefGo);
                 Undo.RegisterCreatedObjectUndo(georefGo, "Create CesiumGeoreference");
             }
 
             GameObject tilesetGo = new GameObject(name);
             tilesetGo.transform.SetParent(georeference.transform);
-            Cesium3DTileset tileset = tilesetGo.AddComponent<Cesium3DTileset>();
+            Cesium3DTileset tileset = ObjectFactory.AddComponent<Cesium3DTileset>(tilesetGo);
             tileset.tilesetSource = CesiumDataSource.FromUrl;
             tileset.url = url;
 
@@ -102,7 +102,7 @@ namespace Rotterdam.DigitalTwins.Editor
             if (georeference == null)
             {
                 GameObject georefGo = new GameObject("CesiumGeoreference");
-                georeference = georefGo.AddComponent<CesiumGeoreference>();
+                georeference = ObjectFactory.AddComponent<CesiumGeoreference>(georefGo);
                 Undo.RegisterCreatedObjectUndo(georefGo, "Create CesiumGeoreference");
             }
 

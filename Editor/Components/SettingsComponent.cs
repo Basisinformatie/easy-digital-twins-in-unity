@@ -45,8 +45,42 @@ namespace Rotterdam.DigitalTwins.Editor
             this.RegisterCallback<AttachToPanelEvent>(evt => RefreshDetection(projectTypeLabel));
            
             Label projectInfoLabel = new Label("The detection is only indicative and based on available build profiles and installed packages. Refer to the documentation for more information on how to set up your project and trouble shooting.");
-            
-            
+            projectInfoLabel.style.fontSize = 10;
+            projectInfoLabel.style.color = new Color(0.7f, 0.7f, 0.7f);
+            projectInfoLabel.style.whiteSpace = WhiteSpace.Normal;
+            projectSection.Add(projectInfoLabel);
+
+            // Graphics & Performance Section
+            VisualElement graphicsSection = new VisualElement();
+            graphicsSection.style.marginTop = 20;
+            graphicsSection.style.paddingTop = 10;
+            graphicsSection.style.borderTopWidth = 1;
+            graphicsSection.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f);
+            Add(graphicsSection);
+
+            Label graphicsTitle = new Label("Graphics & Performance");
+            graphicsTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
+            graphicsSection.Add(graphicsTitle);
+
+            Label graphicsDesc = new Label("Configure 3D Tilesets and Camera settings for the selected target.");
+            graphicsDesc.style.fontSize = 10;
+            graphicsDesc.style.color = new Color(0.7f, 0.7f, 0.7f);
+            graphicsDesc.style.marginBottom = 5;
+            graphicsSection.Add(graphicsDesc);
+
+            void AddPresetButton(string text, GraphicsSettingsService.GraphicsPreset preset)
+            {
+                Button btn = new Button(() => GraphicsSettingsService.ApplyPreset(preset)) { text = text };
+                btn.style.marginTop = 2;
+                btn.style.marginBottom = 2;
+                graphicsSection.Add(btn);
+            }
+
+            AddPresetButton("No Preset / Default", GraphicsSettingsService.GraphicsPreset.None);
+            AddPresetButton("Low (VR, AR)", GraphicsSettingsService.GraphicsPreset.Low);
+            AddPresetButton("Medium (Desktop, Android, Web)", GraphicsSettingsService.GraphicsPreset.Medium);
+            AddPresetButton("High (Desktop, High End)", GraphicsSettingsService.GraphicsPreset.High);
+
             Button backButton = new Button(_onBackToMenu) { text = "Back to Main Menu" };
             backButton.style.marginTop = 10;
             backButton.style.paddingTop = 8;
