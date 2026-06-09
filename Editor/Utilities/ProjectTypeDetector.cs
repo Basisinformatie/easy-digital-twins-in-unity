@@ -54,8 +54,7 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             ProjectType detectedTypes = ProjectType.None;
             var packageIds = packages.Select(p => p.name).ToList();
 
-            bool isVR = packageIds.Any(id => id.Contains("com.unity.xr.openxr") || 
-                                            id.Contains("com.unity.xr.meta-openxr") || 
+            bool isVR = packageIds.Any(id => id.Contains("com.unity.xr.meta-openxr") || 
                                             id.Contains("com.unity.xr.hands") ||
                                             id.Contains("com.unity.xr.compositionlayers") ||
                                             id.Contains("com.unity.xr.androidxr-openxr"));
