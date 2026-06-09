@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System;
 using System.Reflection;
+using System.Linq;
 #if USING_CESIUM
 using CesiumForUnity;
 #endif
@@ -41,6 +42,10 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             {
                 ApplyToTileset(tileset, CurrentPreset);
             }
+            if (component is CesiumWebMapServiceRasterOverlay wms)
+            {
+                ApplyToWms(wms, CurrentPreset);
+            }
 #endif
         }
 
@@ -53,6 +58,12 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             foreach (var tileset in tilesets)
             {
                 ApplyToTileset(tileset, preset);
+            }
+
+            var wmsOverlays = UnityEngine.Object.FindObjectsByType<CesiumWebMapServiceRasterOverlay>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var wms in wmsOverlays)
+            {
+                ApplyToWms(wms, preset);
             }
 #endif
 
@@ -86,6 +97,27 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
                     break;
             }
             EditorUtility.SetDirty(tileset);
+        }
+
+        private static void ApplyToWms(CesiumWebMapServiceRasterOverlay wms, GraphicsPreset preset)
+        {
+            Undo.RecordObject(wms, "Apply Graphics Preset");
+            switch (preset)
+            {
+                case GraphicsPreset.None:
+                    wms.maximumLevel = 14;
+                    break;
+                case GraphicsPreset.Low:
+                    wms.maximumLevel = 10;
+                    break;
+                case GraphicsPreset.Medium:
+                    wms.maximumLevel = 14;
+                    break;
+                case GraphicsPreset.High:
+                    wms.maximumLevel = 22;
+                    break;
+            }
+            EditorUtility.SetDirty(wms);
         }
 
         private static void ApplyToCamera(GraphicsPreset preset)
@@ -140,23 +172,48 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             
             if (antialiasingProp != null && antialiasingModeType != null)
             {
-                object aaValue = 0; // None
+                string targetName = "None";
                 switch (preset)
                 {
-                    case GraphicsPreset.None:
-                        aaValue = Enum.Parse(antialiasingModeType, "None");
-                        break;
-                    case GraphicsPreset.Low:
-                        aaValue = Enum.Parse(antialiasingModeType, "None");
-                        break;
                     case GraphicsPreset.Medium:
-                        aaValue = Enum.Parse(antialiasingModeType, "FastApproximateAntialiasing");
+                        targetName = "FastApproximateAntialiasing";
                         break;
                     case GraphicsPreset.High:
-                        aaValue = Enum.Parse(antialiasingModeType, "SubpixelMorphologicalAntialiasing");
+                        targetName = "SubpixelMorphologicalAntialiasing";
+                        break;
+                    default:
+                        targetName = "None";
                         break;
                 }
-                antialiasingProp.SetValue(cameraData, aaValue);
+
+                try
+                {
+                    string[] availableNames = Enum.GetNames(antialiasingModeType);
+                    string bestMatch = availableNames.FirstOrDefault(n => n.Equals(targetName, StringComparison.OrdinalIgnoreCase));
+                    
+                    if (bestMatch == null)
+                    {
+                        if (targetName == "FastApproximateAntialiasing")
+                            bestMatch = availableNames.FirstOrDefault(n => n.Contains("Fast") || n.Contains("FXAA"));
+                        else if (targetName == "SubpixelMorphologicalAntialiasing")
+                            bestMatch = availableNames.FirstOrDefault(n => n.Contains("Subpixel") || n.Contains("SMAA"));
+                    }
+
+                    if (bestMatch != null)
+                    {
+                        object aaValue = Enum.Parse(antialiasingModeType, bestMatch);
+                        antialiasingProp.SetValue(cameraData, aaValue);
+                    }
+                    else
+                    {
+                        // Fallback to None if still not found
+                        antialiasingProp.SetValue(cameraData, Enum.Parse(antialiasingModeType, "None"));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[GraphicsSettingsService] Failed to set Antialiasing to {targetName}: {e.Message}");
+                }
             }
 
             // Enable post processing for presets
