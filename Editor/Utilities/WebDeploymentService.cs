@@ -15,7 +15,7 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             SetEnumProperty(typeof(PlayerSettings.WebGL), "wasmArithmeticExceptions", "None");
 
             PlayerSettings.WebGL.linkerTarget = WebGLLinkerTarget.Wasm;
-            PlayerSettings.WebGL.threadsSupport = false;
+            PlayerSettings.WebGL.threadsSupport = true;
             PlayerSettings.WebGL.decompressionFallback = true;
             PlayerSettings.WebGL.memorySize = 1024;
             
