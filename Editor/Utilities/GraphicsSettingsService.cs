@@ -106,16 +106,16 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             switch (preset)
             {
                 case GraphicsPreset.None:
-                    wms.maximumLevel = 14;
+                    wms.maximumLevel = 22;
                     break;
                 case GraphicsPreset.Low:
-                    wms.maximumLevel = 10;
+                    wms.maximumLevel = 18;
                     break;
                 case GraphicsPreset.Medium:
-                    wms.maximumLevel = 14;
+                    wms.maximumLevel = 22;
                     break;
                 case GraphicsPreset.High:
-                    wms.maximumLevel = 22;
+                    wms.maximumLevel = 24;
                     break;
             }
             EditorUtility.SetDirty(wms);
@@ -134,7 +134,6 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             {
                 Undo.RecordObject(mainCamera, "Apply Graphics Preset");
                 
-                // Far clip plane
                 switch (preset)
                 {
                     case GraphicsPreset.None:
@@ -167,7 +166,6 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
 
             Undo.RecordObject(cameraData, "Apply Graphics Preset");
 
-            // Antialiasing
             PropertyInfo antialiasingProp = cameraDataType.GetProperty("antialiasing");
             Type antialiasingModeType = Type.GetType("UnityEngine.Rendering.Universal.AntialiasingMode, Unity.RenderPipelines.Universal.Runtime");
             
@@ -204,7 +202,6 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
                     }
                     else
                     {
-                        // Fallback to None if still not found
                         antialiasingProp.SetValue(cameraData, Enum.Parse(antialiasingModeType, "None"));
                     }
                 }
@@ -214,15 +211,6 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
                 }
             }
 
-            // Enable post processing for presets
-            if (preset != GraphicsPreset.None)
-            {
-                PropertyInfo postProcessProp = cameraDataType.GetProperty("renderPostProcessing");
-                if (postProcessProp != null)
-                {
-                    postProcessProp.SetValue(cameraData, true);
-                }
-            }
 
             EditorUtility.SetDirty(cameraData);
         }
