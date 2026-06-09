@@ -24,12 +24,6 @@ namespace Rotterdam.DigitalTwins.Editor
             placeholderLabel.style.marginBottom = 20;
             placeholderLabel.style.whiteSpace = WhiteSpace.Normal;
             Add(placeholderLabel);
-
-            Button backButton = new Button(_onBackToMenu) { text = "Back to Main Menu" };
-            backButton.style.marginTop = 10;
-            backButton.style.paddingTop = 8;
-            backButton.style.paddingBottom = 8;
-            Add(backButton);
             
             // Project Type Detection Section
             VisualElement projectSection = new VisualElement();
@@ -50,7 +44,14 @@ namespace Rotterdam.DigitalTwins.Editor
 
             this.RegisterCallback<AttachToPanelEvent>(evt => RefreshDetection(projectTypeLabel));
            
-            Label projectInfoLabel = new Label("Refer to the documentation for more information on how to set up your project.");
+            Label projectInfoLabel = new Label("The detection is only indicative and based on available build profiles and installed packages. Refer to the documentation for more information on how to set up your project and trouble shooting.");
+            
+            
+            Button backButton = new Button(_onBackToMenu) { text = "Back to Main Menu" };
+            backButton.style.marginTop = 10;
+            backButton.style.paddingTop = 8;
+            backButton.style.paddingBottom = 8;
+            Add(backButton);
             
             VisualElement experimentalSection = new VisualElement();
             experimentalSection.style.marginTop = 30;

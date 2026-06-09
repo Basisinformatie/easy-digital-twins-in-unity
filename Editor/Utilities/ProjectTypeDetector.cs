@@ -22,7 +22,9 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             Mac = 1 << 5,
             Linux = 1 << 6,
             iOS = 1 << 7,
-            Universal3D = 1 << 8
+            Universal3D = 1 << 8,
+            AndroidXR = 1 << 9,
+            MetaQuest = 1 << 10
         }
 
         public static void GetProjectType(Action<ProjectType> callback)
@@ -55,7 +57,6 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             bool isVR = packageIds.Any(id => id.Contains("com.unity.xr.openxr") || 
                                             id.Contains("com.unity.xr.meta-openxr") || 
                                             id.Contains("com.unity.xr.hands") ||
-                                            id.Contains("com.unity.xr.interaction.toolkit") ||
                                             id.Contains("com.unity.xr.compositionlayers") ||
                                             id.Contains("com.unity.xr.androidxr-openxr"));
 
@@ -69,9 +70,14 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             if (!isVR && !isAR)
                 detectedTypes |= ProjectType.Universal3D;
 
-            // Compatibility checks based on installed build support
             if (IsSupported(BuildTargetGroup.Android, BuildTarget.Android))
+            {
                 detectedTypes |= ProjectType.Android;
+                if (packageIds.Any(id => id.Contains("com.unity.xr.androidxr-openxr")))
+                    detectedTypes |= ProjectType.AndroidXR;
+                if (packageIds.Any(id => id.Contains("com.unity.xr.meta-openxr")))
+                    detectedTypes |= ProjectType.MetaQuest;
+            }
 
             if (IsSupported(BuildTargetGroup.WebGL, BuildTarget.WebGL))
                 detectedTypes |= ProjectType.WebApp;
@@ -111,6 +117,8 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
         {
             List<string> results = new List<string>();
             if (type.HasFlag(ProjectType.Android)) results.Add("Android");
+            if (type.HasFlag(ProjectType.AndroidXR)) results.Add("Android XR");
+            if (type.HasFlag(ProjectType.MetaQuest)) results.Add("Meta Quest");
             if (type.HasFlag(ProjectType.Windows)) results.Add("Windows");
             if (type.HasFlag(ProjectType.Mac)) results.Add("MAC");
             if (type.HasFlag(ProjectType.Linux)) results.Add("Linux");
