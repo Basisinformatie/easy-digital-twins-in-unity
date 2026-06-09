@@ -88,7 +88,7 @@ namespace Rotterdam.DigitalTwins.Editor
             _webSection.style.paddingTop = 10;
             _webSection.style.borderTopWidth = 1;
             _webSection.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f);
-            _webSection.style.display = DisplayStyle.None; // Hidden by default
+            _webSection.style.display = DisplayStyle.None; 
             Add(_webSection);
 
             Label webTitle = new Label("Web Deployment");
