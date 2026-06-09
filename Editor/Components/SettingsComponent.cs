@@ -95,7 +95,7 @@ namespace Rotterdam.DigitalTwins.Editor
             webTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
             _webSection.Add(webTitle);
 
-            Label webDesc = new Label("Optimize project settings for WebGL builds (Brotli, 512MB RAM, Wasm 2023).");
+            Label webDesc = new Label("Optimize project settings for WebGL builds (Brotli, 1024MB RAM, Wasm 2023).");
             webDesc.style.fontSize = 10;
             webDesc.style.color = new Color(0.7f, 0.7f, 0.7f);
             webDesc.style.marginBottom = 5;
