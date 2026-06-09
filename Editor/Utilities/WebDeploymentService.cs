@@ -17,7 +17,7 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             PlayerSettings.WebGL.linkerTarget = WebGLLinkerTarget.Wasm;
             PlayerSettings.WebGL.threadsSupport = true;
             PlayerSettings.WebGL.decompressionFallback = true;
-            PlayerSettings.WebGL.memorySize = 512;
+            PlayerSettings.WebGL.memorySize = 1026;
             
             // PlayerSettings.WebGL.capabilities = WebGLCapability.Wasm2023;
             SetEnumProperty(typeof(PlayerSettings.WebGL), "capabilities", "Wasm2023");
