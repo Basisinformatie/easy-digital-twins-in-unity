@@ -9,6 +9,7 @@ namespace Rotterdam.DigitalTwins.Editor
     public class SettingsComponent : VisualElement
     {
         private readonly System.Action _onBackToMenu;
+        private VisualElement _webSection;
 
         public SettingsComponent(System.Action onBackToMenu)
         {
@@ -81,6 +82,31 @@ namespace Rotterdam.DigitalTwins.Editor
             AddPresetButton("Medium (Desktop, Android, Web)", GraphicsSettingsService.GraphicsPreset.Medium);
             AddPresetButton("High (Desktop, High End)", GraphicsSettingsService.GraphicsPreset.High);
 
+            // Web Deployment Section
+            _webSection = new VisualElement();
+            _webSection.style.marginTop = 20;
+            _webSection.style.paddingTop = 10;
+            _webSection.style.borderTopWidth = 1;
+            _webSection.style.borderTopColor = new Color(0.3f, 0.3f, 0.3f);
+            _webSection.style.display = DisplayStyle.None; // Hidden by default
+            Add(_webSection);
+
+            Label webTitle = new Label("Web Deployment");
+            webTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
+            _webSection.Add(webTitle);
+
+            Label webDesc = new Label("Optimize project settings for WebGL builds (Brotli, 512MB RAM, Wasm 2023).");
+            webDesc.style.fontSize = 10;
+            webDesc.style.color = new Color(0.7f, 0.7f, 0.7f);
+            webDesc.style.marginBottom = 5;
+            webDesc.style.whiteSpace = WhiteSpace.Normal;
+            _webSection.Add(webDesc);
+
+            Button webConfigButton = new Button(WebDeploymentService.ConfigureForWebDeployment) { text = "Configure for web deployment" };
+            webConfigButton.style.marginTop = 2;
+            webConfigButton.style.marginBottom = 2;
+            _webSection.Add(webConfigButton);
+
             Button backButton = new Button(_onBackToMenu) { text = "Back to Main Menu" };
             backButton.style.marginTop = 10;
             backButton.style.paddingTop = 8;
@@ -137,6 +163,10 @@ namespace Rotterdam.DigitalTwins.Editor
             ProjectTypeDetector.GetProjectType((type) => {
                 label.text = $"Project type: {ProjectTypeDetector.GetProjectTypes(type)}\n" +
                              $"Compatibility: {ProjectTypeDetector.GetCompatibility(type)}";
+                
+                _webSection.style.display = type.HasFlag(ProjectTypeDetector.ProjectType.WebApp) 
+                    ? DisplayStyle.Flex 
+                    : DisplayStyle.None;
             });
         }
     }
