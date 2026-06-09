@@ -159,7 +159,6 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
 
         private static void ApplyURPSettings(Camera camera, GraphicsPreset preset)
         {
-            // Try to find UniversalAdditionalCameraData via reflection to avoid hard dependency
             Type cameraDataType = Type.GetType("UnityEngine.Rendering.Universal.UniversalAdditionalCameraData, Unity.RenderPipelines.Universal.Runtime");
             if (cameraDataType == null) return;
 
@@ -177,9 +176,6 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
                 string targetName = "None";
                 switch (preset)
                 {
-                    case GraphicsPreset.Medium:
-                        targetName = "FastApproximateAntialiasing";
-                        break;
                     case GraphicsPreset.High:
                         targetName = "SubpixelMorphologicalAntialiasing";
                         break;
