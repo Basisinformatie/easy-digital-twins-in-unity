@@ -70,6 +70,7 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             ApplyToCamera(preset);
         }
 
+#if USING_CESIUM
         private static void ApplyToTileset(Cesium3DTileset tileset, GraphicsPreset preset)
         {
             Undo.RecordObject(tileset, "Apply Graphics Preset");
@@ -119,6 +120,7 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             }
             EditorUtility.SetDirty(wms);
         }
+#endif
 
         private static void ApplyToCamera(GraphicsPreset preset)
         {
