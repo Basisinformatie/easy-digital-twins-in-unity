@@ -112,7 +112,9 @@ namespace Rotterdam.DigitalTwins.Editor
             backButton.style.paddingTop = 8;
             backButton.style.paddingBottom = 8;
             Add(backButton);
-            
+
+			//Experimental section
+            """ 
             VisualElement experimentalSection = new VisualElement();
             experimentalSection.style.marginTop = 30;
             experimentalSection.style.paddingTop = 10;
@@ -139,8 +141,9 @@ namespace Rotterdam.DigitalTwins.Editor
             patchButton.style.paddingTop = 6;
             patchButton.style.paddingBottom = 6;
             experimentalSection.Add(patchButton);
+"""
         }
-
+"""
         private void OnPatchClicked(bool isForked)
         {
             string title = isForked ? "Restore Official Cesium" : "Apply Experimental Patch";
@@ -156,7 +159,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     CesiumSetupService.InstallForkedCesium();
             }
         }
-
+"""
         private void RefreshDetection(Label label)
         {
             label.text = "Detecting project type...";
