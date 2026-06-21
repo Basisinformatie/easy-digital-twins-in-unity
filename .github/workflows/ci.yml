@@ -52,6 +52,13 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
+          RUN_NUM=${{ github.run_number }}
+          MINOR=$((RUN_NUM / 100))
+          PATCH=$((RUN_NUM % 100))
+          NEW_VERSION="0.$MINOR.$PATCH"
+          
+          jq ".version = \"$NEW_VERSION\"" package.json > package.json.tmp && mv package.json.tmp package.json
+
           # Create and switch to upm branch from main
           git checkout -b upm
           
