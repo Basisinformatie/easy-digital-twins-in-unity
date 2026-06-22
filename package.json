@@ -15,5 +15,6 @@
   "author": {
     "name": "Gemeente Rotterdam"
   },
+  "documentationUrl": "https://github.com/Basisinformatie/easy-digital-twins-in-unity/blob/main/README.md",
   "dependencies": {}
 }
