@@ -73,33 +73,6 @@ namespace Rotterdam.DigitalTwins.Editor
             backButton.style.paddingTop = 8;
             backButton.style.paddingBottom = 8;
             Add(backButton);
-
-            VisualElement footer = new VisualElement();
-            footer.style.flexDirection = FlexDirection.Column;
-            footer.style.alignItems = Align.Center;
-            Add(footer);
-
-            Image logo = new Image();
-            string logoPath = "Packages/com.rotterdam.digital-twins/Editor/ToolkitWindow/gemeente-rotterdam-logo.png";
-            Texture2D logoTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(logoPath);
-            if (logoTexture == null)
-            {
-                logoTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Editor/ToolkitWindow/gemeente-rotterdam-logo.png");
-            }
-            
-            logo.image = logoTexture;
-            logo.style.width = 300;
-            logo.style.height = 75;
-            logo.style.marginTop = 20;
-            footer.Add(logo);
-            
-            Label poweredByLabel = new Label("Powered by Cesium");
-            poweredByLabel.style.unityFontStyleAndWeight = FontStyle.Italic;
-            poweredByLabel.style.fontSize = 10;
-            poweredByLabel.style.alignSelf = Align.FlexEnd;
-            poweredByLabel.style.marginTop = 5;
-            poweredByLabel.style.color = new Color(0.5f, 0.5f, 0.5f);
-            footer.Add(poweredByLabel);
         }
 
         private void LoadDocument(string relativePath)
