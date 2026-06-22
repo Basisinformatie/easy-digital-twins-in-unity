@@ -34,7 +34,7 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             return true;
         }
 
-        public static List<OUPDataset> FilterDatasets(List<OUPDataset> datasets, string searchTerm, string hubId, List<string> formats)
+        public static List<OUPDataset> FilterDatasets(List<OUPDataset> datasets, string? searchTerm, string? hubId, List<string>? formats)
         {
             var results = datasets;
 
@@ -62,7 +62,7 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             return results;
         }
 
-        public static List<OUPDigitalTwin> FilterDigitalTwins(List<OUPDigitalTwin> digitalTwins, string searchTerm, List<string> tags)
+        public static List<OUPDigitalTwin> FilterDigitalTwins(List<OUPDigitalTwin> digitalTwins, string? searchTerm, List<string>? tags)
         {
             var results = digitalTwins;
 
