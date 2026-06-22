@@ -7,6 +7,14 @@ namespace Rotterdam.DigitalTwins.Editor
     public class ReadMeComponent : VisualElement
     {
         private readonly System.Action _onBackToMenu;
+        private readonly VisualElement _contentContainer;
+        private readonly ScrollView _scrollView;
+
+        private readonly string[] _docPaths = {
+            "README.md",
+            "Documentation/SETUP_GUIDE.md",
+            "Documentation/USER_GUIDE.md"
+        };
 
         public ReadMeComponent(System.Action onBackToMenu)
         {
@@ -14,38 +22,74 @@ namespace Rotterdam.DigitalTwins.Editor
 
             style.flexGrow = 1;
 
-            Label titleLabel = new Label("ReadMe");
+            VisualElement header = new VisualElement();
+            header.style.flexDirection = FlexDirection.Row;
+            header.style.justifyContent = Justify.SpaceBetween;
+            header.style.marginBottom = 10;
+            Add(header);
+
+            Label titleLabel = new Label("Documentation");
             titleLabel.style.fontSize = 16;
             titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-            titleLabel.style.marginBottom = 10;
-            Add(titleLabel);
+            header.Add(titleLabel);
 
-            string readmePath = "Packages/com.rotterdam.digital-twins/README.md";
-            if (!System.IO.File.Exists(readmePath))
+            VisualElement dropdownContainer = new VisualElement();
+            dropdownContainer.style.flexDirection = FlexDirection.Row;
+            header.Add(dropdownContainer);
+
+            _scrollView = new ScrollView();
+            _scrollView.style.flexGrow = 1;
+            _scrollView.style.marginBottom = 10;
+
+            _contentContainer = new VisualElement();
+            _scrollView.Add(_contentContainer);
+            Add(_scrollView);
+
+            // Simple "dropdown" using buttons for now as UIToolkit DropdownField can be finicky in older versions
+            VisualElement tabContainer = new VisualElement();
+            tabContainer.style.flexDirection = FlexDirection.Row;
+            tabContainer.style.marginBottom = 5;
+            Add(tabContainer);
+
+            foreach (var path in _docPaths)
             {
-                readmePath = "README.md";
+                string fileName = System.IO.Path.GetFileNameWithoutExtension(path).Replace("_", " ");
+                if (path == "README.md") fileName = "Overview";
+                
+                Button tabBtn = new Button(() => LoadDocument(path)) { text = fileName };
+                tabBtn.style.flexGrow = 1;
+                tabContainer.Add(tabBtn);
             }
 
-            string readmeContent = "README.md not found.";
-            if (System.IO.File.Exists(readmePath))
-            {
-                readmeContent = System.IO.File.ReadAllText(readmePath);
-            }
-
-            ScrollView scrollView = new ScrollView();
-            scrollView.style.flexGrow = 1;
-            scrollView.style.marginBottom = 10;
-
-            VisualElement contentContainer = new VisualElement();
-            ParseAndAddMarkdown(contentContainer, readmeContent);
-            scrollView.Add(contentContainer);
-            Add(scrollView);
+            LoadDocument("README.md");
 
             Button backButton = new Button(_onBackToMenu) { text = "Back to Menu" };
             backButton.style.marginTop = 10;
             backButton.style.paddingTop = 8;
             backButton.style.paddingBottom = 8;
             Add(backButton);
+        }
+
+        private void LoadDocument(string relativePath)
+        {
+            _contentContainer.Clear();
+            _scrollView.scrollOffset = Vector2.zero;
+
+            string fullPath = $"Packages/com.rotterdam.digital-twins/{relativePath}";
+            if (!System.IO.File.Exists(fullPath))
+            {
+                fullPath = relativePath;
+            }
+
+            if (System.IO.File.Exists(fullPath))
+            {
+                string content = System.IO.File.ReadAllText(fullPath);
+                ParseAndAddMarkdown(_contentContainer, content);
+            }
+            else
+            {
+                _contentContainer.Add(new Label($"Document not found: {relativePath}"));
+            }
         }
 
         private void ParseAndAddMarkdown(VisualElement container, string content)
