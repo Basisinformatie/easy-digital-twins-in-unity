@@ -15,4 +15,9 @@
         <PackageReference Include="Coverlet.collector" Version="6.0.4" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Include="..\Runtime\Scripts\Core\OUPModels.cs" Link="Source\OUPModels.cs" />
+        <Compile Include="..\Editor\Utilities\OUPFilterUtility.cs" Link="Source\OUPFilterUtility.cs" />
+    </ItemGroup>
+
 </Project>

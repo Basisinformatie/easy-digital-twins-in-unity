@@ -76,4 +76,10 @@ namespace Rotterdam.DigitalTwins.Runtime
     {
         public List<OUPDigitalTwin> results;
     }
+
+    [Serializable]
+    public class OUPHubResponse
+    {
+        public List<OUPHub> results;
+    }
 }

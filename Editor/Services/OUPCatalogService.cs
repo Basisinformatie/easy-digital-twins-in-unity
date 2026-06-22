@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using Rotterdam.DigitalTwins.Runtime;
+using Rotterdam.DigitalTwins.Editor.Utilities;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
@@ -67,27 +68,7 @@ namespace Rotterdam.DigitalTwins.Editor
                         var results = response?.results ?? new List<OUPDataset>();
                         Debug.Log($"[OUP] Fetched {results.Count} datasets from {url}");
                         
-
-                        if (!string.IsNullOrEmpty(searchTerm))
-                        {
-                            results = results.Where(d => 
-                                (d.title != null && d.title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) || 
-                                (d.description != null && d.description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
-                                (d.tags != null && d.tags.Any(t => t.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
-                            ).ToList();
-                        }
-
-                        if (!string.IsNullOrEmpty(hubId))
-                        {
-                            results = results.Where(d => d.ownerHub != null && d.ownerHub._id == hubId).ToList();
-                        }
-
-                        if (formats != null && formats.Count > 0)
-                        {
-                            results = results.Where(d => 
-                                d.resources != null && d.resources.Any(f => formats.Any(fmt => string.Equals(fmt, f.format, StringComparison.OrdinalIgnoreCase)))
-                            ).ToList();
-                        }
+                        results = OUPFilterUtility.FilterDatasets(results, searchTerm, hubId, formats);
 
                         onSuccess?.Invoke(results);
                     }
@@ -138,19 +119,7 @@ namespace Rotterdam.DigitalTwins.Editor
                         var results = response?.results ?? new List<OUPDigitalTwin>();
                         Debug.Log($"[OUP] Fetched {results.Count} digital twins.");
 
-                        if (!string.IsNullOrEmpty(searchTerm))
-                        {
-                            results = results.Where(dt => 
-                                (dt.title != null && dt.title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) || 
-                                (dt.description != null && dt.description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
-                                (dt.tags != null && dt.tags.Any(t => t.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
-                            ).ToList();
-                        }
-
-                        if (tags != null && tags.Count > 0)
-                        {
-                             results = results.Where(dt => dt.tags != null && tags.All(t => dt.tags.Contains(t))).ToList();
-                        }
+                        results = OUPFilterUtility.FilterDigitalTwins(results, searchTerm, tags);
 
                         onSuccess?.Invoke(results);
                     }
@@ -187,7 +156,7 @@ namespace Rotterdam.DigitalTwins.Editor
                             json = "{\"results\":" + json + "}";
                         }
                         
-                        HubResponse response = JsonUtility.FromJson<HubResponse>(json);
+                        OUPHubResponse response = JsonUtility.FromJson<OUPHubResponse>(json);
                         var results = response?.results ?? new List<OUPHub>();
                         Debug.Log($"[OUP] Fetched {results.Count} hubs.");
                         onSuccess?.Invoke(results);
@@ -222,10 +191,5 @@ namespace Rotterdam.DigitalTwins.Editor
             };
         }
 
-        [Serializable]
-        private class HubResponse
-        {
-            public List<OUPHub> results;
-        }
     }
 }
