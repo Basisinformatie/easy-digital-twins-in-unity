@@ -12,8 +12,8 @@ namespace Rotterdam.DigitalTwins.Editor
 
         private readonly string[] _docPaths = {
             "README.md",
-            "Documentation/SETUP_GUIDE.md",
-            "Documentation/USER_GUIDE.md"
+            "SETUP_GUIDE.md",
+            "USER_GUIDE.md"
         };
 
         public ReadMeComponent(System.Action onBackToMenu)

@@ -13,8 +13,8 @@
 ---
 
 ### Documentation
-- [Setup Guide](Documentation/SETUP_GUIDE.md) - How to install and configure the toolkit.
-- [User Interface Guide](Documentation/USER_GUIDE.md) - A compact overview of buttons and windows.
+- [Setup Guide](SETUP_GUIDE.md) - How to install and configure the toolkit.
+- [User Interface Guide](USER_GUIDE.md) - A compact overview of buttons and windows.
 
 ### Licensing
 This toolkit contains custom content, assets, and code protected under **MIT** and **Creative Commons** licensing. See the official `LICENSE` file for details.
