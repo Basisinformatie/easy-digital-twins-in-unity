@@ -1,6 +1,6 @@
 {
   "name": "com.rotterdam.digital-twins",
-  "version": "0.2.66",
+  "version": "0.2.67",
   "displayName": "Easy Digital Twins in Unity",
   "description": "A Unity toolkit by the Gemeente Rotterdam (City of Rotterdam) to develop XR-applications with disclosing complex 3D city data from data Catalogs (e.g. Open Urban Platform).",
   "unity": "6000.0",
