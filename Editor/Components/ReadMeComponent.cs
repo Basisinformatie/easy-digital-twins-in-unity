@@ -58,6 +58,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 
                 Button tabBtn = new Button(() => LoadDocument(path)) { text = fileName };
                 tabBtn.style.width = 120; // Fixed width for consistent button sizing
+                tabBtn.style.height = 30; // Fixed height to prevent vertical scaling
                 tabContainer.Add(tabBtn);
             }
 
