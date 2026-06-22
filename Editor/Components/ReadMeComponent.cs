@@ -4,6 +4,9 @@ using UnityEngine.UIElements;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
+    /// <summary>
+    /// UI Component for displaying Markdown documentation files.
+    /// </summary>
     public class ReadMeComponent : VisualElement
     {
         private readonly System.Action _onBackToMenu;
@@ -45,7 +48,6 @@ namespace Rotterdam.DigitalTwins.Editor
             _scrollView.Add(_contentContainer);
             Add(_scrollView);
 
-            // Simple "dropdown" using buttons for now as UIToolkit DropdownField can be finicky in older versions
             VisualElement tabContainer = new VisualElement();
             tabContainer.style.flexDirection = FlexDirection.Row;
             tabContainer.style.marginBottom = 5;
@@ -57,8 +59,9 @@ namespace Rotterdam.DigitalTwins.Editor
                 if (path == "README.md") fileName = "Overview";
                 
                 Button tabBtn = new Button(() => LoadDocument(path)) { text = fileName };
-                tabBtn.style.flexGrow = 1; // Allow buttons to scale horizontally
-                tabBtn.style.height = 30; // Fixed height to prevent vertical scaling
+                tabBtn.style.flexGrow = 1;
+                tabBtn.style.height = 30;
+                tabBtn.style.marginBottom = 5;
                 tabContainer.Add(tabBtn);
             }
 
@@ -72,6 +75,7 @@ namespace Rotterdam.DigitalTwins.Editor
             backButton.style.marginTop = 10;
             backButton.style.paddingTop = 8;
             backButton.style.paddingBottom = 8;
+            
             Add(backButton);
         }
 
@@ -162,7 +166,6 @@ namespace Rotterdam.DigitalTwins.Editor
 
         private string CleanLine(string line)
         {
-            // Simple removal of common markdown markers for a cleaner look
             string cleaned = line.Replace("**", "");
             cleaned = cleaned.Replace("__", "");
             cleaned = System.Text.RegularExpressions.Regex.Replace(cleaned, @"\[(.*?)\]\((.*?)\)", "$1");

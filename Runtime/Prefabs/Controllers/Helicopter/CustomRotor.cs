@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Component representing a rotating helicopter rotor.
+    /// </summary>
     public class CustomRotor : MonoBehaviour
     {
     public enum Axis { X, Y, Z }

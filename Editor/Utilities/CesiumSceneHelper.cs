@@ -8,6 +8,9 @@ using System.Collections.Generic;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
+    /// <summary>
+    /// Helper class for managing Cesium components and overlays in the scene.
+    /// </summary>
     public static class CesiumSceneHelper
     {
         private struct WmsRequest

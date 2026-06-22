@@ -8,6 +8,9 @@ using System.Linq;
 
 namespace Rotterdam.DigitalTwins.Editor.Utilities
 {
+    /// <summary>
+    /// Utility for detecting the Unity project type and target platforms based on installed packages.
+    /// </summary>
     public static class ProjectTypeDetector
     {
         [Flags]

@@ -5,6 +5,9 @@ using Rotterdam.DigitalTwins.Runtime;
 
 namespace Rotterdam.DigitalTwins.Editor.Utilities
 {
+    /// <summary>
+    /// Utility for filtering OUP datasets and digital twins.
+    /// </summary>
     public static class OUPFilterUtility
     {
         public static bool IsSearchTermValid(string searchTerm, out string errorMessage)

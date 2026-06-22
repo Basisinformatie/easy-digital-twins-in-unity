@@ -5,13 +5,15 @@ using System.Reflection;
 
 namespace Rotterdam.DigitalTwins.Editor.Utilities
 {
+    /// <summary>
+    /// Service for configuring the project for web deployment.
+    /// </summary>
     public static class WebDeploymentService
     {
         public static void ConfigureForWebDeployment()
         {
             PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Brotli;
             
-            // PlayerSettings.WebGL.wasmArithmeticExceptions = WebGLWasmArithmeticExceptions.None;
             SetEnumProperty(typeof(PlayerSettings.WebGL), "wasmArithmeticExceptions", "None");
 
             PlayerSettings.WebGL.linkerTarget = WebGLLinkerTarget.Wasm;
@@ -19,7 +21,6 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             PlayerSettings.WebGL.decompressionFallback = true;
             PlayerSettings.WebGL.memorySize = 1024;
             
-            // PlayerSettings.WebGL.capabilities = WebGLCapability.Wasm2023;
             SetEnumProperty(typeof(PlayerSettings.WebGL), "capabilities", "Wasm2023");
 
             Debug.Log("[WebDeploymentService] Project configured for WebGL deployment.");
@@ -40,7 +41,6 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
             }
             catch
             {
-                // If the specific enum value doesn't exist, we skip it (older Unity version)
             }
         }
     }

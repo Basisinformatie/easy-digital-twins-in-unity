@@ -6,6 +6,9 @@ using Rotterdam.DigitalTwins.Editor.Utilities;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
+    /// <summary>
+    /// Component for managing toolkit settings.
+    /// </summary>
     public class SettingsComponent : VisualElement
     {
         private readonly System.Action _onBackToMenu;
@@ -26,7 +29,6 @@ namespace Rotterdam.DigitalTwins.Editor
             placeholderLabel.style.whiteSpace = WhiteSpace.Normal;
             Add(placeholderLabel);
             
-            // Project Type Detection Section
             VisualElement projectSection = new VisualElement();
             projectSection.style.marginTop = 20;
             projectSection.style.paddingTop = 10;
@@ -51,7 +53,6 @@ namespace Rotterdam.DigitalTwins.Editor
             projectInfoLabel.style.whiteSpace = WhiteSpace.Normal;
             projectSection.Add(projectInfoLabel);
 
-            // Graphics & Performance Section
             VisualElement graphicsSection = new VisualElement();
             graphicsSection.style.marginTop = 20;
             graphicsSection.style.paddingTop = 10;
@@ -82,7 +83,6 @@ namespace Rotterdam.DigitalTwins.Editor
             AddPresetButton("Medium (Desktop, Android, Web)", GraphicsSettingsService.GraphicsPreset.Medium);
             AddPresetButton("High (Desktop, High End)", GraphicsSettingsService.GraphicsPreset.High);
 
-            // Web Deployment Section
             _webSection = new VisualElement();
             _webSection.style.marginTop = 20;
             _webSection.style.paddingTop = 10;
@@ -112,9 +112,6 @@ namespace Rotterdam.DigitalTwins.Editor
             backButton.style.paddingTop = 8;
             backButton.style.paddingBottom = 8;
             Add(backButton);
-
-			//Experimental section
- 
         }
 
 

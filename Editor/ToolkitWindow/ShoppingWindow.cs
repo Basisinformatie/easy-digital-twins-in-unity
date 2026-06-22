@@ -5,6 +5,9 @@ using UnityEngine.UIElements;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
+    /// <summary>
+    /// Main Editor Window for the Rotterdam Digital Twins toolkit.
+    /// </summary>
     public class ShoppingWindow : EditorWindow
     {
         private VisualElement _contentContainer;
@@ -174,7 +177,7 @@ namespace Rotterdam.DigitalTwins.Editor
             VisualElement buttonContainer = new VisualElement();
             buttonContainer.style.marginLeft = 20;
             buttonContainer.style.marginRight = 20;
-
+            
             Button settingsButton = new Button { text = "Settings" };
             Button readmeButton = new Button { text = "ReadMe" };
             Button samplesButton = new Button { text = "Samples" };

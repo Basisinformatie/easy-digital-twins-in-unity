@@ -4,6 +4,9 @@ using UnityEditor.UIElements;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
+    /// <summary>
+    /// UI Component for setting georeference location and adaptive lighting.
+    /// </summary>
     public class LocationComponent : VisualElement
     {
         private DoubleField _latField;
@@ -107,7 +110,6 @@ namespace Rotterdam.DigitalTwins.Editor
             });
             _adaptiveLightingOptions.Add(_rotationModeField);
 
-            // Specific Time UI
             VisualElement specificTimeContainer = new VisualElement();
             _timeSlider = new Slider("Time of Day", 0, 24) { value = sunRotation != null ? sunRotation.timeOfDay : 12f };
             _timeSlider.RegisterValueChangedCallback(evt =>

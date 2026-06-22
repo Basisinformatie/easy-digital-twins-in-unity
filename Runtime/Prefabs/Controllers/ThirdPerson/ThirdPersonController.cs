@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Simple third-person player controller.
+    /// </summary>
     [RequireComponent(typeof(CharacterController))]
     public class ThirdPersonController : MonoBehaviour
     {
@@ -80,7 +83,6 @@ namespace Rotterdam.DigitalTwins.Runtime
 
             if (characterController.isGrounded)
             {
-                // We are grounded, so recalculate move direction based on axes
                 Vector3 forward = transform.TransformDirection(Vector3.forward);
                 Vector3 right = transform.TransformDirection(Vector3.right);
                 float curSpeedX = canMove ? speed * verticalAxis : 0;
@@ -93,15 +95,10 @@ namespace Rotterdam.DigitalTwins.Runtime
                 }
             }
 
-            // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
-            // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
-            // as an acceleration (ms^-2)
             moveDirection.y -= gravity * Time.deltaTime;
 
-            // Move the controller
             characterController.Move(moveDirection * Time.deltaTime);
 
-            // Player and Camera rotation
             if (canMove)
             {
                 rotation.y += mouseX * lookSpeed;

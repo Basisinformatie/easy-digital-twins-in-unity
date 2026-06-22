@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
+    /// <summary>
+    /// UI Component for browsing and adding data from the OUP catalogue.
+    /// </summary>
     public class DataComponent : VisualElement
     {
         private ICatalogService _catalogService;
@@ -234,7 +237,7 @@ namespace Rotterdam.DigitalTwins.Editor
             _scrollView.Clear();
             _loadingIndicator.style.display = DisplayStyle.Flex;
 
-            if (_typeDropdown.value == "Datasets") // Datasets
+            if (_typeDropdown.value == "Datasets")
             {
                 _catalogService.FetchDatasets(datasets =>
                 {
@@ -253,7 +256,7 @@ namespace Rotterdam.DigitalTwins.Editor
                     UpdateApiStatus();
                 }, _searchField.value, selectedHubId, null, AllowedFormats.ToList());
             }
-            else // Digital Twins
+            else
             {
                 _catalogService.FetchDigitalTwins(twins =>
                 {

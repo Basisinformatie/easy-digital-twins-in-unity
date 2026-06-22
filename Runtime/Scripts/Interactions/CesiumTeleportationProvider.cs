@@ -10,6 +10,9 @@ using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Provides teleportation functionality for Cesium 3D Tilesets.
+    /// </summary>
 #if USING_CESIUM && USING_XR_INTERACTION_TOOLKIT
     [AddComponentMenu("Cesium/Cesium Teleportation")]
     [RequireComponent(typeof(Cesium3DTileset))]

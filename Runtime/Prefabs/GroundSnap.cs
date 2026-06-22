@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Utility to snap objects to the ground using raycasts.
+    /// </summary>
     [ExecuteAlways]
     public class GroundSnap : MonoBehaviour
     {

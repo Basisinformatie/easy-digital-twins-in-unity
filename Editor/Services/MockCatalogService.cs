@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
+    /// <summary>
+    /// Mock implementation of the catalog service for demonstration purposes.
+    /// </summary>
     public class MockCatalogService : ICatalogService
     {
         public string Name => "Mock Catalogus (Demo)";

@@ -6,6 +6,9 @@ using Rotterdam.DigitalTwins.Runtime;
 
 namespace Rotterdam.DigitalTwins.Editor.Tests
 {
+    /// <summary>
+    /// Integration tests for the OUP API.
+    /// </summary>
     [TestFixture]
     public class OUPApiIntegrationTests
     {
@@ -27,21 +30,15 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         [Category("Integration")]
         public async Task OUPApi_DatasetsEndpoint_IsReachable()
         {
-            // Arrange
             string url = "https://hub.clearly.app/api/datasets?limit=1";
 
-            // Act
             var response = await _httpClient.GetAsync(url);
 
-            // Assert
             Assert.That(response.IsSuccessStatusCode, Is.True, $"API request to {url} failed with status {response.StatusCode}");
             
             string content = await response.Content.ReadAsStringAsync();
             Assert.That(content, Is.Not.Null.And.Not.Empty);
             
-            // Verify it can be parsed (basic check)
-            // Note: OUP API returns an array or an object depending on version, 
-            // OUPCatalogService handles both.
             using (JsonDocument doc = JsonDocument.Parse(content))
             {
                 Assert.That(doc.RootElement.ValueKind, Is.AnyOf(JsonValueKind.Array, JsonValueKind.Object));
@@ -52,17 +49,13 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         [Category("Integration")]
         public async Task OUPApi_HubsEndpoint_ReturnsValidData()
         {
-            // Arrange
             string url = "https://hub.clearly.app/api/hubs";
 
-            // Act
             var response = await _httpClient.GetAsync(url);
             
-            // Assert
             Assert.That(response.IsSuccessStatusCode, Is.True);
             string content = await response.Content.ReadAsStringAsync();
             
-            // Use our models to see if they are still compatible
             var options = new JsonSerializerOptions 
             { 
                 PropertyNameCaseInsensitive = true,

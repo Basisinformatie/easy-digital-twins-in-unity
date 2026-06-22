@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Camera controller that follows the car.
+    /// </summary>
     [RequireComponent(typeof(Camera))]
     public class CustomCarCamera : MonoBehaviour
     {

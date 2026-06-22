@@ -5,6 +5,9 @@ using System.IO;
 
 namespace Rotterdam.DigitalTwins.Editor.Setup
 {
+    /// <summary>
+    /// Service for ensuring Cesium for Unity is correctly installed and configured.
+    /// </summary>
     public class CesiumSetupService
     {
         private const string PackageName = "com.cesium.unity";

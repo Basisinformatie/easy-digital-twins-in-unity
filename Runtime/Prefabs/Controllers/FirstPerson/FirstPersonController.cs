@@ -8,6 +8,9 @@ using UnityEngine.InputSystem;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Simple first-person player controller.
+    /// </summary>
     [RequireComponent(typeof(CharacterController))]
     public class FirstPersonController : MonoBehaviour
     {
@@ -107,7 +110,6 @@ namespace Rotterdam.DigitalTwins.Runtime
 
             if (!characterController.isGrounded)
             {
-                // Gravity is multiplied over time
                 moveDirection.y -= gravity * Time.deltaTime;
             }
 

@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace Rotterdam.DigitalTwins.Editor.Setup
 {
+    /// <summary>
+    /// Static class defining the toolkit menu items in the Unity Editor.
+    /// </summary>
     public class ToolkitMenu
     {
         [MenuItem("Rotterdam Digital Twins/Launch UI")]

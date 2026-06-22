@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+/// <summary>
+/// Controls the rotation of the sun (directional light) based on time of day or continuous rotation.
+/// </summary>
 public class SunRotation : MonoBehaviour
 {
     public enum RotationMode { Continuous, SpecificTime }

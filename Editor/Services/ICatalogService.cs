@@ -4,6 +4,9 @@ using Rotterdam.DigitalTwins.Runtime;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
+    /// <summary>
+    /// Interface for data catalog services.
+    /// </summary>
     public interface ICatalogService
     {
         string Name { get; }

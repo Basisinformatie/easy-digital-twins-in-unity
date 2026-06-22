@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Component representing a physical wheel for the car controller.
+    /// </summary>
     public class Wheel : MonoBehaviour
     {
         public enum HitDetectionType

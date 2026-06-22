@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Component to move an object along the Y-axis using keyboard or gamepad input.
+    /// </summary>
     public class YAxisMover : MonoBehaviour
     {
         [Header("Settings")]

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Data models for the OUP API responses.
+    /// </summary>
     [Serializable]
     public class OUPDataset
     {

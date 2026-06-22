@@ -8,6 +8,9 @@ using Rotterdam.DigitalTwins.Editor.Utilities;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
+    /// <summary>
+    /// Service for fetching data from the Open Urban Platform (OUP) API.
+    /// </summary>
     public class OUPCatalogService : ICatalogService
     {
         private const string BaseUrl = "https://hub.clearly.app/api";

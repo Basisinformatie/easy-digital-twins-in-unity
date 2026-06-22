@@ -9,6 +9,9 @@ using CesiumForUnity;
 
 namespace Rotterdam.DigitalTwins.Editor.Utilities
 {
+    /// <summary>
+    /// Service for applying graphics and performance presets to the scene.
+    /// </summary>
     [InitializeOnLoad]
     public static class GraphicsSettingsService
     {

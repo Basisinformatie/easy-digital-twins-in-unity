@@ -5,13 +5,15 @@ using System.Collections.Generic;
 
 namespace Rotterdam.DigitalTwins.Editor.Tests
 {
+    /// <summary>
+    /// Unit tests for OUP filtering logic.
+    /// </summary>
     [TestFixture]
     public class OUPFilterTests
     {
         [Test]
         public void FilterDatasets_WithSearchTerm_ReturnsMatchingDatasets()
         {
-            // Arrange
             var datasets = new List<OUPDataset>
             {
                 new OUPDataset { title = "Utrecht Water", description = "Canals and rivers" },
@@ -20,10 +22,8 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
             };
             string searchTerm = "Rotterdam";
 
-            // Act
             var result = OUPFilterUtility.FilterDatasets(datasets, searchTerm, null, null);
 
-            // Assert
             Assert.That(result, Has.Count.EqualTo(1));
             Assert.That(result[0].title, Is.EqualTo("Rotterdam Buildings"));
         }
@@ -31,7 +31,6 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         [Test]
         public void FilterDatasets_WithHubId_ReturnsMatchingDatasets()
         {
-            // Arrange
             var hub1 = new OUPHub { _id = "hub-123" };
             var hub2 = new OUPHub { _id = "hub-456" };
             var datasets = new List<OUPDataset>
@@ -42,10 +41,8 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
             };
             string hubId = "hub-123";
 
-            // Act
             var result = OUPFilterUtility.FilterDatasets(datasets, null, hubId, null);
 
-            // Assert
             Assert.That(result, Has.Count.EqualTo(2));
             foreach (var d in result)
             {
@@ -56,7 +53,6 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         [Test]
         public void FilterDatasets_WithFormats_ReturnsMatchingDatasets()
         {
-            // Arrange
             var datasets = new List<OUPDataset>
             {
                 new OUPDataset 
@@ -72,10 +68,8 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
             };
             var formats = new List<string> { "I3S" };
 
-            // Act
             var result = OUPFilterUtility.FilterDatasets(datasets, null, null, formats);
 
-            // Assert
             Assert.That(result, Has.Count.EqualTo(1));
             Assert.That(result[0].title, Is.EqualTo("D1"));
         }
@@ -83,13 +77,10 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         [Test]
         public void IsSearchTermValid_WithValidTerm_ReturnsTrue()
         {
-            // Arrange
             string searchTerm = "Rotterdam";
 
-            // Act
             bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
 
-            // Assert
             Assert.That(isValid, Is.True);
             Assert.That(errorMessage, Is.Empty);
         }
@@ -97,13 +88,10 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         [Test]
         public void IsSearchTermValid_WithEmptyTerm_ReturnsTrue()
         {
-            // Arrange
             string searchTerm = "";
 
-            // Act
             bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
 
-            // Assert
             Assert.That(isValid, Is.True);
             Assert.That(errorMessage, Is.Empty);
         }
@@ -111,13 +99,10 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         [Test]
         public void IsSearchTermValid_WithShortTerm_ReturnsTrue()
         {
-            // Arrange
             string searchTerm = "Ro";
 
-            // Act
             bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
 
-            // Assert
             Assert.That(isValid, Is.True);
             Assert.That(errorMessage, Is.Empty);
         }
@@ -125,13 +110,10 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         [Test]
         public void IsSearchTermValid_WithInvalidCharacters_ReturnsFalse()
         {
-            // Arrange
             string searchTerm = "<script>";
 
-            // Act
             bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
 
-            // Assert
             Assert.That(isValid, Is.False);
             Assert.That(errorMessage, Is.Not.Empty);
             Assert.That(errorMessage, Does.Contain("Only letters, numbers and spaces are allowed"));
@@ -140,13 +122,10 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         [Test]
         public void IsSearchTermValid_WithOnlySpaces_ReturnsTrue()
         {
-            // Arrange
             string searchTerm = "   ";
 
-            // Act
             bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
 
-            // Assert
             Assert.That(isValid, Is.True);
             Assert.That(errorMessage, Is.Empty);
         }
@@ -154,13 +133,10 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         [Test]
         public void IsSearchTermValid_WithTooLongTerm_ReturnsFalse()
         {
-            // Arrange
             string searchTerm = new string('a', 41);
 
-            // Act
             bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
 
-            // Assert
             Assert.That(isValid, Is.False);
             Assert.That(errorMessage, Does.Contain("cannot exceed 40 characters"));
         }
@@ -168,26 +144,20 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         [Test]
         public void IsSearchTermValid_WithDigitsAndSpaces_ReturnsTrue()
         {
-            // Arrange
             string searchTerm = "Rotterdam 2024";
 
-            // Act
             bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
 
-            // Assert
             Assert.That(isValid, Is.True);
         }
 
         [Test]
         public void IsSearchTermValid_WithExactlyThreeChars_ReturnsTrue()
         {
-            // Arrange
             string searchTerm = "abc";
 
-            // Act
             bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
 
-            // Assert
             Assert.That(isValid, Is.True);
         }
     }

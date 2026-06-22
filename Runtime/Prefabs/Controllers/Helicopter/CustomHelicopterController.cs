@@ -7,6 +7,9 @@ using UnityEngine.InputSystem.Controls;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Controller for helicopter flight physics and input.
+    /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     public class CustomHelicopterController : MonoBehaviour
     {

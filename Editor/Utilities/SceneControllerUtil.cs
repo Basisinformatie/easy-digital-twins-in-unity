@@ -5,6 +5,9 @@ using System.Threading;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
+    /// <summary>
+    /// Utility class for managing scene controllers and lighting.
+    /// </summary>
     public static class SceneControllerUtil
     {
         private const string PackagePath = "Packages/com.rotterdam.digital-twins/Runtime/Prefabs/Controllers/";

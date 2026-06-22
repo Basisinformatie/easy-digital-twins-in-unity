@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Camera controller that follows the helicopter.
+    /// </summary>
     public class CustomHelicopterCamera : MonoBehaviour
     {
     public Transform target;

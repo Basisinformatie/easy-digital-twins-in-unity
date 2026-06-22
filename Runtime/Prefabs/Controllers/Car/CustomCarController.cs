@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 
 namespace Rotterdam.DigitalTwins.Runtime
 {
+    /// <summary>
+    /// Custom car controller for physical vehicle simulation.
+    /// </summary>
     public class CustomCarController : MonoBehaviour
     {
     [Header("Motor Settings")]
