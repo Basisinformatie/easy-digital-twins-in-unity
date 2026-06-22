@@ -1,2 +1,2 @@
-Afstudeerproject bij de Gemeente Rotterdam door Brian de Lange
-Eigendom van de Gemeente Rotterdam, afdeling Basisinformatie.
+Graduation project at the City of Rotterdam by Brian de Lange.
+Owned by the City of Rotterdam, Department of Basic Information.

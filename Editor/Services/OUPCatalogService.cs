@@ -16,6 +16,12 @@ namespace Rotterdam.DigitalTwins.Editor
 
         public void FetchDatasets(Action<List<OUPDataset>> onSuccess, Action<string> onError, string searchTerm = "", string hubId = "", List<string> tags = null, List<string> formats = null)
         {
+            if (!OUPFilterUtility.IsSearchTermValid(searchTerm, out string validationError))
+            {
+                onError?.Invoke(validationError);
+                return;
+            }
+
             List<string> queryParams = new List<string>();
 
             if (!string.IsNullOrEmpty(searchTerm))
@@ -83,6 +89,12 @@ namespace Rotterdam.DigitalTwins.Editor
 
         public void FetchDigitalTwins(Action<List<OUPDigitalTwin>> onSuccess, Action<string> onError, string searchTerm = "", string hubId = "", List<string> tags = null)
         {
+            if (!OUPFilterUtility.IsSearchTermValid(searchTerm, out string validationError))
+            {
+                onError?.Invoke(validationError);
+                return;
+            }
+
             List<string> queryParams = new List<string>();
 
             if (!string.IsNullOrEmpty(searchTerm))

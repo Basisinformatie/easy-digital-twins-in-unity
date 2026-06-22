@@ -7,6 +7,33 @@ namespace Rotterdam.DigitalTwins.Editor.Utilities
 {
     public static class OUPFilterUtility
     {
+        public static bool IsSearchTermValid(string searchTerm, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return true;
+            }
+
+            if (searchTerm.Length > 40)
+            {
+                errorMessage = "Search term cannot exceed 40 characters.";
+                return false;
+            }
+
+            foreach (char c in searchTerm)
+            {
+                if (!char.IsLetterOrDigit(c) && !char.IsWhiteSpace(c))
+                {
+                    errorMessage = "Search term contains invalid characters. Only letters, numbers and spaces are allowed.";
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public static List<OUPDataset> FilterDatasets(List<OUPDataset> datasets, string searchTerm, string hubId, List<string> formats)
         {
             var results = datasets;

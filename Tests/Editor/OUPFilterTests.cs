@@ -14,9 +14,9 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
             // Arrange
             var datasets = new List<OUPDataset>
             {
+                new OUPDataset { title = "Utrecht Water", description = "Canals and rivers" },
                 new OUPDataset { title = "Rotterdam Buildings", description = "3D models of buildings" },
                 new OUPDataset { title = "Amsterdam Parks", description = "Green areas" },
-                new OUPDataset { title = "Utrecht Water", description = "Canals and rivers" }
             };
             string searchTerm = "Rotterdam";
 
@@ -78,6 +78,117 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
             // Assert
             Assert.That(result, Has.Count.EqualTo(1));
             Assert.That(result[0].title, Is.EqualTo("D1"));
+        }
+
+        [Test]
+        public void IsSearchTermValid_WithValidTerm_ReturnsTrue()
+        {
+            // Arrange
+            string searchTerm = "Rotterdam";
+
+            // Act
+            bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
+
+            // Assert
+            Assert.That(isValid, Is.True);
+            Assert.That(errorMessage, Is.Empty);
+        }
+
+        [Test]
+        public void IsSearchTermValid_WithEmptyTerm_ReturnsTrue()
+        {
+            // Arrange
+            string searchTerm = "";
+
+            // Act
+            bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
+
+            // Assert
+            Assert.That(isValid, Is.True);
+            Assert.That(errorMessage, Is.Empty);
+        }
+
+        [Test]
+        public void IsSearchTermValid_WithShortTerm_ReturnsTrue()
+        {
+            // Arrange
+            string searchTerm = "Ro";
+
+            // Act
+            bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
+
+            // Assert
+            Assert.That(isValid, Is.True);
+            Assert.That(errorMessage, Is.Empty);
+        }
+
+        [Test]
+        public void IsSearchTermValid_WithInvalidCharacters_ReturnsFalse()
+        {
+            // Arrange
+            string searchTerm = "<script>";
+
+            // Act
+            bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
+
+            // Assert
+            Assert.That(isValid, Is.False);
+            Assert.That(errorMessage, Is.Not.Empty);
+            Assert.That(errorMessage, Does.Contain("Only letters, numbers and spaces are allowed"));
+        }
+
+        [Test]
+        public void IsSearchTermValid_WithOnlySpaces_ReturnsTrue()
+        {
+            // Arrange
+            string searchTerm = "   ";
+
+            // Act
+            bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
+
+            // Assert
+            Assert.That(isValid, Is.True);
+            Assert.That(errorMessage, Is.Empty);
+        }
+
+        [Test]
+        public void IsSearchTermValid_WithTooLongTerm_ReturnsFalse()
+        {
+            // Arrange
+            string searchTerm = new string('a', 41);
+
+            // Act
+            bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
+
+            // Assert
+            Assert.That(isValid, Is.False);
+            Assert.That(errorMessage, Does.Contain("cannot exceed 40 characters"));
+        }
+
+        [Test]
+        public void IsSearchTermValid_WithDigitsAndSpaces_ReturnsTrue()
+        {
+            // Arrange
+            string searchTerm = "Rotterdam 2024";
+
+            // Act
+            bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
+
+            // Assert
+            Assert.That(isValid, Is.True);
+        }
+
+        [Test]
+        public void IsSearchTermValid_WithExactlyThreeChars_ReturnsTrue()
+        {
+            // Arrange
+            string searchTerm = "abc";
+
+            // Act
+            bool isValid = OUPFilterUtility.IsSearchTermValid(searchTerm, out string errorMessage);
+
+            // Assert
+            Assert.That(isValid, Is.True);
         }
     }
 }

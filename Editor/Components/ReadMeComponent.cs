@@ -26,7 +26,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 readmePath = "README.md";
             }
 
-            string readmeContent = "README.md niet gevonden.";
+            string readmeContent = "README.md not found.";
             if (System.IO.File.Exists(readmePath))
             {
                 readmeContent = System.IO.File.ReadAllText(readmePath);
@@ -41,7 +41,7 @@ namespace Rotterdam.DigitalTwins.Editor
             scrollView.Add(contentLabel);
             Add(scrollView);
 
-            Button backButton = new Button(_onBackToMenu) { text = "Terug naar Menu" };
+            Button backButton = new Button(_onBackToMenu) { text = "Back to Menu" };
             backButton.style.marginTop = 10;
             backButton.style.paddingTop = 8;
             backButton.style.paddingBottom = 8;
