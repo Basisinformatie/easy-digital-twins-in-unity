@@ -57,7 +57,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 if (path == "README.md") fileName = "Overview";
                 
                 Button tabBtn = new Button(() => LoadDocument(path)) { text = fileName };
-                tabBtn.style.flexGrow = 1;
+                tabBtn.style.width = 120; // Fixed width for consistent button sizing
                 tabContainer.Add(tabBtn);
             }
 

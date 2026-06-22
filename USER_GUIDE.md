@@ -1,4 +1,4 @@
-### User Interface Guide
+# User Interface Guide
 
 This guide provides an overview of the "Easy Digital Twins" toolkit interface in Unity.
 
