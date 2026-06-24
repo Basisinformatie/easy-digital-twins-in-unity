@@ -1,6 +1,8 @@
 namespace Rotterdam.DigitalTwins.Runtime
 {
+#if USING_CESIUM
     using CesiumForUnity;
+#endif
     using UnityEngine;
     using UnityEngine.UI;
     using System.Collections.Generic;
@@ -147,6 +149,7 @@ namespace Rotterdam.DigitalTwins.Runtime
                 GameObject hitObject = hit.transform.gameObject;
                 Debug.Log("[DEBUG_LOG] Hit: " + hitObject.name);
 
+#if USING_CESIUM
                 CesiumMetadata metadata = hitObject.GetComponentInParent<CesiumMetadata>();
                 CesiumModelMetadata modelMetadata = hitObject.GetComponentInParent<CesiumModelMetadata>();
 
@@ -186,6 +189,10 @@ namespace Rotterdam.DigitalTwins.Runtime
                         }
                     }
                 }
+#else
+                bool foundData = false;
+                string displayInfo = null;
+#endif
 
                 if (foundData)
                 {
@@ -202,6 +209,7 @@ namespace Rotterdam.DigitalTwins.Runtime
             }
         }
 
+#if USING_CESIUM
         private string ExtractInfoFromFeature(CesiumFeature feature)
         {
             string street = null, houseNumber = null, postalCode = null, year = null, name = null;
@@ -264,7 +272,9 @@ namespace Rotterdam.DigitalTwins.Runtime
             
             return "Object ID: " + feature.GetString("id", "Unknown");
         }
+#endif
 
+#if USING_CESIUM
         private string ExtractInfoFromTable(Dictionary<string, CesiumMetadataValue> values, string rawDataFallback = null)
         {
             string street = null, houseNumber = null, postalCode = null, year = null, name = null;
@@ -317,6 +327,7 @@ namespace Rotterdam.DigitalTwins.Runtime
 
             return "Object ID: " + GetValue(values, "id", "ID");
         }
+#endif
 
         private string GetNestedValue(string json, string key)
         {
@@ -341,6 +352,7 @@ namespace Rotterdam.DigitalTwins.Runtime
             return null;
         }
 
+#if USING_CESIUM
         private string GetValue(Dictionary<string, CesiumMetadataValue> values, params string[] keys)
         {
             foreach (var key in keys)
@@ -353,6 +365,7 @@ namespace Rotterdam.DigitalTwins.Runtime
             }
             return null;
         }
+#endif
 
         private void ShowUI(string text)
         {
