@@ -33,6 +33,8 @@ The toolkit is designed to work with the following Unity templates:
    `https://github.com/Basisinformatie/easy-digital-twins-in-unity.git`
 6. Wait for the installation to complete.
 
+Alternatively, you can download the zip from npm branch, unpack it and import the package manually.
+
 ---
 
 ## 3. Initial Launch

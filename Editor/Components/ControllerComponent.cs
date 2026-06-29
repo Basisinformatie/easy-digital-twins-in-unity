@@ -4,6 +4,9 @@ using UnityEngine.UIElements;
 
 namespace Rotterdam.DigitalTwins.Editor
 {
+    /// <summary>
+    /// UI Component for adding controller to the scene.
+    /// </summary>
     public class ControllerComponent : VisualElement
     {
         public ControllerComponent()
