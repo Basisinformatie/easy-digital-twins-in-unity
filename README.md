@@ -1,11 +1,11 @@
 # Easy Digital Twins Toolkit in Unity
 
-[![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
-[![macOS](https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
-[![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
-[![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
-[![XR/VR](https://img.shields.io/badge/XR%20%2F%20VR-FF5733?style=for-the-badge)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
-[![Universal 3D](https://img.shields.io/badge/Universal%203D%20Supported-4285F4?style=for-the-badge)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
+[![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
+[![macOS](https://img.shields.io/badge/mac%20os-000000?logo=apple&logoColor=white)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
+[![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
+[![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
+[![XR/VR](https://img.shields.io/badge/XR%20%2F%20VR-FF5733)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
+[![Universal 3D](https://img.shields.io/badge/Universal%203D%20Supported-4285F4)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
 
 ## Usermanual for the Easy Digital Twins Toolkit in Unity
 **Version:** V0.1  
