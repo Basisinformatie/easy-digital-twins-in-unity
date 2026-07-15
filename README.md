@@ -10,7 +10,7 @@
 [![Tests](https://github.com/Basisinformatie/easy-digital-twins-in-unity/actions/workflows/ci.yml/badge.svg)](https://github.com/Basisinformatie/easy-digital-twins-in-unity/actions/workflows/ci.yml)
 
 ## Usermanual for the Easy Digital Twins Toolkit in Unity
-**Version:** V0.9
+**Version:** V0.9  
 **Author:** Brian de Lange  
 **Owner:** Gemeente Rotterdam  
 **Contact:** Joris Koolen (Department Basisinformatie)
