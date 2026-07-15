@@ -7,11 +7,10 @@
 [![XR/VR](https://img.shields.io/badge/XR%20%2F%20VR-Supported-brightgreen)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
 [![Universal 3D](https://img.shields.io/badge/Universal%203D-Supported-brightgreen)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
 [![Unity](https://img.shields.io/badge/Unity-Supported-brightgreen?logo=unity&logoColor=white)](https://github.com/Basisinformatie/easy-digital-twins-in-unity)
-[![Version](https://img.shields.io/github/packagejson/v/Basisinformatie/easy-digital-twins-in-unity/main?label=version&color=orange)](https://github.com/Basisinformatie/easy-digital-twins-in-unity/blob/main/package.json)
 [![Tests](https://github.com/Basisinformatie/easy-digital-twins-in-unity/actions/workflows/ci.yml/badge.svg)](https://github.com/Basisinformatie/easy-digital-twins-in-unity/actions/workflows/ci.yml)
 
 ## Usermanual for the Easy Digital Twins Toolkit in Unity
-**Version:** V0.1  
+**Version:** V0.9
 **Author:** Brian de Lange  
 **Owner:** Gemeente Rotterdam  
 **Contact:** Joris Koolen (Department Basisinformatie)
