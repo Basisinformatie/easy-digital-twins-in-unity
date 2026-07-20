@@ -18,7 +18,7 @@
 ### Publication & Releases
 - **Clearly Hub:** [App Details](https://hub.clearly.app/apps/6a2b147ff03efa527b952d73/details)
 - **Unity Package (UPM):** `https://github.com/Basisinformatie/easy-digital-twins-in-unity.git`
-
+ 
 ---
 
 ### Documentation
