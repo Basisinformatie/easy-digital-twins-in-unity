@@ -69,6 +69,8 @@ namespace UnityEngine.XR.Templates.AR
 
             Undo.RecordObject(spawner, "Configure ObjectSpawner");
             // spawner.singleObjectMode = true; // Not found in this version of ObjectSpawner
+            // ObjectSpawner in XRIT 3.x Starter Assets might have changed. 
+            // spawner.singleObjectMode = true; 
 
             if (!spawner.objectPrefabs.Contains(cesiumPrefab))
             {
@@ -244,24 +246,44 @@ namespace UnityEngine.XR.Templates.AR
         }
         private static void SetupScaling(MonoBehaviour menuManager, ObjectSpawner spawner, System.Type menuManagerType)
         {
-            /* ObjectScaleController is missing from the project
+            // ObjectScaleController is missing or moved in current version
             var scaleController = menuManager.GetComponent("ObjectScaleController");
             if (scaleController == null)
             {
-                scaleController = Undo.AddComponent<ObjectScaleController>(menuManager.gameObject);
+                Debug.LogWarning("ObjectScaleController not found on ARTemplateMenuManager. Skipping scaling setup.");
+                return;
             }
 
+            /* 
             SerializedObject soScale = new SerializedObject(scaleController);
-            soScale.FindProperty("m_ObjectSpawner").objectReferenceValue = spawner;
-            soScale.ApplyModifiedProperties();
+            var spawnerProp = soScale.FindProperty("m_ObjectSpawner");
+            if (spawnerProp != null)
+            {
+                spawnerProp.objectReferenceValue = spawner;
+                soScale.ApplyModifiedProperties();
+            }
 
-            if (menuManager.deleteButton == null) return;
+            var deleteButtonProp = menuManagerType.GetProperty("deleteButton");
+            var deleteButton = deleteButtonProp?.GetValue(menuManager) as Button;
+            if (deleteButton == null) return;
 
-            GameObject deleteButtonGO = menuManager.deleteButton.gameObject;
+            GameObject deleteButtonGO = deleteButton.gameObject;
             Transform parent = deleteButtonGO.transform.parent;
 
-            CreateScaleButton(deleteButtonGO, parent, "Button (Zoom In)", "+", new Vector2(100, -250), scaleController.ScaleUp);
-            CreateScaleButton(deleteButtonGO, parent, "Button (Zoom Out)", "-", new Vector2(100, -350), scaleController.ScaleDown);
+            var scaleUpMethod = scaleController.GetType().GetMethod("ScaleUp");
+            var scaleDownMethod = scaleController.GetType().GetMethod("ScaleDown");
+
+            if (scaleUpMethod != null)
+            {
+                var scaleUpAction = System.Delegate.CreateDelegate(typeof(UnityEngine.Events.UnityAction), scaleController, scaleUpMethod) as UnityEngine.Events.UnityAction;
+                CreateScaleButton(deleteButtonGO, parent, "Button (Zoom In)", "+", new Vector2(100, -250), scaleUpAction);
+            }
+
+            if (scaleDownMethod != null)
+            {
+                var scaleDownAction = System.Delegate.CreateDelegate(typeof(UnityEngine.Events.UnityAction), scaleController, scaleDownMethod) as UnityEngine.Events.UnityAction;
+                CreateScaleButton(deleteButtonGO, parent, "Button (Zoom Out)", "-", new Vector2(100, -350), scaleDownAction);
+            }
             */
         }
 

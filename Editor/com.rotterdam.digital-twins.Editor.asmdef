@@ -4,7 +4,10 @@
     "references": [
         "com.rotterdam.digital-twins.Runtime",
         "com.rotterdam.digital-twins.Editor.Setup",
-        "CesiumForUnity"
+        "CesiumForUnity",
+        "Unity.XR.Interaction.Toolkit",
+        "Unity.TextMeshPro",
+        "Unity.XR.Interaction.Toolkit.Samples.StarterAssets"
     ],
     "includePlatforms": [
         "Editor"
