@@ -23,6 +23,16 @@
             "name": "com.cesium.unity",
             "expression": "",
             "define": "USING_CESIUM"
+        },
+        {
+            "name": "com.unity.xr.interaction.toolkit",
+            "expression": "3.0.0",
+            "define": "USING_XRIT_3"
+        },
+        {
+            "name": "com.unity.xr.interaction.toolkit",
+            "expression": "",
+            "define": "USING_XRIT"
         }
     ],
     "noEngineReferences": false

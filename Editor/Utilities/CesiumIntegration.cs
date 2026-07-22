@@ -5,8 +5,13 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
+#if USING_XRIT
+using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+#if USING_XRIT_3
+using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
+#endif
+#endif
 using TMPro;
 #endif
 
@@ -41,6 +46,11 @@ namespace UnityEngine.XR.Templates.AR
     {
         public static void Integrate()
         {
+#if !USING_XRIT
+            Debug.LogError("XR Interaction Toolkit is not installed. Cesium Integration for AR requires XRIT.");
+            EditorUtility.DisplayDialog("Missing Dependency", "XR Interaction Toolkit is not installed. Please install it via Package Manager to use this feature.", "OK");
+            return;
+#else
             System.Type menuManagerType = System.Type.GetType("UnityEngine.XR.Templates.AR.ARTemplateMenuManager, Assembly-CSharp");
             if (menuManagerType == null)
             {
@@ -48,7 +58,13 @@ namespace UnityEngine.XR.Templates.AR
                 return;
             }
 
+#if USING_XRIT_3
             var spawner = Object.FindAnyObjectByType<ObjectSpawner>();
+#else
+            // Fallback for older XRIT or missing Starter Assets
+            var spawnerType = System.Type.GetType("UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets.ObjectSpawner, Unity.XR.Interaction.Toolkit.Samples.StarterAssets");
+            var spawner = spawnerType != null ? Object.FindAnyObjectByType(spawnerType) as MonoBehaviour : null;
+#endif
             if (spawner == null)
             {
                 Debug.LogError("ObjectSpawner not found in the scene. Ensure the SampleScene is open.");
@@ -72,6 +88,7 @@ namespace UnityEngine.XR.Templates.AR
             // ObjectSpawner in XRIT 3.x Starter Assets might have changed. 
             // spawner.singleObjectMode = true; 
 
+#if USING_XRIT_3
             if (!spawner.objectPrefabs.Contains(cesiumPrefab))
             {
                 var list = spawner.objectPrefabs.ToList();
@@ -79,13 +96,45 @@ namespace UnityEngine.XR.Templates.AR
                 spawner.objectPrefabs = list;
                 Debug.Log("CesiumGeoreference added to ObjectSpawner.");
             }
+#else
+            // Use reflection for objectPrefabs if not USING_XRIT_3 but we found a spawner
+            var prefabsField = spawner.GetType().GetField("objectPrefabs", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic) 
+                               ?? spawner.GetType().GetProperty("objectPrefabs")?.GetBackingField(); // simplified check
+            
+            var prefabsProp = spawner.GetType().GetProperty("objectPrefabs");
+            if (prefabsProp != null)
+            {
+                var currentPrefabs = prefabsProp.GetValue(spawner) as System.Collections.Generic.IEnumerable<GameObject>;
+                if (currentPrefabs != null && !currentPrefabs.Contains(cesiumPrefab))
+                {
+                    var list = currentPrefabs.ToList();
+                    list.Add(cesiumPrefab);
+                    // Try to set it back if it's a property with a setter
+                    if (prefabsProp.CanWrite)
+                    {
+                        prefabsProp.SetValue(spawner, list);
+                    }
+                    Debug.Log("CesiumGeoreference added to ObjectSpawner via reflection.");
+                }
+            }
+#endif
             else
             {
                 Debug.Log("CesiumGeoreference was already in the ObjectSpawner.");
             }
             EditorUtility.SetDirty(spawner);
 
+#if USING_XRIT_3
             int index = spawner.objectPrefabs.IndexOf(cesiumPrefab);
+#else
+            int index = -1;
+            var prefabsPropForIndex = spawner.GetType().GetProperty("objectPrefabs");
+            if (prefabsPropForIndex != null)
+            {
+                var list = (prefabsPropForIndex.GetValue(spawner) as System.Collections.Generic.IEnumerable<GameObject>)?.ToList();
+                index = list?.IndexOf(cesiumPrefab) ?? -1;
+            }
+#endif
 
             var menuManager = Object.FindAnyObjectByType(menuManagerType) as MonoBehaviour;
             if (menuManager == null)
@@ -243,6 +292,7 @@ namespace UnityEngine.XR.Templates.AR
                 $"- Dragging and rotation enabled via ARTransformer\n" +
                 $"- Camera Far Clip Plane set to {mainCam?.farClipPlane ?? 100f}\n\n" +
                 $"Make sure to save the scene (Ctrl+S).", "OK");
+#endif
         }
         private static void SetupScaling(MonoBehaviour menuManager, ObjectSpawner spawner, System.Type menuManagerType)
         {
@@ -387,8 +437,9 @@ namespace UnityEngine.XR.Templates.AR
                 Debug.Log("CesiumGeoreference prefab scale set to 0.01, 0.01, 0.01.");
             }
 
+#if USING_XRIT
             var simple = prefabRoot.GetComponent<XRSimpleInteractable>();
-            if (simple != null && simple.GetType() == typeof(XRSimpleInteractable))
+            if (simple != null)
             {
                 Object.DestroyImmediate(simple);
                 changed = true;
@@ -402,12 +453,13 @@ namespace UnityEngine.XR.Templates.AR
 
             grab.selectMode = InteractableSelectMode.Multiple;
             
-            grab.movementType = UnityEngine.XR.Interaction.Toolkit.Interactables.XRBaseInteractable.MovementType.Instantaneous;
+            grab.movementType = XRBaseInteractable.MovementType.Instantaneous;
             grab.throwOnDetach = false;
             grab.trackPosition = true;
             grab.trackRotation = true;
             grab.useDynamicAttach = true;
             grab.matchAttachPosition = true;
+#endif
             
             var uniqueness = prefabRoot.GetComponent<CesiumUniquenessEnforcer>();
             if (uniqueness == null)
