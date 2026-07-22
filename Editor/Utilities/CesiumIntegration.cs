@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.XR.Templates.AR;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using TMPro;
@@ -42,6 +41,13 @@ namespace UnityEngine.XR.Templates.AR
     {
         public static void Integrate()
         {
+            System.Type menuManagerType = System.Type.GetType("UnityEngine.XR.Templates.AR.ARTemplateMenuManager, Assembly-CSharp");
+            if (menuManagerType == null)
+            {
+                Debug.LogError("ARTemplateMenuManager type not found. Make sure it is in Assembly-CSharp.");
+                return;
+            }
+
             var spawner = Object.FindAnyObjectByType<ObjectSpawner>();
             if (spawner == null)
             {
@@ -62,7 +68,7 @@ namespace UnityEngine.XR.Templates.AR
             ConfigurePrefabAsInteractable(prefabPath);
 
             Undo.RecordObject(spawner, "Configure ObjectSpawner");
-            spawner.singleObjectMode = true;
+            // spawner.singleObjectMode = true; // Not found in this version of ObjectSpawner
 
             if (!spawner.objectPrefabs.Contains(cesiumPrefab))
             {
@@ -79,20 +85,22 @@ namespace UnityEngine.XR.Templates.AR
 
             int index = spawner.objectPrefabs.IndexOf(cesiumPrefab);
 
-            var menuManager = Object.FindAnyObjectByType<ARTemplateMenuManager>();
+            var menuManager = Object.FindAnyObjectByType(menuManagerType) as MonoBehaviour;
             if (menuManager == null)
             {
                 Debug.LogError("ARTemplateMenuManager not found in the scene.");
                 return;
             }
 
-            if (menuManager.objectMenu == null)
+            var objectMenuProp = menuManagerType.GetProperty("objectMenu");
+            GameObject objectMenu = objectMenuProp?.GetValue(menuManager) as GameObject;
+            if (objectMenu == null)
             {
                 Debug.LogError("ARTemplateMenuManager has no reference to objectMenu.");
                 return;
             }
 
-            Button existingButton = menuManager.objectMenu.GetComponentsInChildren<Button>(true)
+            Button existingButton = objectMenu.GetComponentsInChildren<Button>(true)
                 .FirstOrDefault(b => b.name.StartsWith("Button (") && !b.name.Contains("Cesium"));
             
             if (existingButton == null)
@@ -127,7 +135,12 @@ namespace UnityEngine.XR.Templates.AR
                 UnityEditor.Events.UnityEventTools.RemovePersistentListener(newButton.onClick, i);
             }
             
-            UnityEditor.Events.UnityEventTools.AddIntPersistentListener(newButton.onClick, menuManager.SetObjectToSpawn, index);
+            var setObjectToSpawnMethod = menuManagerType.GetMethod("SetObjectToSpawn", new[] { typeof(int) });
+            if (setObjectToSpawnMethod != null)
+            {
+                var delegateAction = System.Delegate.CreateDelegate(typeof(UnityEngine.Events.UnityAction<int>), menuManager, setObjectToSpawnMethod) as UnityEngine.Events.UnityAction<int>;
+                UnityEditor.Events.UnityEventTools.AddIntPersistentListener(newButton.onClick, delegateAction, index);
+            }
 
             var text = existingButtonGO.GetComponentInChildren<Text>();
             if (text != null)
@@ -145,7 +158,7 @@ namespace UnityEngine.XR.Templates.AR
                 }
             }
 
-            string texturePath = "Assets/3drotterdam.png";
+            string texturePath = "Packages/com.rotterdam.digital-twins/Runtime/Prefabs/3drotterdam.png";
             Texture iconTexture = AssetDatabase.LoadAssetAtPath<Texture>(texturePath);
             if (iconTexture != null)
             {
@@ -192,16 +205,19 @@ namespace UnityEngine.XR.Templates.AR
                 Debug.Log($"Main Camera farClipPlane set to {mainCam.farClipPlane} for Cesium.");
             }
 
-            SetupScaling(menuManager, spawner);
+            SetupScaling(menuManager, spawner, menuManagerType);
 
             bool menuManagerChanged = false;
-            if (menuManager.cancelButton == null && menuManager.objectMenu != null)
+            var cancelButtonProp = menuManagerType.GetProperty("cancelButton");
+            var cancelButton = cancelButtonProp?.GetValue(menuManager) as Button;
+
+            if (cancelButton == null && objectMenu != null)
             {
-                var cancelBtn = menuManager.objectMenu.GetComponentsInChildren<Button>(true)
+                var cancelBtn = objectMenu.GetComponentsInChildren<Button>(true)
                     .FirstOrDefault(b => b.name.ToLower().Contains("cancel"));
                 if (cancelBtn != null)
                 {
-                    menuManager.cancelButton = cancelBtn;
+                    cancelButtonProp?.SetValue(menuManager, cancelBtn);
                     menuManagerChanged = true;
                     Debug.Log("Automatically assigned missing Cancel Button reference to ARTemplateMenuManager.");
                 }
@@ -226,9 +242,10 @@ namespace UnityEngine.XR.Templates.AR
                 $"- Camera Far Clip Plane set to {mainCam?.farClipPlane ?? 100f}\n\n" +
                 $"Make sure to save the scene (Ctrl+S).", "OK");
         }
-        private static void SetupScaling(ARTemplateMenuManager menuManager, ObjectSpawner spawner)
+        private static void SetupScaling(MonoBehaviour menuManager, ObjectSpawner spawner, System.Type menuManagerType)
         {
-            var scaleController = menuManager.GetComponent<ObjectScaleController>();
+            /* ObjectScaleController is missing from the project
+            var scaleController = menuManager.GetComponent("ObjectScaleController");
             if (scaleController == null)
             {
                 scaleController = Undo.AddComponent<ObjectScaleController>(menuManager.gameObject);
@@ -245,6 +262,7 @@ namespace UnityEngine.XR.Templates.AR
 
             CreateScaleButton(deleteButtonGO, parent, "Button (Zoom In)", "+", new Vector2(100, -250), scaleController.ScaleUp);
             CreateScaleButton(deleteButtonGO, parent, "Button (Zoom Out)", "-", new Vector2(100, -350), scaleController.ScaleDown);
+            */
         }
 
         private static void CreateScaleButton(GameObject template, Transform parent, string name, string label, Vector2 position, UnityEngine.Events.UnityAction action)
@@ -362,7 +380,7 @@ namespace UnityEngine.XR.Templates.AR
 
             grab.selectMode = InteractableSelectMode.Multiple;
             
-            grab.movementType = XRBaseInteractable.MovementType.Instantaneous;
+            grab.movementType = UnityEngine.XR.Interaction.Toolkit.Interactables.XRBaseInteractable.MovementType.Instantaneous;
             grab.throwOnDetach = false;
             grab.trackPosition = true;
             grab.trackRotation = true;
