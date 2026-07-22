@@ -107,6 +107,11 @@ namespace Rotterdam.DigitalTwins.Editor
             webConfigButton.style.marginBottom = 2;
             _webSection.Add(webConfigButton);
 
+            Button cesiumButton = new Button(UnityEngine.XR.Templates.AR.CesiumIntegrationEditor.Integrate) { text = "Integrate Cesium into AR" };
+            cesiumButton.style.marginTop = 2;
+            cesiumButton.style.marginBottom = 2;
+            _webSection.Add(cesiumButton);
+
             Button backButton = new Button(_onBackToMenu) { text = "Back to Main Menu" };
             backButton.style.marginTop = 10;
             backButton.style.paddingTop = 8;
