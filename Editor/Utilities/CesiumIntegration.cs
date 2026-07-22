@@ -256,7 +256,7 @@ namespace UnityEngine.XR.Templates.AR
                 Debug.Log($"Main Camera farClipPlane set to {mainCam.farClipPlane} for Cesium.");
             }
 
-            SetupScaling(menuManager, spawner, menuManagerType);
+            SetupScaling(menuManager, spawner as MonoBehaviour, menuManagerType);
 
             bool menuManagerChanged = false;
             var cancelButtonProp = menuManagerType.GetProperty("cancelButton");
@@ -294,7 +294,7 @@ namespace UnityEngine.XR.Templates.AR
                 $"Make sure to save the scene (Ctrl+S).", "OK");
 #endif
         }
-        private static void SetupScaling(MonoBehaviour menuManager, ObjectSpawner spawner, System.Type menuManagerType)
+        private static void SetupScaling(MonoBehaviour menuManager, MonoBehaviour spawner, System.Type menuManagerType)
         {
             // ObjectScaleController is missing or moved in current version
             var scaleController = menuManager.GetComponent("ObjectScaleController");
