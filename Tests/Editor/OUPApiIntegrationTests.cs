@@ -71,5 +71,33 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
                 Assert.That(responseData.results[0]._id, Is.Not.Null.And.Not.Empty);
             }
         }
+
+        [Test]
+        [Category("Integration")]
+        public async Task OUPApi_DigitalTwinsEndpoint_ReturnsValidData()
+        {
+            string url = "https://hub.clearly.app/api/digital-twins?limit=5";
+
+            var response = await _httpClient.GetAsync(url);
+            
+            Assert.That(response.IsSuccessStatusCode, Is.True);
+            string content = await response.Content.ReadAsStringAsync();
+            
+            var options = new JsonSerializerOptions 
+            { 
+                PropertyNameCaseInsensitive = true,
+                IncludeFields = true
+            };
+            
+            var responseData = JsonSerializer.Deserialize<OUPDigitalTwinResponse>(content, options);
+            Assert.That(responseData, Is.Not.Null);
+            Assert.That(responseData.results, Is.Not.Null);
+            
+            if (responseData.results.Count > 0)
+            {
+                Assert.That(responseData.results[0]._id, Is.Not.Null.And.Not.Empty);
+                Assert.That(responseData.results[0].title, Is.Not.Null.And.Not.Empty);
+            }
+        }
     }
 }

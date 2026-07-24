@@ -18,6 +18,7 @@
     <ItemGroup>
         <Compile Include="..\Runtime\Scripts\Core\OUPModels.cs" Link="Source\OUPModels.cs" />
         <Compile Include="..\Editor\Utilities\OUPFilterUtility.cs" Link="Source\OUPFilterUtility.cs" />
+        <Compile Include="..\Editor\Utilities\ProjectTypeShared.cs" Link="Source\ProjectTypeShared.cs" />
     </ItemGroup>
 
 </Project>

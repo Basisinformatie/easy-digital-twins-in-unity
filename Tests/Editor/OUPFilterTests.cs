@@ -75,6 +75,78 @@ namespace Rotterdam.DigitalTwins.Editor.Tests
         }
 
         [Test]
+        public void FilterDatasets_WithMultipleFormats_ReturnsMatchingDatasets()
+        {
+            var datasets = new List<OUPDataset>
+            {
+                new OUPDataset 
+                { 
+                    title = "D1", 
+                    resources = new List<OUPResource> { new OUPResource { format = "I3S" } } 
+                },
+                new OUPDataset 
+                { 
+                    title = "D2", 
+                    resources = new List<OUPResource> { new OUPResource { format = "WMS" } } 
+                },
+                new OUPDataset 
+                { 
+                    title = "D3", 
+                    resources = new List<OUPResource> { new OUPResource { format = "WFS" } } 
+                }
+            };
+            var formats = new List<string> { "I3S", "WMS" };
+
+            var result = OUPFilterUtility.FilterDatasets(datasets, null, null, formats);
+
+            Assert.That(result, Has.Count.EqualTo(2));
+            var titles = result.ConvertAll(d => d.title);
+            Assert.That(titles, Contains.Item("D1"));
+            Assert.That(titles, Contains.Item("D2"));
+        }
+
+        [Test]
+        public void FilterDatasets_CaseInsensitiveSearch_ReturnsMatchingDatasets()
+        {
+            var datasets = new List<OUPDataset>
+            {
+                new OUPDataset { title = "Rotterdam", description = "" }
+            };
+            string searchTerm = "rotterdam";
+
+            var result = OUPFilterUtility.FilterDatasets(datasets, searchTerm, null, null);
+
+            Assert.That(result, Has.Count.EqualTo(1));
+            Assert.That(result[0].title, Is.EqualTo("Rotterdam"));
+        }
+
+        [Test]
+        public void FilterDatasets_WithEmptyList_ReturnsEmptyList()
+        {
+            var datasets = new List<OUPDataset>();
+            var result = OUPFilterUtility.FilterDatasets(datasets, "test", null, null);
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void FilterDatasets_WithNullFilters_ReturnsOriginalList()
+        {
+            var datasets = new List<OUPDataset>
+            {
+                new OUPDataset { title = "D1" }
+            };
+            var result = OUPFilterUtility.FilterDatasets(datasets, null, null, null);
+            Assert.That(result, Has.Count.EqualTo(1));
+        }
+
+        [Test]
+        public void IsSearchTermValid_WithNullTerm_ReturnsTrue()
+        {
+            bool isValid = OUPFilterUtility.IsSearchTermValid(null, out string errorMessage);
+            Assert.That(isValid, Is.True);
+        }
+
+        [Test]
         public void IsSearchTermValid_WithValidTerm_ReturnsTrue()
         {
             string searchTerm = "Rotterdam";
