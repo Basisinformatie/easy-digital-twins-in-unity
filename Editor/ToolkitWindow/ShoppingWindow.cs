@@ -233,7 +233,7 @@ namespace Rotterdam.DigitalTwins.Editor
         private void ShowSamples()
         {
             _contentContainer.Clear();
-            _contentContainer.Add(new MarkdownComponent("Sample Features", "SAMPLES.md", ShowMainMenu));
+            _contentContainer.Add(new Rotterdam.DigitalTwins.Editor.MarkdownComponent("Sample Features", "SAMPLES.md", ShowMainMenu));
         }
 
         private void ShowShoppingWizard()
