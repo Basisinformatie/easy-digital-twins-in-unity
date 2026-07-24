@@ -185,6 +185,7 @@ namespace Rotterdam.DigitalTwins.Editor
 
             settingsButton.clicked += ShowSettings;
             readmeButton.clicked += ShowReadMe;
+            samplesButton.clicked += ShowSamples;
             startButton.clicked += ShowShoppingWizard;
 
             settingsButton.style.marginTop = 5;
@@ -227,6 +228,12 @@ namespace Rotterdam.DigitalTwins.Editor
         {
             _contentContainer.Clear();
             _contentContainer.Add(new ReadMeComponent(ShowMainMenu));
+        }
+
+        private void ShowSamples()
+        {
+            _contentContainer.Clear();
+            _contentContainer.Add(new MarkdownComponent("Sample Features", "SAMPLES.md", ShowMainMenu));
         }
 
         private void ShowShoppingWizard()
