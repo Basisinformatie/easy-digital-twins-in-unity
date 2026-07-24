@@ -127,7 +127,7 @@ namespace Rotterdam.DigitalTwins.Editor
                 label.text = $"Project type: {ProjectTypeDetector.GetProjectTypes(type)}\n" +
                              $"Compatibility: {ProjectTypeDetector.GetCompatibility(type)}";
                 
-                _webSection.style.display = type.HasFlag(ProjectTypeDetector.ProjectType.WebApp) 
+                _webSection.style.display = type.HasFlag(ProjectType.WebApp) 
                     ? DisplayStyle.Flex 
                     : DisplayStyle.None;
             });
